@@ -21,8 +21,9 @@ function hero(u) {
     <div class="hero-copy"><div class="wrap">
       <p class="en">${esc(SITE.en)}</p>
       <h1>${esc(SITE.tagline)}<span class="k">대학로·혜화에서 연극과 어린이 뮤지컬을 만드는 파릇</span></h1>
-      <p class="lead">${esc(SITE.intro)} 2016년부터 대학로에서, 공연이 처음인 사람도 편하게 웃고 나올 수 있는 무대를 만듭니다.</p>
+      <p class="lead">${esc(SITE.intro)}<br>2016년부터 대학로에서, 공연이 처음인 사람도 편하게 웃고 나올 수 있는 무대를 만듭니다.</p>
       <div class="hero-cta"><a class="btn btn-light" href="#lineup">지금 공연 보기${ico('arrow')}</a><button class="btn btn-ghost-dk" type="button" data-open="drawerBook">${ico('ticket')}예매하기</button></div>
+      <ul class="hero-shows" aria-label="지금 공연 중인 작품">${SHOWS.map((s, i) => `<li style="--i:${i}"><a href="${u(`shows/${s.slug}/`)}" data-qv="${s.id}"><span class="hs-img ph"><img src="${u(`assets/img/shows/${s.slug}/thumb.webp`)}" alt="${esc(s.title)} 포스터" width="320" height="400" decoding="async"></span><b>${esc(s.title)}</b><small>${esc(s.kind)}</small></a></li>`).join('')}</ul>
     </div></div>
   </div>
 </section>`;
