@@ -330,23 +330,23 @@ export const AWARDS = [
   { t: '<한뼘사이> 중국 라이선스 진출', d: '중국 공연사와 라이선스 계약을 맺고 2023년 12월부터 현지 공연', src: '경인매일 2024.06' },
 ];
 
-// 언론 보도(기존 사이트 뉴스 게시판에 올린 기사)
+// 언론 보도(기존 사이트 뉴스 게시판에 올린 기사) — 최신순으로 정렬해 쓴다
 export const PRESS = [
-  { o: '한국경제TV', d: '2025-11-25', t: "대학로 대표 연극 '한뼘사이' 풍성한 연말의 19차 신규 캐스팅 공개", u: 'https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202511040672&t=NN' },
-  { o: 'ABC뉴스', d: '2025-11-28', t: "연인·친구·가족과 즐기는 '크리스마스 추천 연극 3선'", u: 'https://www.abcn.kr/news/articleView.html?idxno=85068' },
-  { o: '잡포스트', d: '2025-10-30', t: "대학로 연극 '비누향기', 7번째 캐스팅 공개… 젠더프리 무대와 관객 참여형 결말 도입", u: 'http://www.job-post.co.kr/news/articleView.html?idxno=180478' },
-  { o: '뉴스티앤티', d: '2025-10-30', t: "대학로 대표 로맨틱 코미디 연극 '사내연애 보고서' 4차 캐스팅 공개", u: 'http://www.newstnt.com/news/articleView.html?idxno=540582' },
-  { o: '한국경제TV', d: '2025-09-23', t: '10월 황금 연휴 "올해는 연극보자"…파릇, 한가위 맞이 연극 특별 할인', u: 'https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202509220411&t=NN' },
-  { o: '이데일리', d: '2025-07-11', t: "오픈런 공연 위기 속 인기 지속…연극 '한뼘사이'의 저력", u: 'https://www.edaily.co.kr/News/Read?newsId=02965126642171872' },
-  { o: '한국일보', d: '2025-07-11', t: "빨간 객석 닦는 손, '토니상'을 꿈꾸다", u: 'https://www.hankookilbo.com/News/Read/A2025061818360000710' },
-  { o: '뉴스프리즌', d: '2025-07-25', t: "래퍼 스윙스, 대학로 연극 '사내연애보고서' 출연", u: 'https://www.newsfreezone.co.kr/news/articleView.html?idxno=636285' },
-  { o: '한국정경신문', d: '2025-02-04', t: "광양제철소, 대학로 인기작 '한뼘사이' 연극 성료…총 1145명 관람", u: 'http://kpenews.com/View.aspx?No=3481806' },
-  { o: '중앙일보', d: '2024-11-27', t: "연극 한뼘사이, '2024 올해의 우수브랜드 대상' 공연·연극 부문 1위 3년 연속 수상", u: 'https://www.joongang.co.kr/article/25295258' },
-  { o: '시선뉴스', d: '2024-11-27', t: "연극 '사내연애 보고서' 예매순위 상승", u: 'http://www.sisunnews.co.kr/news/articleView.html?idxno=217637' },
-  { o: '경인매일', d: '2024-06-15', t: "대학로 인기 연극 '한뼘사이', 중국 진출 신호탄", u: 'https://www.kmaeil.com/news/articleView.html?idxno=458940' },
-  { o: '뉴스핌', d: '2024-05-12', t: "어린이를 위한 공연 소개에 진심인 배우 정해인 — '피노키오야 노올자'", u: 'https://www.newspim.com/news/view/20240430000712' },
-  { o: 'K스피릿', d: '2024-05-12', t: "어린이들과 함께 동화 속으로! 뮤지컬 '아기돼지삼형제'", u: 'https://www.ikoreanspirit.com/news/articleView.html?idxno=75716' },
-];
+  { o: '한국경제TV', d: '2025-11-25', t: "대학로 대표 연극 '한뼘사이' 풍성한 연말의 19차 신규 캐스팅 공개", img: 'press/168756716.webp', u: 'https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202511040672&t=NN' },
+  { o: 'ABC뉴스', d: '2025-11-28', t: "연인·친구·가족과 즐기는 '크리스마스 추천 연극 3선'", img: 'press/168806113.webp', u: 'https://www.abcn.kr/news/articleView.html?idxno=85068' },
+  { o: '잡포스트', d: '2025-10-30', t: "대학로 연극 '비누향기', 7번째 캐스팅 공개… 젠더프리 무대와 관객 참여형 결말 도입", img: 'press/168408122.webp', u: 'http://www.job-post.co.kr/news/articleView.html?idxno=180478' },
+  { o: '뉴스티앤티', d: '2025-10-30', t: "대학로 대표 로맨틱 코미디 연극 '사내연애 보고서' 4차 캐스팅 공개", img: 'press/168408179.webp', u: 'http://www.newstnt.com/news/articleView.html?idxno=540582' },
+  { o: '한국경제TV', d: '2025-09-23', t: '10월 황금 연휴 "올해는 연극보자"…파릇, 한가위 맞이 연극 특별 할인', img: 'press/167909512.webp', u: 'https://www.wowtv.co.kr/NewsCenter/News/Read?articleId=A202509220411&t=NN' },
+  { o: '이데일리', d: '2025-07-11', t: "오픈런 공연 위기 속 인기 지속…연극 '한뼘사이'의 저력", img: 'press/166718283.webp', u: 'https://www.edaily.co.kr/News/Read?newsId=02965126642171872' },
+  { o: '한국일보', d: '2025-07-11', t: "빨간 객석 닦는 손, '토니상'을 꿈꾸다", img: 'press/166718106.webp', u: 'https://www.hankookilbo.com/News/Read/A2025061818360000710' },
+  { o: '뉴스프리즌', d: '2025-07-25', t: "래퍼 스윙스, 대학로 연극 '사내연애보고서' 출연", img: 'press/167028083.webp', u: 'https://www.newsfreezone.co.kr/news/articleView.html?idxno=636285' },
+  { o: '한국정경신문', d: '2025-02-04', t: "광양제철소, 대학로 인기작 '한뼘사이' 연극 성료…총 1145명 관람", img: 'press/148184104.webp', u: 'http://kpenews.com/View.aspx?No=3481806' },
+  { o: '중앙일보', d: '2024-11-27', t: "연극 한뼘사이, '2024 올해의 우수브랜드 대상' 공연·연극 부문 1위 3년 연속 수상", img: 'press/128992849.webp', u: 'https://www.joongang.co.kr/article/25295258' },
+  { o: '시선뉴스', d: '2024-11-27', t: "연극 '사내연애 보고서' 예매순위 상승", img: 'press/128991451.webp', u: 'http://www.sisunnews.co.kr/news/articleView.html?idxno=217637' },
+  { o: '경인매일', d: '2024-06-15', t: "대학로 인기 연극 '한뼘사이', 중국 진출 신호탄", img: 'press/27566460.webp', u: 'https://www.kmaeil.com/news/articleView.html?idxno=458940' },
+  { o: '뉴스핌', d: '2024-05-12', t: "어린이를 위한 공연 소개에 진심인 배우 정해인 — '피노키오야 노올자'", img: 'shows/pinocchio/cover.webp', u: 'https://www.newspim.com/news/view/20240430000712' },
+  { o: 'K스피릿', d: '2024-05-12', t: "어린이들과 함께 동화 속으로! 뮤지컬 '아기돼지삼형제'", img: 'press/22022699.webp', u: 'https://www.ikoreanspirit.com/news/articleView.html?idxno=75716' },
+].sort((a, b) => b.d.localeCompare(a.d));
 
 // 오디션 공지(기존 공지사항)
 export const NOTICES = [

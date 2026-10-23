@@ -8,13 +8,14 @@
 | 경로 | 내용 |
 |---|---|
 | `src/data.mjs` | **공연·가격·회차·공연장·관람 규정·연혁·수상·보도·FAQ — 사실 정보는 여기 한 곳만 고칩니다** (네이버 예약 2026-10-23 기준) |
-| `src/home.mjs` | 홈: 히어로 필름 → 스크롤하면 카드로 줄며 기존 배너 문구 → 소개(단어 밝힘) → 공연 라인업(세로 스크롤 → 가로 이동) → 한뼘사이 스포트라이트(고정 사진 + 6단계) → 관람평 → 관람 도우미 → 연혁(진행 선) → 수상·보도 → 오시는 길 → FAQ → 가이드 → 문의 |
+| `src/home.mjs` | 홈: 히어로 필름 → 스크롤하면 카드로 줄며 기존 배너 문구·공연 썸네일 → 공연 라인업(세로 스크롤 → 가로 이동) → 관람평(공연별 썸네일·평점) → 한뼘사이 스포트라이트(벤토 그리드) → 관람 도우미 → 연혁(진행 선) → 수상·보도(기사 썸네일) → 오시는 길 → FAQ → 가이드 → 문의 |
 | `src/pages.mjs` | 공연 목록·공연 상세 6개·파릇 소개·오시는 길·소식·문의·FAQ·블로그·개인정보 |
 | `src/layout.mjs` · `src/parts.mjs` | `<head>`(메타·OG·JSON-LD), 헤더, 메뉴 드로어, 예매 드로어, 빠른 보기·후기 모달, 푸터 / 공용 카드·평점 막대·아코디언 |
 | `src/schema.mjs` | 구조화 데이터(Organization+PerformingGroup, TheaterEvent·Event+Schedule+AggregateOffer, FAQPage, BreadcrumbList, BlogPosting) |
 | `assets/css/style.css` · `assets/js/app.js` | 디자인(Noto Sans KR) / 인터랙션: 모달·드로어·바텀시트·토스트·아코디언·탭·스켈레톤·스크롤 시퀀스 5종·라이트박스·문의 메일 정리 |
 | `assets/video/` | 히어로 필름(4K `hero-2160.mp4` 15MB · 1080p `hero-1080.mp4` 5MB · 모바일 세로 `hero-m.mp4` 4.5MB, 소리 포함) — 만드는 법은 `../motion/` |
 | `assets/img/shows/<slug>/` | 포스터·키비주얼·네이버 예약 상세 이미지·무대 사진(WebP) — `python -I tools/prepare_images.py` 로 다시 만듦 |
+| `assets/img/press/` | 보도 썸네일(640×400) — 기존 paroot.kr 뉴스 게시판에 올린 기사 이미지로 `python -I tools/prepare_press.py` 가 만듦 |
 | `content/blog/*.md` | 블로그 원고. `_topics.json` = AI가 쓸 주제 대기열(대표 키워드 중복 없음) |
 | `content/drafts/` | 검증에 떨어진 AI 초안(발행 안 됨). 고쳐서 `content/blog/`로 옮기면 발행 |
 | `tools/blog-ai/generate.mjs` | AI 글 작성·검증기 |

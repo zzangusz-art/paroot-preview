@@ -58,27 +58,26 @@ function lineup(u) {
 </section>`;
 }
 
+// 한뼘사이 스포트라이트 — 벤토 그리드(사진 타일 + 숫자 타일). 타일마다 순서대로 등장, 마우스를 따라오는 빛
 function spotlight(u) {
-  const s = H();
-  const shots = [['stage/exterior.webp', '혜화역 2번 출구 골목의 한뼘사이 전용관 외관'], ['stage/couple.webp', '한뼘사이 두 주인공이 손을 맞잡은 장면'], ['stage/laugh.webp', '한뼘사이 배우가 크게 웃는 장면'], ['stage/crowd-a.webp', '한뼘사이 객석의 관객들'], ['shows/hanbbeumsai/gallery/02.webp', '한뼘사이 커튼콜'], ['stage/couple-2.webp', '한뼘사이 로맨스 장면']];
-  const steps = [
-    ['2017 → 오픈런', `<span class="sp-big">2017.03</span>`, '「한뼘사이」는 2017년 3월 첫 공연 이후 오픈런으로 이어지고 있습니다. 2021년 3월부터는 혜화역 2번 출구 KFC 골목의 전용관(라온아트홀)에서 평일 3회, 주말 4~5회 공연합니다.'],
-    ['한 뼘 남짓한 오피스텔', '두 커플, 두 가지 연애', '속마음을 감춘 무뚝뚝한 여자와 썸을 넘지 못하는 남자, 그리고 아픔을 대하는 방식이 정반대인 두 사람. 한 무대에서 두 연애가 번갈아 흘러갑니다.'],
-    ['멀티맨', '웃음은 타이밍에서', '한 배우가 여러 인물을 오가는 멀티맨은 관람평에 자주 이름이 오르는 배역입니다. “애드립도 리얼해서 첨엔 진짜 대본인줄” 같은 후기가 이어집니다.'],
-    ['관람평', `<span class="sp-big">★${s.rating.avg}</span>`, `네이버 예약에 남은 관람평 ${s.rating.count.toLocaleString('ko-KR')}건의 평균입니다(${kdate(s.rating.asof)} 기준). 5점이 ${Math.round(s.rating.dist[5] / Object.values(s.rating.dist).reduce((a, b) => a + b) * 100)}%를 차지합니다.`],
-    ['대학로 밖으로', `${TOUR_CITIES.length}개 도시, 그리고 중국`, `울산·포항·대구·제주에서 광양까지 지역 무대에 올랐고, 삼성전자·POSCO·건양대학교 초청 공연도 했습니다. 2023년 12월부터는 중국에서 라이선스 공연이 열립니다.<span class="tour">${TOUR_CITIES.map(c => `<span>${c}</span>`).join('')}</span>`],
-    ['수상', '올해의 우수브랜드 대상<br>3년 연속 1위', `2022·2023·2024년 문화컨텐츠 공연·연극 부문(JY네트워크 주최, 중앙일보 후원).<br><br><a class="btn btn-pink" href="${u('shows/hanbbeumsai/')}">한뼘사이 자세히 보기${ico('arrow')}</a>`],
-  ];
+  const s = H(), d = s.rating.dist, tot = Object.values(d).reduce((a, b) => a + b, 0);
+  const pct = k => Math.round(d[k] / tot * 100);
+  const photo = (f, alt, cls = '') => img(u, `assets/img/${f}`, alt, { cls: 'bt-bg' + (cls ? ' ' + cls : '') });
   return `<section class="sec spot" id="spotlight" aria-labelledby="spTitle">
   <div class="wrap">
-    <div class="sec-head"><div><p class="eyebrow">Spotlight</p><h2 class="h2" id="spTitle">대학로 대표 로맨틱 코미디,<br><em>한뼘사이</em></h2></div></div>
-    <div class="sp-grid">
-      <div class="sp-media">
-        <span class="sp-badge tag tag-pink">2017년 3월 개막 · 오픈런</span>
-        ${shots.map(([f, a], i) => img(u, `assets/img/${f}`, a, { cls: i === 0 ? 'on' : '', lazy: i > 0 })).join('')}
-        <span class="sp-count">01 / ${String(steps.length).padStart(2, '0')}</span>
-      </div>
-      <ol class="sp-steps">${steps.map(([n, t, p], i) => `<li class="sp-step"><span class="num">${String(i + 1).padStart(2, '0')} — ${n}</span><h3>${t}</h3><p>${p}</p></li>`).join('')}</ol>
+    <div class="sec-head"><div><p class="eyebrow">Spotlight</p><h2 class="h2" id="spTitle">대학로 대표 로맨틱 코미디,<br><em>한뼘사이</em></h2></div>
+      <div class="sh-cta"><a class="btn btn-ghost-dk" href="${u('shows/hanbbeumsai/')}">작품 자세히 보기${ico('arrow')}</a><a class="btn btn-pink" href="${s.booking.url}" target="_blank" rel="noopener" data-book="${esc(s.title)}">${ico('ticket')}예매하기</a></div></div>
+    <div class="bento" id="bento">
+      <article class="bt bt-a reveal">${photo('stage/couple.webp', '한뼘사이 두 주인공이 손을 맞잡은 장면')}<div class="bt-cap"><span class="tag tag-dk">${esc(s.sinceLabel)}</span><h3>썸 청산, 연애 시작.</h3><p>한 뼘 남짓한 오피스텔에서 두 커플의 연애가 엇갈립니다. 105분, 만 12세 이상.</p></div></article>
+      <article class="bt bt-b reveal" data-d="1"><span class="bt-k">첫 공연</span><b class="bt-big">2017.03</b><p>오픈런 공연 중<br>2021년 3월부터 전용관</p></article>
+      <article class="bt bt-c reveal" data-d="2">${photo('stage/exterior.webp', '혜화역 2번 출구 골목의 한뼘사이 전용관 외관')}<div class="bt-cap"><b>한뼘사이 전용관</b><span>혜화역 2번 출구 KFC 골목 50m</span></div></article>
+      <article class="bt bt-d reveal" data-d="1"><span class="bt-k">네이버 예약 관람평</span><div class="bt-rate"><b>★<span data-count="${s.rating.avg}" data-dec="2">${s.rating.avg}</span></b><span><span data-count="${s.rating.count}">${s.rating.count.toLocaleString('ko-KR')}</span>건 · ${kdate(s.rating.asof)} 기준</span></div>
+        <div class="bt-bars">${[5, 4, 3].map(k => `<div><span>${k === 5 ? '5점' : k + '점대'}</span><i style="--w:${pct(k)}%"></i><em>${pct(k)}%</em></div>`).join('')}</div></article>
+      <article class="bt bt-e reveal">${photo('stage/laugh.webp', '한뼘사이 멀티맨이 크게 웃는 장면')}<div class="bt-cap"><b>멀티맨</b><span>“애드립도 리얼해서 첨엔 진짜 대본인줄”</span></div></article>
+      <article class="bt bt-f reveal" data-d="1"><span class="bt-k">대학로 밖으로</span><b class="bt-big"><span data-count="${TOUR_CITIES.length}">${TOUR_CITIES.length}</span><small>개 도시</small></b><p>지역 공연과 삼성전자·POSCO·건양대학교 초청 공연, 그리고 2023년 12월부터 중국 라이선스 공연.</p><div class="tour">${TOUR_CITIES.map(c => `<span>${c}</span>`).join('')}</div></article>
+      <article class="bt bt-g reveal" data-d="2">${photo('shows/hanbbeumsai/gallery/04.webp', '한뼘사이 공연장 객석과 무대', 'dim')}<div class="bt-cap"><span class="bt-k">줄거리</span><h3>두 커플, 두 가지 연애</h3><p>속마음을 감춘 무뚝뚝한 여자와 썸을 넘지 못하는 남자, 아픔을 대하는 방식이 정반대인 두 사람.</p></div></article>
+      <article class="bt bt-h reveal"><span class="bt-ico">${ico('award')}</span><span class="bt-k">수상</span><b class="bt-mid">3년 연속 1위</b><p>올해의 우수브랜드 대상 공연·연극 부문 2022·2023·2024</p></article>
+      <article class="bt bt-i reveal" data-d="1">${photo('shows/hanbbeumsai/gallery/02.webp', '한뼘사이 커튼콜')}<div class="bt-cap"><b>평일 3회 · 주말 4~5회</b><span>평일 일반 17,900원 · 주말 21,900원 (네이버 예약)</span></div></article>
     </div>
   </div>
 </section>`;
@@ -134,9 +133,11 @@ function history() {
   return `<section class="sec" id="history" aria-label="연혁"><div class="wrap">${historyBlock()}</div></section>`;
 }
 
+// 보도 카드: 기사 썸네일(기존 파릇 홈페이지 뉴스 게시판에 올린 이미지) + 언론사 + 제목 + 날짜, 누르면 기사 원문(새 창)
+export const pressCard = (u, p) => `<a class="pr-card reveal" href="${p.u}" target="_blank" rel="noopener">${phImg(u, `assets/img/${p.img}`, '', { wrapCls: 'pr-img' })}<span class="pr-body"><span class="src">${esc(p.o)}</span><span class="tt">${esc(p.t)}</span><span class="dt">${kdate(p.d)}${ico('ext')}</span></span></a>`;
 export function awardsPress(u, n = 8) {
   return `<div class="awards">${AWARDS.map(a => `<div class="award reveal"><span class="a-ico">${ico('award')}</span><span><b>${esc(a.t).replace(/&lt;(.+?)&gt;/g, '「$1」')}</b><span>${esc(a.d).replace(/&lt;(.+?)&gt;/g, '「$1」')} · ${esc(a.src)}</span></span></div>`).join('')}</div>
-  <ul class="press">${PRESS.slice(0, n).map(p => `<li><a href="${p.u}" target="_blank" rel="noopener"><span class="src">${esc(p.o)}</span><span class="tt">${esc(p.t)}</span><span class="dt">${kdate(p.d)}</span>${ico('ext')}</a></li>`).join('')}</ul>`;
+  <div class="press-grid">${PRESS.slice(0, n).map(p => pressCard(u, p)).join('')}</div>`;
 }
 
 function press(u) {
@@ -185,5 +186,5 @@ export function ctaBand(u) {
 }
 
 export function homeBody(u, posts) {
-  return [hero(u), marquee(), lineup(u), spotlight(u), reviews(u), finder(u), history(), press(u), venues(u), faq(u), blog(u, posts), ctaBand(u)].join('\n');
+  return [hero(u), marquee(), lineup(u), reviews(u), spotlight(u), finder(u), history(), press(u), venues(u), faq(u), blog(u, posts), ctaBand(u)].join('\n');
 }

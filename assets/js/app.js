@@ -311,18 +311,16 @@
     });
   });
 
-  // ── 4) 대표작 스포트라이트: 단계가 화면 가운데 오면 사진·숫자 전환 ──
-  $$('.spot').forEach(sec => {
-    const steps = $$('.sp-step', sec), imgs = $$('.sp-media img', sec), cnt = $('.sp-count', sec);
-    const set = i => {
-      steps.forEach((s, k) => s.classList.toggle('on', k === i));
-      imgs.forEach((im, k) => im.classList.toggle('on', k === Math.min(i, imgs.length - 1)));
-      if (cnt) cnt.textContent = `${String(i + 1).padStart(2, '0')} / ${String(steps.length).padStart(2, '0')}`;
-    };
-    set(0);
-    const so = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) set(steps.indexOf(en.target)); }), { rootMargin: '-45% 0px -45% 0px' });
-    steps.forEach(s => so.observe(s));
-  });
+  // ── 4) 한뼘사이 벤토: 타일 위에서 마우스를 따라오는 빛 ──
+  const bento = $('#bento');
+  if (bento && !reduce && matchMedia('(hover: hover)').matches) {
+    bento.addEventListener('pointermove', e => {
+      const t = e.target.closest('.bt'); if (!t) return;
+      const r = t.getBoundingClientRect();
+      t.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      t.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    }, { passive: true });
+  }
 
   // ── 5) 연혁: 진행 선이 차오르고, 지나간 해에 불이 들어옴 ──
   $$('.history').forEach(h => {

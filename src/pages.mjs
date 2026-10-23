@@ -6,7 +6,7 @@ import { SITE, SHOWS, FAQ, VENUES, PRESS, NOTICES, BLOG_CATEGORIES, venueOf, pri
 import { esc, won, img, phImg, kdate, nl2br } from './lib.mjs';
 import { ico } from './layout.mjs';
 import { showCard, ratingBars, reviewCard, faqAcc, venueCard, rulesList, crumbs, postCard, mapUrl, ratingLine } from './parts.mjs';
-import { historyBlock, awardsPress, ctaBand } from './home.mjs';
+import { historyBlock, awardsPress, ctaBand, pressCard } from './home.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const IMGS = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/images.json'), 'utf8'));
@@ -186,7 +186,7 @@ export function news(u) {
   return `${pageHd(u, { crumb: [['홈', ''], ['소식', 'news/']], eyebrow: 'News', title: '보도와 오디션 소식', lead: '언론에 소개된 파릇 공연 이야기와 작품별 오디션 공지입니다.' })}
 <section class="sec-tight"><div class="wrap">
   <div class="tabs" role="tablist" aria-label="소식 분류"><button role="tab" id="tab-press" aria-controls="pan-press" aria-selected="true">언론 보도 ${PRESS.length}</button><button role="tab" id="tab-aud" aria-controls="pan-aud" aria-selected="false" tabindex="-1">오디션 공지 ${NOTICES.length}</button></div>
-  <div role="tabpanel" id="pan-press" aria-labelledby="tab-press"><ul class="press press-lt">${PRESS.map(p => `<li><a href="${p.u}" target="_blank" rel="noopener"><span class="src">${esc(p.o)}</span><span class="tt">${esc(p.t)}</span><span class="dt">${kdate(p.d)}</span>${ico('ext')}</a></li>`).join('')}</ul><p class="muted" style="font-size:13.5px;margin-top:14px">날짜는 기존 파릇 홈페이지 뉴스 게시판에 올린 날짜입니다.</p></div>
+  <div role="tabpanel" id="pan-press" aria-labelledby="tab-press"><div class="press-grid press-lt">${PRESS.map(p => pressCard(u, p)).join('')}</div><p class="muted" style="font-size:13.5px;margin-top:14px">날짜는 기존 파릇 홈페이지 뉴스 게시판에 올린 날짜입니다.</p></div>
   <div role="tabpanel" id="pan-aud" aria-labelledby="tab-aud" hidden><ul class="press press-lt">${NOTICES.map(n => `<li><div class="pr"><span class="src">오디션</span><span class="tt">${esc(n.t)}</span><span class="dt">${kdate(n.d)}</span><span></span></div></li>`).join('')}</ul>
     <div class="cc" style="margin-top:24px"><h3>오디션 지원</h3><p>파릇은 언제나 재능 있는 배우를 환영합니다. 프로필과 포트폴리오, 사진 등 본인을 알릴 수 있는 자료를 보내 주시면 담당 부서에서 확인 후 연락드립니다.</p><span class="mail">${SITE.audition}</span><div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-dark btn-s" href="mailto:${SITE.audition}?subject=${encodeURIComponent('[오디션 지원] 이름 / 지원 작품')}">${ico('mail')}메일 쓰기</a><button class="btn btn-line btn-s" type="button" data-copy="${SITE.audition}" data-copy-msg="오디션 메일 주소를 복사했습니다">${ico('copy')}주소 복사</button></div></div>
   </div>
