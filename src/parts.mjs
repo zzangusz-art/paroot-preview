@@ -32,9 +32,13 @@ export function ratingBars(s) {
   return `<div class="bars" aria-label="${esc(s.title)} 평점 분포">${[5, 4, 3, 2, 1].map(k => { const p = d[k] / tot * 100; return `<div class="bar"><span>${k === 5 ? '5점' : k === 1 ? '1점대' : k + '점대'}</span><i style="--w:${p.toFixed(1)}%"></i><span>${p >= 1 ? Math.round(p) : p.toFixed(1)}%</span></div>`; }).join('')}</div>`;
 }
 
-export function reviewCard(s, r) {
+// u 를 넘기면 카드 머리에 공연 포스터 썸네일과 점수를 함께 보여 준다(홈 롤링 후기)
+export function reviewCard(s, r, u = null) {
   const meta = `${r.who} · ${kdate(r.date)} 관람 · ★${r.score}`;
-  return `<button class="rv-card" type="button" data-show="${esc(s.title)}" data-full="${esc(r.body)}" data-meta="${esc(meta + ' · 네이버 예약 관람평')}"><span class="tag tag-pink">${esc(s.title)}</span><q>${esc(r.body.replace(/\s*\n+\s*/g, ' '))}</q><span class="who"><span>${esc(r.who)} · ${kdate(r.date)}</span><span class="stars">${'★'.repeat(Math.round(r.score))}</span></span></button>`;
+  const head = u
+    ? `<span class="rv-top"><img class="rv-thumb" src="${u(`assets/img/shows/${s.slug}/thumb.webp`)}" alt="" width="32" height="40" loading="lazy" decoding="async"><span class="tag tag-pink">${esc(s.title)}</span><span class="rv-score">★ ${r.score}</span></span>`
+    : `<span class="tag tag-pink">${esc(s.title)}</span>`;
+  return `<button class="rv-card" type="button" data-show="${esc(s.title)}" data-full="${esc(r.body)}" data-meta="${esc(meta + ' · 네이버 예약 관람평')}">${head}<q>${esc(r.body.replace(/\s*\n+\s*/g, ' '))}</q><span class="who"><span>${esc(r.who)} · ${kdate(r.date)}</span><span class="stars">${'★'.repeat(Math.round(r.score))}</span></span></button>`;
 }
 
 export function faqAcc(list, prefix, { open = 0 } = {}) {

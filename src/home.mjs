@@ -1,6 +1,6 @@
 // 홈: 히어로 필름 → (스크롤) 카드로 줄며 기존 배너 문구 → 소개(단어 밝힘) → 라인업(가로 이동) → 한뼘사이 스포트라이트 → 후기 → 관람 도우미 → 연혁 → 수상·보도 → 오시는 길 → FAQ → 가이드 → 문의
 import { SITE, SHOWS, FAQ, HISTORY, AWARDS, PRESS, VENUES, WHO, TOUR_CITIES, totalReviews, avgRating, showBySlug } from './data.mjs';
-import { esc, words, img, phImg, kdate } from './lib.mjs';
+import { esc, img, phImg, kdate } from './lib.mjs';
 import { ico } from './layout.mjs';
 import { showCard, ratingBars, reviewCard, faqAcc, venueCard, postCard } from './parts.mjs';
 
@@ -33,22 +33,6 @@ function marquee() {
   const ws = ['대학로 연극', '혜화 연극', ...SHOWS.map(s => s.title), '대학로 데이트', '아이와 대학로', '혜화역 공연'];
   const row = ws.map(w => `<span>${esc(w)}</span>`).join('');
   return `<div class="marquee" aria-hidden="true"><div class="marquee-track">${row}${row}</div></div>`;
-}
-
-function intro(u) {
-  const n = totalReviews();
-  return `<section class="sec" id="about">
-  <div class="wrap">
-    <p class="eyebrow reveal">About Paroot</p>
-    <p class="manifesto">${words('주식회사 파릇은 2016년 어린이뮤지컬 기획으로 시작해 **대학로에서** 연극과 뮤지컬을 만들어 왔습니다. 연인과 친구, **아이와 부모님까지** 공연이 처음인 사람도 부담 없이 웃고 나올 수 있는 무대. **2017년 3월에 올린 「한뼘사이」는** 지금도 매일 혜화역 2번 출구 골목에서 막을 올립니다.')}</p>
-    <div class="facts reveal">
-      <div class="fact"><b><span data-count="2016" data-plain>2016</span></b><span>첫 공연 기획<br>어린이뮤지컬 「성냥팔이소녀」</span></div>
-      <div class="fact"><b><span data-count="${SHOWS.length}">${SHOWS.length}</span><small>편</small></b><span>지금 대학로에서 공연 중<br>연극 3 · 어린이 뮤지컬 2 · 쇼 1</span></div>
-      <div class="fact"><b><span data-count="${n}">${n.toLocaleString('ko-KR')}</span><small>건</small></b><span>네이버 예약 관람평<br>5개 작품 합계</span></div>
-      <div class="fact"><b>★<span data-count="${avgRating().toFixed(2)}" data-dec="2">${avgRating().toFixed(2)}</span></b><span>관람평 수로 가중한 평균<br>2026년 10월 기준</span></div>
-    </div>
-  </div>
-</section>`;
 }
 
 function lineup(u) {
@@ -100,6 +84,8 @@ function spotlight(u) {
 </section>`;
 }
 
+// 작품별 집계일 범위: 2026년 10월 18~22일
+const asofRange = list => { const ds = list.map(s => s.rating.asof).sort(); const [y, m, d1] = ds[0].split('-'), d2 = ds[ds.length - 1].split('-')[2]; return `${y}년 ${+m}월 ${+d1}${d1 !== d2 ? `~${+d2}` : ''}일`; };
 function reviews(u) {
   const rated = SHOWS.filter(s => s.rating);
   const voted = new Map();
@@ -110,11 +96,13 @@ function reviews(u) {
   const mix = []; const pools = SHOWS.map(s => s.reviews.map(r => [s, r]));
   for (let i = 0; mix.length < all.length; i++) pools.forEach(p => { if (p[i]) mix.push(p[i]); });
   const r1 = mix.filter((_, i) => i % 2 === 0), r2 = mix.filter((_, i) => i % 2 === 1);
-  const row = (list, cls, dur) => `<div class="rv-row ${cls}" style="--dur:${dur}s">${[...list, ...list].map(([s, r], i) => (i >= list.length ? reviewCard(s, r).replace('<button', '<button tabindex="-1" aria-hidden="true"') : reviewCard(s, r))).join('')}</div>`;
+  const row = (list, cls, dur) => `<div class="rv-row ${cls}" style="--dur:${dur}s">${[...list, ...list].map(([s, r], i) => (i >= list.length ? reviewCard(s, r, u).replace('<button', '<button tabindex="-1" aria-hidden="true"') : reviewCard(s, r, u))).join('')}</div>`;
   return `<section class="sec sec-soft" id="reviews" aria-labelledby="rvTitleSec">
   <div class="wrap">
-    <div class="sec-head"><div><p class="eyebrow">Reviews</p><h2 class="h2" id="rvTitleSec">관객이 먼저 쓴<br>${totalReviews().toLocaleString('ko-KR')}건의 관람평</h2><p class="lead">네이버 예약에 공개된 관람평을 작품별로 모았습니다. 후기는 맞춤법을 고치지 않고 원문 그대로 옮겼습니다.</p></div></div>
-    <div class="rv-summary">${rated.map(s => `<div class="rv-stat reveal"><span class="t">${esc(s.title)}</span><div class="n"><b>${s.rating.avg.toFixed(2)}</b><span>${s.rating.count.toLocaleString('ko-KR')}건 · ${kdate(s.rating.asof)}</span></div>${ratingBars(s)}</div>`).join('')}</div>
+    <div class="sec-head"><div><p class="eyebrow">Reviews</p><h2 class="h2" id="rvTitleSec">관객이 먼저 쓴<br>${totalReviews().toLocaleString('ko-KR')}건의 관람평</h2><p class="lead">네이버 예약에 공개된 관람평을 작품별로 모았습니다(${asofRange(rated)} 기준). 후기는 맞춤법을 고치지 않고 원문 그대로 옮겼습니다.</p></div></div>
+    <div class="rv-summary">${rated.map(s => `<div class="rv-stat reveal">
+      <a class="rs-head" href="${u(`shows/${s.slug}/`)}" data-qv="${s.id}">${phImg(u, `assets/img/shows/${s.slug}/thumb.webp`, `${s.title} 포스터`, { wrapCls: 'rs-img' })}<span class="rs-meta"><span class="t">${esc(s.title)}</span><span class="rs-kind">${esc(s.genre)}</span><span class="n"><b>${s.rating.avg.toFixed(2)}</b><span class="star5" style="--r:${(s.rating.avg / 5 * 100).toFixed(1)}%" aria-label="5점 만점에 ${s.rating.avg.toFixed(2)}점">★★★★★</span></span><span class="rs-cnt">관람평 ${s.rating.count.toLocaleString('ko-KR')}건</span></span></a>
+      ${ratingBars(s)}</div>`).join('')}</div>
     ${kw.length ? `<div class="kw" aria-label="관객이 고른 키워드">${kw.map(([k, n]) => `<span>“${esc(k)}” <b>${n}</b></span>`).join('')}<span class="muted" style="border:0;background:none;font-weight:500">수상한 룸메이트·피노키오야 노올자 관람평 키워드 투표 합계</span></div>` : ''}
   </div>
   <div class="rv-rows">${row(r1, '', 110)}${row(r2, 'rev', 125)}</div>
@@ -197,5 +185,5 @@ export function ctaBand(u) {
 }
 
 export function homeBody(u, posts) {
-  return [hero(u), marquee(), intro(u), lineup(u), spotlight(u), reviews(u), finder(u), history(), press(u), venues(u), faq(u), blog(u, posts), ctaBand(u)].join('\n');
+  return [hero(u), marquee(), lineup(u), spotlight(u), reviews(u), finder(u), history(), press(u), venues(u), faq(u), blog(u, posts), ctaBand(u)].join('\n');
 }
