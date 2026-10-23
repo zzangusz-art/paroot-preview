@@ -1,0 +1,94 @@
+# 파릇: 빌드 → GitHub Pages 배포 + 「대학로 연극 가이드」 글 AI 자동 발행(하루 3회: 09:05 · 13:05 · 18:05 KST)
+# 처음 한 번 설정(저장소 Settings):
+#   1) Pages → Source: GitHub Actions
+#   2) Secrets and variables → Actions → Secrets: ANTHROPIC_API_KEY (없으면 글 작성만 건너뛰고 배포는 진행)
+#   3) (운영 전환 시) Variables: SITE_MODE=production, SITE_URL=https://www.paroot.kr/
+#      SITE_MODE가 없으면 미리보기(모든 페이지 noindex)로 배포한다.
+name: site
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '5 0 * * *'   # 09:05 KST
+    - cron: '5 4 * * *'   # 13:05 KST
+    - cron: '5 9 * * *'   # 18:05 KST
+  workflow_dispatch:
+    inputs:
+      generate:
+        description: '대학로 연극 가이드 글 AI 작성'
+        type: boolean
+        default: true
+      count:
+        description: '작성할 편수(1~5)'
+        type: string
+        default: '1'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: 썸네일 도구 준비
+        run: pip install --quiet pillow==11.3.0
+
+      - name: 대학로 연극 가이드 AI 글 작성
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.generate)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SITE_URL: ${{ vars.SITE_URL }}
+          COUNT: ${{ inputs.count || '1' }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then echo "::warning::ANTHROPIC_API_KEY 미설정 — 글 작성을 건너뜁니다"; exit 0; fi
+          npm ci --no-audit --no-fund
+          node tools/blog-ai/generate.mjs --count "$COUNT" || echo "::warning::이번 회차에 발행된 글이 없습니다(content/drafts 확인)"
+          python tools/thumbs/build_thumbs.py
+          git config user.name "paroot-blog-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content assets/img/blog
+          if git diff --cached --quiet; then echo "새 글 없음"; else git commit -m "대학로 연극 가이드: AI 글 자동 발행" && git pull --rebase && git push; fi
+
+      - name: 썸네일(누락분)
+        run: python tools/thumbs/build_thumbs.py
+
+      - name: 빌드
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          if [ "${{ vars.SITE_MODE }}" = "production" ]; then
+            node build.mjs
+          else
+            node build.mjs --preview "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          fi
+
+      - name: 글 검증
+        run: node tools/blog-ai/generate.mjs --check
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

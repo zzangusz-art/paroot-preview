@@ -1,0 +1,15 @@
+{
+  "name": "paroot-site",
+  "private": true,
+  "description": "파릇 정적 사이트 + 대학로 연극 가이드 AI 자동 발행(하루 3편)",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "preview": "node build.mjs && python -m http.server 5530 --directory dist",
+    "blog:generate": "node tools/blog-ai/generate.mjs",
+    "blog:check": "node tools/blog-ai/generate.mjs --check"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.135.0"
+  }
+}

@@ -1,0 +1,788 @@
+[
+  {
+    "id": "daehakro-play-recommend-2026",
+    "title": "대학로 연극 추천 2026, 처음 고를 때 보는 기준 다섯 가지",
+    "keyword": "대학로 연극 추천",
+    "category": "공연 고르기",
+    "status": "done",
+    "slug": "daehakro-play-recommend-2026",
+    "date": "2026-10-23",
+    "source": "manual"
+  },
+  {
+    "id": "daehakro-play-price-discount",
+    "title": "대학로 연극 가격, 정가 60,000원이 2만 원 안팎이 되는 구조",
+    "keyword": "대학로 연극 가격",
+    "category": "관람 가이드",
+    "status": "done",
+    "slug": "daehakro-play-price-discount",
+    "date": "2026-10-23",
+    "source": "manual"
+  },
+  {
+    "id": "hanbbeumsai-play-guide",
+    "title": "한뼘사이 연극 줄거리·러닝타임·좌석, 보기 전에 알면 좋은 것",
+    "keyword": "한뼘사이 연극",
+    "category": "작품 노트",
+    "status": "done",
+    "slug": "hanbbeumsai-play-guide",
+    "date": "2026-10-23",
+    "source": "manual"
+  },
+  {
+    "id": "hyehwa-play-recommend",
+    "title": "혜화 연극 추천, 혜화역 출구별로 고르는 법",
+    "keyword": "혜화 연극 추천",
+    "angle": "1·2·4번 출구별 공연장과 작품을 묶어 설명. 파릇 공연 기준임을 밝힌다.",
+    "category": "공연 고르기",
+    "keywords": [
+      "혜화역 연극",
+      "혜화 연극 순위"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "daehakro-kids-musical",
+    "title": "대학로 어린이 뮤지컬, 처음 데려갈 때 확인할 것",
+    "keyword": "대학로 어린이 뮤지컬",
+    "angle": "24개월 기준, 보호자 동반, 50분 전 발권, 참여 방식, 두 작품 비교 표.",
+    "category": "아이와 공연",
+    "keywords": [
+      "아이와 대학로",
+      "주말 아이 공연"
+    ],
+    "show": "wolf-forest-piglets",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "roommate-play-guide",
+    "title": "수상한 룸메이트 연극 줄거리·공연 시간·공연장",
+    "keyword": "수상한 룸메이트 연극",
+    "angle": "원작 비누향기, 110분, 서연아트홀, 관객 선택 결말과 젠더프리. 결말은 쓰지 않는다.",
+    "category": "작품 노트",
+    "keywords": [
+      "수상한 룸메이트 후기",
+      "서연아트홀"
+    ],
+    "show": "suspicious-roommate",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "office-romance-guide",
+    "title": "사내연애 보고서 연극 시간·가격·공연장 정리",
+    "keyword": "사내연애 보고서 연극",
+    "angle": "100분, 제나아트홀 지하 1층, 요일별 회차, 할인 권종과 증빙.",
+    "category": "작품 노트",
+    "keywords": [
+      "사내연애 보고서 시간",
+      "제나아트홀"
+    ],
+    "show": "office-romance-report",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "drag-in-hyehwa-guide",
+    "title": "드랙인혜화 관람 안내, 대학로 심야 드랙퀸 쇼",
+    "keyword": "드랙인혜화",
+    "angle": "금·토 23:00·00:30, 입장 22:15, 스탠딩 40분, 만 19세 이상 신분증, 환불 규정.",
+    "category": "작품 노트",
+    "keywords": [
+      "DRAG in 혜화",
+      "대학로 드랙쇼"
+    ],
+    "show": "drag-in-hyehwa",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "csat-after-play",
+    "title": "수능 끝나고 볼 연극, 중고생이 알아 둘 할인과 규정",
+    "keyword": "수능 끝나고 연극",
+    "angle": "만 12세 이상 연극, 중고생 권종과 학생증, 당일 취소 불가. 사실 목록에 없는 수험생 할인 금액은 쓰지 않는다.",
+    "category": "관람 가이드",
+    "keywords": [
+      "중고생 연극 할인",
+      "고3 연극"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "three-little-pigs-musical",
+    "title": "아기돼지삼형제 뮤지컬, 늑대가 무섭지 않은 참여형 공연",
+    "keyword": "아기돼지삼형제 뮤지컬",
+    "angle": "늑대숲 또옹돼지 원정대 줄거리·인물(척척이·반짝이·초롱이·얼프), 60분, 라온씨어터.",
+    "category": "아이와 공연",
+    "keywords": [
+      "늑대숲 또옹돼지 원정대",
+      "라온씨어터"
+    ],
+    "show": "wolf-forest-piglets",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "daehakro-date-course",
+    "title": "대학로 데이트 코스, 연극 시간에 맞춘 동선 짜기",
+    "keyword": "대학로 데이트 코스",
+    "angle": "공연 시간·회차·출구를 기준으로 전후 시간을 짜는 법. 맛집·카페 이름은 쓰지 않는다.",
+    "category": "데이트·모임",
+    "keywords": [
+      "혜화 데이트 코스",
+      "대학로 연극 데이트"
+    ],
+    "show": "hanbbeumsai",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "pinocchio-musical-guide",
+    "title": "피노키오야 노올자 공연 시간·관람 나이·참여 방식",
+    "keyword": "피노키오야 노올자",
+    "angle": "토·일 11:20·12:50, 60분, 24개월 이상, 줄다리기·공 던지기 참여, 서연아트홀.",
+    "category": "아이와 공연",
+    "keywords": [
+      "피노키오 뮤지컬",
+      "서연아트홀 어린이"
+    ],
+    "show": "pinocchio",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "hyehwa-couple-play",
+    "title": "혜화 커플 연극 추천, 썸·연애 단계별로 고르기",
+    "keyword": "혜화 커플 연극",
+    "angle": "썸은 한뼘사이, 직장 연애는 사내연애 보고서, 감동은 수상한 룸메이트 식으로 상황별 정리.",
+    "category": "데이트·모임",
+    "keywords": [
+      "대학로 커플 연극",
+      "데이트 연극"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "hanbbeumsai-review",
+    "title": "한뼘사이 후기, 관람평 8,482건에서 자주 나온 이야기",
+    "keyword": "한뼘사이 후기",
+    "angle": "관람평 원문 짧게 인용(출처 표기), 멀티맨·애드리브·소극장 거리감, 낮은 점수 후기도 언급.",
+    "category": "작품 노트",
+    "keywords": [
+      "한뼘사이 관람평",
+      "한뼘사이 연극 후기"
+    ],
+    "show": "hanbbeumsai",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "daehakro-play-booking",
+    "title": "대학로 연극 예매 방법, 네이버 예약에서 권종 고르는 순서",
+    "keyword": "대학로 연극 예매",
+    "angle": "날짜→회차→권종→증빙 확인 순서, 당일 변경·취소 불가, 매표소 수령.",
+    "category": "관람 가이드",
+    "keywords": [
+      "혜화 연극 예매",
+      "연극 예매 방법"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "christmas-play-daehakro",
+    "title": "크리스마스 연극 추천, 연말 대학로 데이트 준비",
+    "keyword": "크리스마스 연극",
+    "angle": "연말 주말 회차, 미리 예매, 로맨틱 코미디 작품 비교. 특정 이벤트 가격은 쓰지 않는다.",
+    "category": "데이트·모임",
+    "keywords": [
+      "연말 연극 추천",
+      "크리스마스 데이트"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "late-arrival-rule",
+    "title": "연극 늦으면 입장할 수 있나요? 지각·입장 규정",
+    "keyword": "연극 지각",
+    "angle": "공연 시작 후 입장 불가, 매표소 오픈 시간, 출구별 도보 거리.",
+    "category": "관람 가이드",
+    "keywords": [
+      "연극 늦으면",
+      "공연 시작 후 입장"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "office-romance-review",
+    "title": "사내연애 보고서 후기, 직장인이 공감한 장면들",
+    "keyword": "사내연애 보고서 후기",
+    "angle": "관람평 원문 짧게 인용, 팀장과 대리 설정, 멀티맨·멀티걸, 평일 낮 회차.",
+    "category": "작품 노트",
+    "keywords": [
+      "사내연애보고서 후기",
+      "오피스 로맨스 연극"
+    ],
+    "show": "office-romance-report",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "kids-first-show-age",
+    "title": "아이 첫 공연 몇 살부터? 24개월 기준으로 정리",
+    "keyword": "아이 첫 공연",
+    "angle": "24개월 이상 관람권, 미만 증빙 시 무료, 60분 공연, 관람평 속 3~5세 사례.",
+    "category": "아이와 공연",
+    "keywords": [
+      "아이 첫 뮤지컬",
+      "24개월 공연"
+    ],
+    "show": "pinocchio",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "daehakro-comedy-play",
+    "title": "대학로 코미디 연극, 웃음만 원할 때와 감동도 원할 때",
+    "keyword": "대학로 코미디 연극",
+    "angle": "한뼘사이·사내연애 보고서(웃음 위주)와 수상한 룸메이트(웃음+가족 이야기) 비교.",
+    "category": "공연 고르기",
+    "keywords": [
+      "코미디 연극 추천",
+      "웃긴 연극"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "hyehwa-parking",
+    "title": "대학로 공연장 주차, 차를 가져가도 될까",
+    "keyword": "대학로 공연장 주차",
+    "angle": "파릇 공연장 모두 주차 시설 없음, 대중교통 권장, 출구별 공연장. 특정 주차장 이름·요금은 쓰지 않는다.",
+    "category": "관람 가이드",
+    "keywords": [
+      "혜화 주차",
+      "대학로 주차"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "soap-scent-play",
+    "title": "비누향기 연극, 지금은 수상한 룸메이트로 공연합니다",
+    "keyword": "비누향기 연극",
+    "angle": "2021년 7월 비누향기로 개막, 2026년 8월 수상한 룸메이트로 새 단장, 같은 서연아트홀. 이름을 바꾼 이유는 추측하지 않는다.",
+    "category": "작품 노트",
+    "keywords": [
+      "연극 비누향기",
+      "비누향기 줄거리"
+    ],
+    "show": "suspicious-roommate",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "daehakro-play-solo",
+    "title": "대학로 연극 혼자 보기, 회차와 좌석 고르는 법",
+    "keyword": "대학로 연극 혼자",
+    "angle": "혼자 관람 후기 인용, 발권 순서 좌석 배정, 평일 회차.",
+    "category": "공연 고르기",
+    "keywords": [
+      "혼자 연극",
+      "혼공"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "participatory-musical",
+    "title": "어린이 참여형 뮤지컬이란? 보는 공연과 다른 점",
+    "keyword": "어린이 참여형 뮤지컬",
+    "angle": "두 작품의 참여 방식(놀이, 소리치기, 줄다리기), 관람평 사례, 소극적인 아이.",
+    "category": "아이와 공연",
+    "keywords": [
+      "참여형 공연",
+      "아이 참여 뮤지컬"
+    ],
+    "show": "wolf-forest-piglets",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "hyehwa-night-date",
+    "title": "혜화 밤 데이트, 연극 뒤 심야 쇼까지",
+    "keyword": "혜화 밤 데이트",
+    "angle": "저녁 연극 회차 + 금·토 밤 드랙인혜화(만 19세 이상) 동선. 술집 이름은 쓰지 않는다.",
+    "category": "데이트·모임",
+    "keywords": [
+      "혜화 밤에 할 것",
+      "대학로 심야 공연"
+    ],
+    "show": "drag-in-hyehwa",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "same-day-cancel",
+    "title": "연극 당일 취소 되나요? 파릇 공연 환불 규정",
+    "keyword": "연극 당일 취소",
+    "angle": "연극·어린이 뮤지컬·드랙인혜화 규정 비교 표.",
+    "category": "관람 가이드",
+    "keywords": [
+      "연극 환불",
+      "공연 취소 규정"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "roommate-ending-choice",
+    "title": "관객이 결말을 고르는 연극, 수상한 룸메이트",
+    "keyword": "관객 참여 연극",
+    "angle": "관객 선택 결말 방식, 회차마다 달라지는 엔딩, 젠더프리 캐스팅. 결말 내용은 쓰지 않는다.",
+    "category": "작품 노트",
+    "keywords": [
+      "결말 선택 연극",
+      "관객 투표 연극"
+    ],
+    "show": "suspicious-roommate",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "parents-play",
+    "title": "부모님과 볼 연극, 대학로에서 고르는 기준",
+    "keyword": "부모님 연극",
+    "angle": "수상한 룸메이트 가족 이야기 관람평, 공연 시간. 계단·소극장 환경은 단정하지 않는다.",
+    "category": "데이트·모임",
+    "keywords": [
+      "부모님 공연 선물",
+      "효도 연극"
+    ],
+    "show": "suspicious-roommate",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "hyehwa-station-exits",
+    "title": "혜화역 출구별 공연장 찾아가기",
+    "keyword": "혜화역 출구 공연장",
+    "angle": "1·2·4번 출구에서 각 공연장까지 가는 길, 같은 골목 건물 구분법.",
+    "category": "관람 가이드",
+    "keywords": [
+      "혜화역 2번 출구",
+      "혜화역 4번 출구"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "pinocchio-review",
+    "title": "피노키오 뮤지컬 후기, 내성적인 아이도 참여할까",
+    "keyword": "피노키오 뮤지컬 후기",
+    "angle": "관람평 원문(36개월·42개월·5세·할머니와 관람) 인용, 키워드 투표.",
+    "category": "아이와 공연",
+    "keywords": [
+      "피노키오야 노올자 후기",
+      "아이 뮤지컬 후기"
+    ],
+    "show": "pinocchio",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "student-discount",
+    "title": "대학로 연극 학생 할인, 중고생·대학생 증빙 정리",
+    "keyword": "대학로 연극 학생 할인",
+    "angle": "작품별 중고생·대학생 권종과 필요한 증빙, 미지참 시 차액.",
+    "category": "관람 가이드",
+    "keywords": [
+      "대학로 연극 대학생 할인",
+      "중고생 할인"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "multiman-role",
+    "title": "연극 멀티맨이란? 1인 다역이 웃음을 만드는 방식",
+    "keyword": "멀티맨 연극",
+    "angle": "한뼘사이·사내연애 보고서·수상한 룸메이트 관람평 속 멀티맨 언급.",
+    "category": "작품 노트",
+    "keywords": [
+      "1인 다역 연극",
+      "멀티맨"
+    ],
+    "show": "hanbbeumsai",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "company-group-viewing",
+    "title": "회사 단체 관람 연극, 준비 순서와 문의 방법",
+    "keyword": "단체 관람 연극",
+    "angle": "20인 이상 단체 문의 070-8952-2151·contact@paroot.kr, 날짜·인원·작품 정리, 초청 공연 사례.",
+    "category": "데이트·모임",
+    "keywords": [
+      "단체 연극 관람",
+      "회사 문화 행사"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "weekday-matinee",
+    "title": "평일 낮 연극, 연차 쓰고 보기 좋은 회차",
+    "keyword": "평일 낮 연극",
+    "angle": "사내연애 보고서 14:30, 한뼘사이 15:00, 수상한 룸메이트 16:00 등 평일 회차 비교.",
+    "category": "공연 고르기",
+    "keywords": [
+      "평일 연극",
+      "연차 데이트"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "wolf-forest-review",
+    "title": "늑대숲 또옹돼지 원정대 후기로 본 참여형 뮤지컬",
+    "keyword": "늑대숲 또옹돼지 원정대 후기",
+    "angle": "관람평 원문 인용(4살·7살, 28개월 등), 낮은 점수 후기의 아쉬움도 함께.",
+    "category": "아이와 공연",
+    "keywords": [
+      "아기돼지삼형제 후기",
+      "라온씨어터 후기"
+    ],
+    "show": "wolf-forest-piglets",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "drag-show-first",
+    "title": "드랙쇼 처음 본다면, 드랙인혜화에서 알아 둘 것",
+    "keyword": "드랙쇼 처음",
+    "angle": "입장 절차·신분증·스탠딩·환불 규정, 대학로의 밤 공연.",
+    "category": "관람 가이드",
+    "keywords": [
+      "드랙퀸 쇼",
+      "혜화 드랙쇼"
+    ],
+    "show": "drag-in-hyehwa",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "daehakro-small-theater",
+    "title": "대학로 소극장 연극, 처음 가면 낯선 것들",
+    "keyword": "대학로 소극장 연극",
+    "angle": "발권 순서 좌석, 무대와 객석 거리, 음료 반입 불가, 늦으면 입장 불가.",
+    "category": "관람 가이드",
+    "keywords": [
+      "소극장 연극",
+      "대학로 소극장"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "hanbbeumsai-open-run",
+    "title": "한뼘사이 오픈런, 2017년부터 이어진 대학로 공연",
+    "keyword": "한뼘사이 오픈런",
+    "angle": "2017년 3월 개막, 2021년 전용관 이전, 2관 오픈, 지역 공연, 수상 이력.",
+    "category": "작품 노트",
+    "keywords": [
+      "오픈런 연극",
+      "한뼘사이 전용관"
+    ],
+    "show": "hanbbeumsai",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "rainy-day-kids",
+    "title": "비 오는 주말 아이와 실내 공연, 대학로 오전 뮤지컬",
+    "keyword": "비 오는 날 아이와",
+    "angle": "토·일 오전 회차, 60분, 혜화역 출구, 관람평 속 비 오는 날 방문 사례.",
+    "category": "아이와 공연",
+    "keywords": [
+      "주말 실내 놀이",
+      "아이와 실내"
+    ],
+    "show": "pinocchio",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "daehakro-play-cheap",
+    "title": "대학로 연극 싸게 보는 법, 요일과 회차로 고르기",
+    "keyword": "대학로 연극 싸게 보는 법",
+    "angle": "평일·주말 차이, 조조·심야 권종, 조건부 할인과 증빙. 가격 글과 겹치지 않게 회차 선택 중심.",
+    "category": "관람 가이드",
+    "keywords": [
+      "연극 할인",
+      "저렴한 연극"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "genderfree-play",
+    "title": "젠더프리 연극이란? 수상한 룸메이트의 두 가지 성훈",
+    "keyword": "젠더프리 연극",
+    "angle": "성훈 역을 남녀 배우가 나눠 맡는 방식, 관람평 속 딸 성훈·아들 성훈.",
+    "category": "작품 노트",
+    "keywords": [
+      "젠더프리 캐스팅",
+      "성별 바뀐 배역"
+    ],
+    "show": "suspicious-roommate",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "friends-group-play",
+    "title": "친구 모임 대학로 연극, 인원별 예매 요령",
+    "keyword": "대학로 연극 친구",
+    "angle": "함께 예매하면 발권 순서 좌석, 권종이 다른 일행, 공연 후 동선.",
+    "category": "데이트·모임",
+    "keywords": [
+      "친구랑 연극",
+      "모임 연극"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "drink-food-rule",
+    "title": "연극 볼 때 음료 마셔도 되나요? 반입 규정",
+    "keyword": "연극 음료 반입",
+    "angle": "물 포함 음료·음식물 반입 불가, 공연 전 준비.",
+    "category": "관람 가이드",
+    "keywords": [
+      "공연장 음식",
+      "연극 물"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "paroot-company",
+    "title": "파릇은 어떤 회사인가요? 대학로 공연 제작사 이야기",
+    "keyword": "파릇 공연 제작사",
+    "angle": "2016년 시작, 작품 목록, 연혁, 수상, 오디션·제휴 창구.",
+    "category": "작품 노트",
+    "keywords": [
+      "주식회사 파릇",
+      "대학로 제작사"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "hyehwa-play-time",
+    "title": "혜화 연극 시간표, 평일 낮부터 주말 밤까지",
+    "keyword": "혜화 연극 시간",
+    "angle": "파릇 공연 요일별 회차 전체 표, 공연 시간 합산해 끝나는 시각 계산.",
+    "category": "공연 고르기",
+    "keywords": [
+      "대학로 연극 시간표",
+      "연극 회차"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "ticket-pickup",
+    "title": "연극 티켓 수령, 매표소 오픈 시간과 준비물",
+    "keyword": "연극 티켓 수령",
+    "angle": "연극 1시간 전, 어린이 뮤지컬 50분 전, 예매자 이름, 증빙, 신분증(드랙).",
+    "category": "관람 가이드",
+    "keywords": [
+      "매표소 시간",
+      "현장 발권"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "daehakro-indoor-date",
+    "title": "대학로 실내 데이트, 날씨 상관없이 연극 보기",
+    "keyword": "대학로 실내 데이트",
+    "angle": "계절·날씨와 무관한 소극장 관람, 회차, 공연 시간.",
+    "category": "데이트·모임",
+    "keywords": [
+      "비 오는 날 데이트",
+      "겨울 실내 데이트"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "hanbbeumsai-china",
+    "title": "한뼘사이 중국 라이선스와 지역 공연 이야기",
+    "keyword": "한뼘사이 중국",
+    "angle": "2023년 12월 중국 라이선스 공연, 11개 도시 지역 공연, 초청 공연.",
+    "category": "작품 노트",
+    "keywords": [
+      "한뼘사이 지역 공연",
+      "연극 라이선스"
+    ],
+    "show": "hanbbeumsai",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "audition-guide",
+    "title": "대학로 연극 오디션, 파릇 지원 방법",
+    "keyword": "대학로 연극 오디션",
+    "angle": "audition@paroot.kr, 프로필·포트폴리오·사진, 작품별 공고 예시(한뼘사이 19차 등).",
+    "category": "작품 노트",
+    "keywords": [
+      "연극 배우 오디션",
+      "파릇 오디션"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "invited-performance",
+    "title": "기업·학교 초청 연극 공연, 이렇게 진행됩니다",
+    "keyword": "기업 초청 공연",
+    "angle": "삼성전자·POSCO·건양대·광양제철소 사례, 문의 창구. 견적 금액은 쓰지 않는다.",
+    "category": "데이트·모임",
+    "keywords": [
+      "초청 공연",
+      "찾아가는 공연"
+    ],
+    "show": "hanbbeumsai",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "daehakro-romance-play",
+    "title": "대학로 로맨스 연극, 연애 단계별로 고르기",
+    "keyword": "대학로 로맨스 연극",
+    "angle": "썸·첫사랑·재회 설정별 작품, 공연 시간과 회차.",
+    "category": "공연 고르기",
+    "keywords": [
+      "로맨스 코미디 연극",
+      "설레는 연극"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "play-manners",
+    "title": "연극 관람 매너, 소극장에서 꼭 지킬 것",
+    "keyword": "연극 관람 매너",
+    "angle": "입장 시간, 음료, 휴대폰은 일반적인 매너로만, 사실 목록의 규정 중심.",
+    "category": "관람 가이드",
+    "keywords": [
+      "공연 매너",
+      "관람 예절"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "year-end-group",
+    "title": "연말 모임 연극 단체 관람, 미리 정할 것",
+    "keyword": "연말 모임 연극",
+    "angle": "단체 문의, 인원·날짜·작품, 연말 주말 회차.",
+    "category": "데이트·모임",
+    "keywords": [
+      "송년회 연극",
+      "연말 단체 관람"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "hyehwa-play-seat",
+    "title": "혜화 연극 자리 고르기, 소극장 좌석 배정 방식",
+    "keyword": "혜화 연극 자리",
+    "angle": "지정석 제외 발권 순서 배정, 일찍 도착, 관람평 속 좌석 간격 이야기.",
+    "category": "관람 가이드",
+    "keywords": [
+      "연극 좌석 추천",
+      "소극장 자리"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "daehakro-winter-date",
+    "title": "대학로 겨울 데이트, 따뜻하게 보는 연극",
+    "keyword": "대학로 겨울 데이트",
+    "angle": "실내 공연, 외투 보관은 단정하지 않고 팁으로만, 연말 회차.",
+    "category": "데이트·모임",
+    "keywords": [
+      "겨울 데이트 코스",
+      "12월 데이트"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "open-run-meaning",
+    "title": "오픈런 연극이란? 대학로 장기 공연 읽는 법",
+    "keyword": "오픈런 연극",
+    "angle": "종료일 없이 이어지는 공연, 파릇 오픈런 작품의 개막 연도.",
+    "category": "작품 노트",
+    "keywords": [
+      "오픈런 뜻",
+      "장기 공연"
+    ],
+    "show": "",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  },
+  {
+    "id": "kids-weekend-hyehwa",
+    "title": "주말 아이와 혜화 가볼 만한 곳, 오전 뮤지컬 동선",
+    "keyword": "혜화 아이와 가볼 만한 곳",
+    "angle": "11:20 회차 기준 도착·발권·관람·귀가 동선, 출구.",
+    "category": "아이와 공연",
+    "keywords": [
+      "대학로 아이",
+      "주말 아이와 서울"
+    ],
+    "show": "wolf-forest-piglets",
+    "status": "todo",
+    "source": "plan-2026-10-23"
+  }
+]
