@@ -1,6 +1,6 @@
 """보도 썸네일 만들기 — 기존 paroot.kr 뉴스 게시판에 고객사가 올린 기사 이미지(첫 번째 본문 이미지)를 640×400 WebP로.
 원본: ../research/images/press/<게시글 idx>_<n>.<ext> (2026-10-23 수집, 목록 press-images.json)
-출력: assets/img/press/<idx>.webp
+출력: assets/img/press/<idx>.webp (+ 360×225 작은 사본 <idx>-sm.webp)
 사용: python -I tools/prepare_press.py
 """
 from pathlib import Path
@@ -45,7 +45,9 @@ def main():
     for idx, (stem, fy) in PICK.items():
         f = next(p for p in SRC.iterdir() if p.stem == stem)
         im = ImageOps.exif_transpose(Image.open(f)).convert('RGB')
-        cover(im, 640, 400, fy).save(OUT / f'{idx}.webp', 'WEBP', quality=80, method=6)
+        c = cover(im, 640, 400, fy)
+        c.save(OUT / f'{idx}.webp', 'WEBP', quality=80, method=6)
+        c.resize((360, 225), Image.LANCZOS).save(OUT / f'{idx}-sm.webp', 'WEBP', quality=78, method=6)  # 모바일 목록용(srcset)
         print(idx, f.name, im.size)
 
 

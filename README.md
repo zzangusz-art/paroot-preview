@@ -13,8 +13,8 @@
 | `src/layout.mjs` · `src/parts.mjs` | `<head>`(메타·OG·JSON-LD), 헤더, 메뉴 드로어, 예매 드로어, 빠른 보기·후기 모달, 푸터 / 공용 카드·평점 막대·아코디언 |
 | `src/schema.mjs` | 구조화 데이터(Organization+PerformingGroup, TheaterEvent·Event+Schedule+AggregateOffer, FAQPage, BreadcrumbList, BlogPosting) |
 | `assets/css/style.css` · `assets/js/app.js` | 디자인(Noto Sans KR) / 인터랙션: 모달·드로어·바텀시트·토스트·아코디언·탭·스켈레톤·스크롤 시퀀스 5종·라이트박스·문의 메일 정리 |
-| `assets/video/` | 히어로 필름(4K `hero-2160.mp4` 15MB · 1080p `hero-1080.mp4` 5MB · 모바일 세로 `hero-m.mp4` 4.5MB, 소리 포함) — 만드는 법은 `../motion/` |
-| `assets/img/shows/<slug>/` | 포스터·키비주얼·네이버 예약 상세 이미지·무대 사진(WebP) — `python -I tools/prepare_images.py` 로 다시 만듦 |
+| `assets/video/` | 히어로 필름(4K `hero-2160.mp4` 15MB · 1080p `hero-1080.mp4` 5MB · 모바일 세로 `hero-m.mp4` 3.4MB · 3G용 `hero-m-lite.mp4` 2MB, 소리 포함). 휴대폰은 페이지 로드가 끝난 뒤 받기 시작 — 만드는 법은 `../motion/` |
+| `assets/img/shows/<slug>/` | 포스터·키비주얼·네이버 예약 상세 이미지·무대 사진(WebP, 무대 사진은 휴대폰용 560px 사본 `-sm.webp` 함께) — `python -I tools/prepare_images.py` 로 다시 만듦. `img()`에 `sizes`를 주면 `-sm` 사본이 있을 때 srcset 자동 |
 | `assets/img/press/` | 보도 썸네일(640×400) — 기존 paroot.kr 뉴스 게시판에 올린 기사 이미지로 `python -I tools/prepare_press.py` 가 만듦 |
 | `content/blog/*.md` | 블로그 원고. `_topics.json` = AI가 쓸 주제 대기열(대표 키워드 중복 없음) |
 | `content/drafts/` | 검증에 떨어진 AI 초안(발행 안 됨). 고쳐서 `content/blog/`로 옮기면 발행 |

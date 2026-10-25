@@ -224,12 +224,16 @@
     const saveData = navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType || ''));
     if (v) {
       const portrait = matchMedia('(max-aspect-ratio: 4/5)').matches && innerWidth < 900;
-      const big = !portrait && screen.width * devicePixelRatio >= 2400 && !saveData && navigator.connection?.effectiveType !== '3g';
-      const src = portrait ? v.dataset.srcM : big ? v.dataset.src4k : v.dataset.src;
+      // 느린 연결(3G)은 720p 가벼운 영상. downlink 는 첫 방문 때 낮게 잡히는 일이 있어 쓰지 않는다
+      const conn = navigator.connection, slow = !!conn && /3g/.test(conn.effectiveType || '');
+      const big = !portrait && screen.width * devicePixelRatio >= 2400 && !saveData && !slow;
+      const src = portrait ? (slow ? v.dataset.srcMLite : v.dataset.srcM) : big ? v.dataset.src4k : v.dataset.src;
       if (portrait) v.poster = ROOT + 'assets/video/hero-poster-m.webp';
       if (!reduce && !saveData) {
-        v.src = ROOT + src; v.muted = true;
-        v.play().catch(() => { rep && (rep.hidden = false); });
+        // 휴대폰에서는 글꼴·첫 화면 이미지가 먼저 받아지도록 페이지 로드가 끝난 뒤 영상을 받기 시작(그동안 포스터)
+        const start = () => { if (v.getAttribute('src')) return; v.src = ROOT + src; v.muted = true; v.play().catch(() => { rep && (rep.hidden = false); }); };
+        if (!portrait || d.readyState === 'complete') start();
+        else { addEventListener('load', start, { once: true }); setTimeout(start, 2500); }
       } else {
         v.removeAttribute('autoplay'); v.preload = 'none'; v.dataset.lazy = src; rep && (rep.hidden = false);
       }
@@ -357,18 +361,21 @@
   // ── 7) 공연 상세: 하위 메뉴 위치 표시, 상세 이미지 펼치기, 모바일 예매 바 ──
   const subnav = $('.subnav');
   if (subnav) {
-    const links = $$('a', subnav), secs = links.map(a => d.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+    const row = $('.wrap', subnav), links = $$('a', subnav), secs = links.map(a => d.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+    // 지금 탭을 탭 줄 안에서만 가운데로 민다. scrollIntoView는 페이지 세로 위치까지 움직여서(처음 열 때 아래로 내려감) 쓰지 않는다.
+    const center = a => { const r = a.getBoundingClientRect(), w = row.getBoundingClientRect(); row.scrollTo({ left: row.scrollLeft + r.left + r.width / 2 - w.left - w.width / 2, behavior: reduce ? 'auto' : 'smooth' }); };
     onScrollFns.push(() => {
       let cur = secs[0];
       secs.forEach(s => { if (s.getBoundingClientRect().top < innerHeight * .35) cur = s; });
-      links.forEach(a => { const on = a.getAttribute('href') === '#' + cur.id; a.classList.toggle('on', on); if (on && a.scrollIntoView && subnav.dataset.cur !== cur.id) { subnav.dataset.cur = cur.id; a.scrollIntoView({ block: 'nearest', inline: 'center' }); } });
+      links.forEach(a => { const on = a.getAttribute('href') === '#' + cur.id; a.classList.toggle('on', on); if (on && subnav.dataset.cur !== cur.id) { subnav.dataset.cur = cur.id; center(a); } });
     });
   }
   $$('[data-fold]').forEach(b => b.addEventListener('click', () => {
     const f = d.getElementById(b.dataset.fold); const open = !f.classList.contains('open');
     f.classList.toggle('open', open); b.setAttribute('aria-expanded', String(open));
-    b.querySelector('span').textContent = open ? '상세 정보 접기' : '상세 정보 더 보기';
+    b.querySelector('span').textContent = open ? (b.dataset.less || '상세 정보 접기') : (b.dataset.more || '상세 정보 더 보기');
     if (!open) f.scrollIntoView({ block: 'start' });
+    dispatchEvent(new Event('resize'));
   }));
   const mbar = $('.mbar');
   if (mbar) {

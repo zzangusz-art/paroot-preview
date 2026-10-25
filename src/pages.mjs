@@ -21,7 +21,8 @@ const lightbox = `<div class="modal" id="modalImg" hidden role="dialog" aria-mod
 
 // ── 공연 전체 ──
 export function showsIndex(u) {
-  const rows = SHOWS.map(s => { const v = venueOf(s); return `<tr><th scope="row"><a href="${u(`shows/${s.slug}/`)}">${esc(s.title)}</a></th><td>${CAT[s.cat]} · ${esc(s.genre)}</td><td>${esc(v.name)}<br><small class="muted">혜화역 ${v.exit}번 출구</small></td><td>${s.runtime}분</td><td>${esc(s.age.replace(/\(.*\)/, ''))}</td><td>${s.schedule.map(([d, t]) => `${d} ${t}`).join('<br>')}</td><td>${won(priceFrom(s))}~</td><td>${s.rating ? `★${s.rating.avg.toFixed(2)} (${s.rating.count.toLocaleString('ko-KR')})` : '—'}</td></tr>`; }).join('');
+  // 휴대폰에서는 표가 공연별 카드로 바뀐다(data-label 이 칸 이름)
+  const rows = SHOWS.map(s => { const v = venueOf(s); return `<tr><th scope="row"><a href="${u(`shows/${s.slug}/`)}">${esc(s.title)}</a></th><td data-label="장르"><span>${CAT[s.cat]} · ${esc(s.genre)}</span></td><td data-label="공연장"><span>${esc(v.name)}<br><small class="muted">혜화역 ${v.exit}번 출구</small></span></td><td data-label="시간"><span>${s.runtime}분</span></td><td data-label="관람 연령"><span>${esc(s.age.replace(/\(.*\)/, ''))}</span></td><td data-label="회차"><span>${s.schedule.map(([d, t]) => `${d} ${t}`).join('<br>')}</span></td><td data-label="가격"><span>${won(priceFrom(s))}~</span></td><td data-label="관람평"><span>${s.rating ? `★${s.rating.avg.toFixed(2)} (${s.rating.count.toLocaleString('ko-KR')})` : '—'}</span></td></tr>`; }).join('');
   return `${pageHd(u, { crumb: [['홈', ''], ['공연', 'shows/']], eyebrow: 'Shows', title: '대학로 연극·뮤지컬<br>파릇 공연 전체', lead: `연극 3편, 어린이 뮤지컬 2편, 심야 쇼 1편. 모두 혜화역에서 걸어서 5분 안의 대학로 공연장에서 열립니다(${ASOF_LABEL} 기준).` })}
 <section class="sec-tight"><div class="wrap">
   <p class="answer">대학로·혜화에서 지금 볼 수 있는 파릇 공연은 로맨틱 코미디 「한뼘사이」, 힐링 코미디 「수상한 룸메이트」(원작 비누향기), 오피스 로맨틱 코미디 「사내연애 보고서」, 어린이 참여형 뮤지컬 「늑대숲 또옹돼지 원정대」와 「피노키오야 노올자」, 금·토 심야 드랙퀸 쇼 「드랙인혜화」입니다.</p>
@@ -33,7 +34,7 @@ export function showsIndex(u) {
 </div></section>
 <section class="sec-tight sec-soft"><div class="wrap">
   <h2 class="h2" style="font-size:clamp(24px,3vw,34px);margin-bottom:22px">한 번에 비교하기</h2>
-  <div class="tbl-scroll"><table class="cmp"><thead><tr><th>공연</th><th>장르</th><th>공연장</th><th>시간</th><th>관람 연령</th><th>회차</th><th>가격</th><th>관람평</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <div class="tbl-scroll tbl-cards"><table class="cmp cmp-wide"><thead><tr><th>공연</th><th>장르</th><th>공연장</th><th>시간</th><th>관람 연령</th><th>회차</th><th>가격</th><th>관람평</th></tr></thead><tbody>${rows}</tbody></table></div>
   <p class="muted" style="font-size:13.5px;margin-top:12px">가격은 네이버 예약에서 증빙 없이 살 수 있는 가장 낮은 일반 가격입니다. 중고생·대학생·군인 등 할인은 공연 상세에서 확인하세요. 회차는 날짜에 따라 바뀔 수 있습니다.</p>
 </div></section>
 ${ctaBand(u)}`;
@@ -76,7 +77,7 @@ export function showPage(u, s, posts) {
 </div></section>
 ${im.gallery.length ? `<section class="sec-tight sec-soft" id="stage"><div class="wrap">
   <div class="sec-head" style="margin-bottom:24px"><div><p class="eyebrow">Stage</p><h2 class="h2" style="font-size:clamp(24px,3vw,34px)">무대 사진</h2></div><span class="muted">사진을 누르면 크게 볼 수 있습니다</span></div>
-  <div class="gallery">${im.gallery.map((g, i) => `<button class="gal" type="button" data-lightbox="${u(`assets/img/shows/${s.slug}/gallery/${String(i + 1).padStart(2, '0')}.webp`)}" data-alt="${esc(s.title)} 무대 사진 ${i + 1}">${phImg(u, `assets/img/shows/${s.slug}/gallery/${String(i + 1).padStart(2, '0')}.webp`, `${s.title} 무대 사진 ${i + 1}`)}</button>`).join('')}</div>
+  <div class="gallery">${im.gallery.map((g, i) => `<button class="gal" type="button" data-lightbox="${u(`assets/img/shows/${s.slug}/gallery/${String(i + 1).padStart(2, '0')}.webp`)}" data-alt="${esc(s.title)} 무대 사진 ${i + 1}">${phImg(u, `assets/img/shows/${s.slug}/gallery/${String(i + 1).padStart(2, '0')}.webp`, `${s.title} 무대 사진 ${i + 1}`, { sizes: '(max-width: 760px) calc(50vw - 25px), 300px' })}</button>`).join('')}</div>
 </div></section>` : ''}
 <section class="sec-tight" id="detail"><div class="wrap">
   <div class="sec-head" style="margin-bottom:24px"><div><p class="eyebrow">Details</p><h2 class="h2" style="font-size:clamp(24px,3vw,34px)">상세 정보</h2><p class="lead" style="font-size:15.5px">네이버 예약 상세 안내와 같은 내용입니다. 기간 한정 이벤트 안내는 뺐습니다.</p></div></div>

@@ -51,9 +51,12 @@ export function webpSize(rel) {
   return wh;
 }
 // u: 상대 경로 함수, rel: assets/ 부터의 경로(WebP)
+// sizes 를 주고 옆에 작은 사본(<이름>-sm.webp)이 있으면 srcset 을 붙여 휴대폰은 작은 사본을 받는다
 export function img(u, rel, alt, { cls = '', lazy = true, priority = false, sizes = '' } = {}) {
   const [w, h] = webpSize(rel);
-  return `<img src="${u(rel)}" alt="${esc(alt)}" width="${w}" height="${h}"${cls ? ` class="${cls}"` : ''}${lazy && !priority ? ' loading="lazy"' : ''} decoding="async"${priority ? ' fetchpriority="high"' : ''}${sizes ? ` sizes="${sizes}"` : ''}>`;
+  const sm = rel.replace(/\.webp$/, '-sm.webp');
+  const srcset = sizes && sm !== rel && fs.existsSync(path.join(ROOT, sm)) ? ` srcset="${u(sm)} ${webpSize(sm)[0]}w, ${u(rel)} ${w}w"` : '';
+  return `<img src="${u(rel)}"${srcset} alt="${esc(alt)}" width="${w}" height="${h}"${cls ? ` class="${cls}"` : ''}${lazy && !priority ? ' loading="lazy"' : ''} decoding="async"${priority ? ' fetchpriority="high"' : ''}${sizes ? ` sizes="${sizes}"` : ''}>`;
 }
 // 스켈레톤 자리(.ph) 안의 사진 — 받는 동안 반짝이는 회색 칸
 export const phImg = (u, rel, alt, o = {}) => `<div class="ph${o.wrapCls ? ' ' + o.wrapCls : ''}">${img(u, rel, alt, o)}</div>`;

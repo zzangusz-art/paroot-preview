@@ -44,6 +44,9 @@ STILLS = [('exterior', 'exterior', 3), ('crowd-a', 'crowdA', 12), ('crowd-b', 'c
 ARCHIVE = ['legacy/090.jpg', 'legacy/091.jpg', 'legacy/092.jpg', 'legacy/093.jpg', 'legacy/094.jpg', 'legacy/095.jpg']
 
 
+SM_W = 560  # 작은 사본 너비: 모바일 2열 칸(약 175px) × 화면 배율 3
+
+
 def load(rel):
     im = Image.open(SRC / rel)
     im = ImageOps.exif_transpose(im)
@@ -92,7 +95,9 @@ def main():
             det.append(save(im, d / 'detail' / f'{n}.webp', 78, 1000))
         gal = []
         for i, g in enumerate(c['gallery'], 1):
-            gal.append(save(load(g), d / 'gallery' / f'{i:02d}.webp', 80, 1400))
+            im = load(g)
+            gal.append(save(im, d / 'gallery' / f'{i:02d}.webp', 80, 1400))
+            save(im, d / 'gallery' / f'{i:02d}-sm.webp', 76, SM_W)  # 모바일 2열 격자용(srcset)
         report[slug] = {'detail': [[n, *s] for n, s in zip(c['detail'], det)], 'gallery': [list(s) for s in gal]}
         print(slug, 'detail', len(det), 'gallery', len(gal))
     # 영상 스틸

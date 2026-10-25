@@ -10,7 +10,7 @@ function hero(u) {
   return `<section class="hero" aria-label="파릇 소개 영상">
   <div class="hero-stage">
     <div class="hero-film">
-      <video id="film" muted playsinline preload="none" poster="${u('assets/video/hero-poster.webp')}" data-src="assets/video/hero-1080.mp4" data-src4k="assets/video/hero-2160.mp4" data-src-m="assets/video/hero-m.mp4" aria-label="파릇 쇼릴 15초: 대학로 공연장, 객석, 배우들, 한뼘사이, 공연 라인업, 파릇 로고"></video>
+      <video id="film" muted playsinline preload="none" poster="${u('assets/video/hero-poster.webp')}" data-src="assets/video/hero-1080.mp4" data-src4k="assets/video/hero-2160.mp4" data-src-m="assets/video/hero-m.mp4" data-src-m-lite="assets/video/hero-m-lite.mp4" aria-label="파릇 쇼릴 15초: 대학로 공연장, 객석, 배우들, 한뼘사이, 공연 라인업, 파릇 로고"></video>
       <div class="film-bar" aria-hidden="true"></div>
     </div>
     <div class="film-ctl">
@@ -125,7 +125,8 @@ function finder(u) {
 export function historyBlock() {
   return `<div class="history">
     <div class="hs-side"><p class="eyebrow">History</p><div class="hs-year" aria-hidden="true">${HISTORY[HISTORY.length - 1].year}</div><p class="lead" style="font-size:16px;margin-top:14px">2016년 첫 어린이뮤지컬 기획부터 지금까지, 파릇이 올린 무대의 기록입니다.</p></div>
-    <div class="hs-line">${[...HISTORY].reverse().map(h => `<div class="hs-item" data-year="${h.year}"><h3>${h.year}</h3><ul>${[...h.items].reverse().map(([d, t]) => `<li><b>${d.slice(5)}월</b>${esc(t).replace(/&lt;(.+?)&gt;/g, '「$1」')}</li>`).join('')}</ul></div>`).join('')}</div>
+    <div><div class="hs-line m-fold" id="hsFold">${[...HISTORY].reverse().map(h => `<div class="hs-item" data-year="${h.year}"><h3>${h.year}</h3><ul>${[...h.items].reverse().map(([d, t]) => `<li><b>${d.slice(5)}월</b>${esc(t).replace(/&lt;(.+?)&gt;/g, '「$1」')}</li>`).join('')}</ul></div>`).join('')}</div>
+    <div class="m-more"><button class="btn btn-line" type="button" data-fold="hsFold" data-more="연혁 전체 보기" data-less="연혁 접기" aria-expanded="false" aria-controls="hsFold"><span>연혁 전체 보기</span>${ico('chev')}</button></div></div>
   </div>`;
 }
 
@@ -134,10 +135,10 @@ function history() {
 }
 
 // 보도 카드: 기사 썸네일(기존 파릇 홈페이지 뉴스 게시판에 올린 이미지) + 언론사 + 제목 + 날짜, 누르면 기사 원문(새 창)
-export const pressCard = (u, p) => `<a class="pr-card reveal" href="${p.u}" target="_blank" rel="noopener">${phImg(u, `assets/img/${p.img}`, '', { wrapCls: 'pr-img' })}<span class="pr-body"><span class="src">${esc(p.o)}</span><span class="tt">${esc(p.t)}</span><span class="dt">${kdate(p.d)}${ico('ext')}</span></span></a>`;
+export const pressCard = (u, p) => `<a class="pr-card reveal" href="${p.u}" target="_blank" rel="noopener">${phImg(u, `assets/img/${p.img}`, '', { wrapCls: 'pr-img', sizes: '(max-width: 520px) 120px, (max-width: 1099px) 50vw, 300px' })}<span class="pr-body"><span class="src">${esc(p.o)}</span><span class="tt">${esc(p.t)}</span><span class="dt">${kdate(p.d)}${ico('ext')}</span></span></a>`;
 export function awardsPress(u, n = 8) {
   return `<div class="awards">${AWARDS.map(a => `<div class="award reveal"><span class="a-ico">${ico('award')}</span><span><b>${esc(a.t).replace(/&lt;(.+?)&gt;/g, '「$1」')}</b><span>${esc(a.d).replace(/&lt;(.+?)&gt;/g, '「$1」')} · ${esc(a.src)}</span></span></div>`).join('')}</div>
-  <div class="press-grid">${PRESS.slice(0, n).map(p => pressCard(u, p)).join('')}</div>`;
+  <div class="press-grid m-cap">${PRESS.slice(0, n).map(p => pressCard(u, p)).join('')}</div>`;
 }
 
 function press(u) {
@@ -154,7 +155,7 @@ function venues(u) {
   return `<section class="sec sec-soft" id="visit" aria-labelledby="vsTitle">
   <div class="wrap">
     <div class="sec-head"><div><p class="eyebrow">Venues</p><h2 class="h2" id="vsTitle">모두 혜화역에서<br>걸어서 5분 안</h2><p class="lead">파릇 공연은 대학로 다섯 곳의 공연장에서 열립니다. 공연장마다 가까운 출구가 다르니 예매한 공연장을 먼저 확인해 주세요. 주차 시설은 모두 없습니다.</p></div><a class="btn btn-dark" href="${u('visit/')}">출구별 오시는 길${ico('arrow')}</a></div>
-    <div class="venues">${VENUES.map(v => venueCard(u, v)).join('')}</div>
+    <div class="venues m-swipe">${VENUES.map(v => venueCard(u, v)).join('')}</div>
   </div>
 </section>`;
 }

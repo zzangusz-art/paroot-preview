@@ -212,7 +212,7 @@ ul, ol { margin: 0; padding: 0; }
 .hero-shows .ph { background: #24212C; }
 .hero-shows a:hover .hs-img, .hero-shows a:focus-visible .hs-img { transform: translateY(-5px); border-color: rgba(255,255,255,.55); }
 .hero-shows b { font-size: 13.5px; font-weight: 700; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.hero-shows small { font-size: 11.5px; color: #CFC8D9; line-height: 1.2; }
+.hero-shows small { font-size: 12px; color: #CFC8D9; line-height: 1.2; }
 @media (max-width: 640px) {
   .hero-copy .lead { font-size: 15px; margin: 10px auto 18px; }
   .hero-shows { justify-content: flex-start; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin: 22px -20px 0; padding: 0 20px 6px; }
@@ -490,7 +490,7 @@ ul, ol { margin: 0; padding: 0; }
 .page-hd { background: var(--ink); color: var(--on-dk); padding: calc(var(--hd) + clamp(48px, 7vw, 96px)) 0 clamp(48px, 6vw, 80px); position: relative; overflow: hidden; }
 .page-hd::after { content: ""; position: absolute; inset: auto -10% -60% 40%; height: 120%; background: radial-gradient(closest-side, rgba(165,139,203,.32), transparent); pointer-events: none; }
 .page-hd h1 { font-size: clamp(34px, 5.4vw, 64px); font-weight: 900; letter-spacing: -.05em; position: relative; z-index: 1; }
-.page-hd .lead { margin-top: 18px; position: relative; z-index: 1; }
+.page-hd .lead { margin-top: 18px; position: relative; z-index: 1; color: #D9D3E3; }
 .crumbs { display: flex; flex-wrap: wrap; gap: 6px; font-size: 13.5px; color: var(--on-dk-sub); margin-bottom: 22px; list-style: none; position: relative; z-index: 1; }
 .crumbs li + li::before { content: "/"; margin-right: 6px; opacity: .5; }
 .crumbs a:hover { color: #fff; }
@@ -554,7 +554,7 @@ ul, ol { margin: 0; padding: 0; }
 .cmp thead th { background: var(--ink); color: #fff; font-weight: 700; white-space: nowrap; }
 .cmp tbody th { font-weight: 800; white-space: nowrap; }
 .tbl-scroll { overflow-x: auto; border-radius: var(--r); border: 1px solid var(--line); max-width: 100%; }
-.tbl-scroll table { min-width: 640px; }
+.tbl-scroll .cmp-wide { min-width: 760px; }
 
 /* ── 블로그 글 ── */
 .article { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: clamp(32px, 5vw, 72px); }
@@ -660,4 +660,50 @@ ul, ol { margin: 0; padding: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* ── 모바일 최적화: 터치 영역·접기·옆으로 넘기기·표 카드·하단 예매 바 여백 ── */
+a, button, summary, label, [role="tab"] { -webkit-tap-highlight-color: transparent; }
+.btn[aria-expanded="true"] .ico { transform: rotate(180deg); }
+.m-more { display: none; }
+@media (max-width: 860px) {
+  .has-bar .ft { padding-bottom: calc(40px + 74px + env(safe-area-inset-bottom)); }
+  .ft-links ul { gap: 0; }
+  .ft-links a { padding: 10px 0; }
+}
+@media (max-width: 640px) {
+  /* 긴 연혁은 앞부분만 보이고 버튼으로 펼침 */
+  .m-fold:not(.open) { max-height: 720px; overflow: hidden; -webkit-mask-image: linear-gradient(#000 72%, transparent); mask-image: linear-gradient(#000 72%, transparent); }
+  .m-more { display: block; margin-top: 4px; }
+  .m-more .btn { width: 100%; }
+  /* 홈 공연장 카드: 세로로 다섯 장 쌓는 대신 옆으로 넘기기 */
+  .m-swipe { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; margin: 0 -20px; padding: 0 20px 10px; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .m-swipe::-webkit-scrollbar { display: none; }
+  .m-swipe > * { flex: 0 0 86%; scroll-snap-align: center; }
+  /* 홈·소개의 보도 카드는 4건까지(전체는 소식 페이지) */
+  .press-grid.m-cap .pr-card:nth-child(n+5) { display: none; }
+  /* 공연 비교표 → 공연별 카드 */
+  .tbl-cards { overflow: visible; border: 0; border-radius: 0; }
+  .tbl-cards .cmp-wide { min-width: 0; background: none; border-radius: 0; overflow: visible; }
+  .cmp-wide thead { display: none; }
+  .cmp-wide, .cmp-wide tbody, .cmp-wide tr, .cmp-wide th, .cmp-wide td { display: block; }
+  .cmp-wide tr { background: #fff; border: 1px solid var(--line); border-radius: var(--r); padding: 6px 18px 8px; margin-bottom: 12px; }
+  .cmp-wide tbody th { padding: 0; border-bottom: 1px solid var(--line); font-size: 17.5px; white-space: normal; }
+  .cmp-wide tbody th a { display: flex; align-items: center; min-height: 48px; }
+  .cmp-wide td { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; padding: 9px 0; font-size: 14.5px; border-bottom: 1px dashed var(--line); }
+  .cmp-wide td:last-child { border-bottom: 0; }
+  .cmp-wide td::before { content: attr(data-label); color: var(--mute); font-weight: 600; }
+  .hero-shows small { font-size: 12px; }
+}
+.h2 > a { display: inline-block; padding: 6px 0; }
+/* 손가락으로 누르는 기기: 태그 링크를 조금 키우고, 마우스 올림 효과 대신 누를 때 반응 */
+@media (pointer: coarse) {
+  a.tag { height: 34px; padding: 0 13px; font-size: 13px; }
+}
+@media (hover: none) {
+  .hero-shows a:hover .hs-img, .show-card:hover, .show-card:hover .sc-poster img, .bt:hover .bt-bg, .rs-head:hover .rs-img, .rv-card:hover, .pr-card:hover, .pr-card:hover .pr-img img, .post-card:hover .pc-cover img, .bk:hover, .gal:hover img { transform: none; }
+  .bt:hover::after { opacity: 0; }
+  .btn:active, .chip:active { transform: scale(.97); }
+  .show-card:active, .rv-card:active, .pr-card:active, .post-card:active, .gal:active, .bk:active, .venue:active { transform: scale(.985); }
+  .gal, .post-card, .venue { transition: transform .2s var(--ease); }
 }
