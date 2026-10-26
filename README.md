@@ -8,13 +8,14 @@
 | 경로 | 내용 |
 |---|---|
 | `src/data.mjs` | **공연·가격·회차·공연장·관람 규정·연혁·수상·보도·FAQ — 사실 정보는 여기 한 곳만 고칩니다** (네이버 예약 2026-10-23 기준) |
-| `src/home.mjs` | 홈: 히어로 필름 → 스크롤하면 카드로 줄며 기존 배너 문구·공연 썸네일 → 공연 라인업(세로 스크롤 → 가로 이동) → 관람평(공연별 썸네일·평점) → 한뼘사이 스포트라이트(벤토 그리드) → 관람 도우미 → 연혁(진행 선) → 수상·보도(기사 썸네일) → 오시는 길 → FAQ → 가이드 → 문의 |
-| `src/pages.mjs` | 공연 목록·공연 상세 6개·파릇 소개·오시는 길·소식·문의·FAQ·블로그·개인정보 |
+| `src/home.mjs` | 홈: 히어로 필름 → 스크롤하면 카드로 줄며 기존 배너 문구·공연 썸네일 → 공연 라인업(세로 스크롤 → 가로 이동) → 관람평(공연별 썸네일·평점) → 한뼘사이 스포트라이트(벤토 그리드) → 관람 도우미 → 공지사항 & 이벤트 → 연혁(진행 선) → 수상·보도(기사 썸네일) → 오시는 길 → FAQ → 가이드 → 공연사진(펼쳐지는 사진 줄) → 문의 |
+| `src/pages.mjs` | 공연 목록·공연 상세 7개·파릇 소개·오시는 길·공지사항·이벤트·언론 보도·문의·FAQ·블로그·개인정보 |
 | `src/layout.mjs` · `src/parts.mjs` | `<head>`(메타·OG·JSON-LD), 헤더, 메뉴 드로어, 예매 드로어, 빠른 보기·후기 모달, 푸터 / 공용 카드·평점 막대·아코디언 |
 | `src/schema.mjs` | 구조화 데이터(Organization+PerformingGroup, TheaterEvent·Event+Schedule+AggregateOffer, FAQPage, BreadcrumbList, BlogPosting) |
 | `assets/css/style.css` · `assets/js/app.js` | 디자인(Noto Sans KR) / 인터랙션: 모달·드로어·바텀시트·토스트·아코디언·탭·스켈레톤·스크롤 시퀀스 5종·라이트박스·문의 메일 정리 |
 | `assets/video/` | 히어로 필름(4K `hero-2160.mp4` 15MB · 1080p `hero-1080.mp4` 5MB · 모바일 세로 `hero-m.mp4` 3.4MB · 3G용 `hero-m-lite.mp4` 2MB, 소리 포함). 휴대폰은 페이지 로드가 끝난 뒤 받기 시작 — 만드는 법은 `../motion/` |
 | `assets/img/shows/<slug>/` | 포스터·키비주얼·네이버 예약 상세 이미지·무대 사진(WebP, 무대 사진은 휴대폰용 560px 사본 `-sm.webp` 함께) — `python -I tools/prepare_images.py` 로 다시 만듦. `img()`에 `sizes`를 주면 `-sm` 사본이 있을 때 srcset 자동 |
+| `assets/img/notice/` | 공지사항·이벤트 이미지(이벤트 안내·오디션 공고 원본 + 목록 썸네일) — `python -I tools/prepare_notices.py` |
 | `assets/img/press/` | 보도 썸네일(640×400) — 기존 paroot.kr 뉴스 게시판에 올린 기사 이미지로 `python -I tools/prepare_press.py` 가 만듦 |
 | `content/blog/*.md` | 블로그 원고. `_topics.json` = AI가 쓸 주제 대기열(대표 키워드 중복 없음) |
 | `content/drafts/` | 검증에 떨어진 AI 초안(발행 안 됨). 고쳐서 `content/blog/`로 옮기면 발행 |
@@ -26,6 +27,10 @@
 1. 가격·회차·문구는 `src/data.mjs`, 화면은 `src/*.mjs`, 디자인은 `assets/css/style.css`
 2. `build.bat` (또는 `node build.mjs`) — 모든 페이지·JSON-LD·sitemap·robots·llms.txt·RSS가 같이 갱신되고 깨진 링크·JSON-LD 오류를 검사합니다
 3. `publish.bat` — 썸네일·빌드·글 검증 → 커밋 → AI가 올린 글 받기 → 푸시 (저장소 연결 후)
+
+**공연 순서**는 `src/data.mjs`의 `SHOWS` 배열 순서가 곧 사이트 전체(메뉴·라인업·목록·푸터·비교표) 순서입니다. 히어로 필름 속 포스터 순서는 `../motion/video/comp.js`의 `SHOWS`를 같이 바꾸고 `../motion/render_all.sh`(또는 `render.bat`)로 다시 렌더합니다.
+
+**공지사항·이벤트**는 `src/data.mjs`의 `NOTICES`에 한 건씩 추가합니다(cat: event/notice/audition, 이벤트는 start·end 날짜). 진행 중·시작 예정·상시·종료 표시는 빌드하는 날 기준으로 자동으로 바뀌고, 예약 빌드가 하루 3번 돌아 날짜가 지나면 저절로 "종료"가 됩니다. 이미지는 `tools/prepare_notices.py`의 `SRC`에 원본을 적고 실행합니다.
 
 **가격·회차는 네이버 예약이 바뀌면 `src/data.mjs`도 같이 바꿔야 합니다.** 사이트 문구, JSON-LD, llms.txt, AI 글의 사실 목록이 모두 이 값을 씁니다.
 
@@ -55,5 +60,5 @@ GitHub Actions가 **매일 09:05 · 13:05 · 18:05(KST)** 에 `_topics.json`의 
 ## 운영 도메인 전환(www.paroot.kr)
 - 기본 주소는 `src/data.mjs`의 `SITE.url`(`https://www.paroot.kr/`). 미리보기는 `node build.mjs --preview <주소>` 로 모든 페이지 noindex·robots `Disallow: /`.
 - 운영 빌드: 저장소 Variables에 `SITE_MODE=production`(+필요하면 `SITE_URL`). GitHub Pages Custom domain 에 `www.paroot.kr`, DNS(현재 imweb)를 GitHub Pages로 연결.
-- 기존 imweb 주소(`/play1`~`/play5`, `/paroot`, `/news`, `/notice`, `/contact`)는 새 주소로 301 리다이렉트가 필요합니다: play1→shows/hanbbeumsai/, play2→shows/suspicious-roommate/, play3→shows/wolf-forest-piglets/, play4→shows/office-romance-report/, play5→shows/pinocchio/, paroot→about/, news·notice→news/, contact·contact0→contact/, casting→about/.
+- 기존 imweb 주소(`/play1`~`/play5`, `/paroot`, `/news`, `/notice`, `/contact`)는 새 주소로 301 리다이렉트가 필요합니다: play1→shows/hanbbeumsai/, play2→shows/suspicious-roommate/, play3→shows/wolf-forest-piglets/, play4→shows/office-romance-report/, play5→shows/pinocchio/, paroot→about/, news→news/, notice→notice/, contact·contact0→contact/, casting→about/.
 - 네이버 서치어드바이저·구글 서치 콘솔 인증값(`SITE.naverVerification`, `googleVerification`)은 기존 사이트 값을 그대로 넣어 두었습니다. 도메인 이전 후 sitemap.xml 제출.

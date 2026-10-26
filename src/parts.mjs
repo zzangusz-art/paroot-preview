@@ -1,6 +1,6 @@
 // 여러 페이지가 함께 쓰는 조각
-import { SHOWS, VENUES, venueOf, priceFrom, RULES } from './data.mjs';
-import { esc, won, phImg, kdate } from './lib.mjs';
+import { SITE, SHOWS, VENUES, venueOf, priceFrom, RULES, showBySlug, noticeStatus, noticePeriod } from './data.mjs';
+import { esc, won, img, phImg, kdate } from './lib.mjs';
 import { ico } from './layout.mjs';
 
 export const stars = n => `<span class="stars" aria-hidden="true">★</span>`;
@@ -72,5 +72,27 @@ export function postCard(u, p, { lazy = true } = {}) {
 
 // 사진 크게 보기(라이트박스) — [data-lightbox] 버튼이 있는 페이지에 한 번 넣는다
 export const lightbox = `<div class="modal" id="modalImg" hidden role="dialog" aria-modal="true" aria-labelledby="lbTitle"><div class="modal-scrim" data-close></div><div class="modal-panel modal-wide"><div class="sheet-grip" aria-hidden="true"></div><div class="modal-hd"><h2 id="lbTitle">무대 사진</h2><button class="x-btn" type="button" data-close aria-label="닫기">${ico('close')}</button></div><div class="modal-body lb-body"><div class="ph"><img id="lbImg" src="data:," alt=""></div><div class="lb-nav"><button class="btn btn-line btn-s" type="button" data-lb="-1">이전</button><span id="lbCount" class="muted"></span><button class="btn btn-line btn-s" type="button" data-lb="1">다음</button></div></div></div></div>`;
+
+// 공지사항·이벤트 한 건: 누르면 펼쳐져 본문과 원본 이미지를 보여 준다(주소 #id 로 바로 열림)
+const NCAT = { event: '이벤트', notice: '공지', audition: '오디션' };
+export function noticeItem(u, n) {
+  const st = noticeStatus(n), show = n.show ? showBySlug(n.show) : null, per = noticePeriod(n);
+  const thumb = n.imgs ? `<span class="nt-thumb ph">${img(u, `assets/img/notice/${n.id}-t.webp`, '')}</span>` : `<span class="nt-thumb nt-thumb-ico" aria-hidden="true">${ico('bell')}</span>`;
+  const pics = Array.from({ length: n.imgs }, (_, k) => img(u, `assets/img/notice/${n.id}${k ? `-${k + 1}` : ''}.webp`, `${n.title.replace(/[「」]/g, '')} 안내 이미지${n.imgs > 1 ? ` ${k + 1}` : ''}`)).join('');
+  const acts = [
+    show && n.cat === 'event' && st.key !== 'closed' ? `<a class="btn btn-pink btn-s" href="${show.booking.url}" target="_blank" rel="noopener" data-book="${esc(show.title)}">${ico('ticket')}네이버 예약에서 예매</a>` : '',
+    show ? `<a class="btn btn-line btn-s" href="${u(`shows/${show.slug}/`)}">${esc(show.title)} 공연 정보</a>` : '',
+    n.cat === 'audition' ? `<a class="btn btn-line btn-s" href="mailto:${SITE.audition}">${ico('mail')}${SITE.audition}</a>` : '',
+    `<button class="btn btn-line btn-s" type="button" data-copy-link="#${n.id}">${ico('copy')}링크 복사</button>`,
+  ].join('');
+  return `<article class="nt" id="${n.id}" data-cat="${n.cat}" data-st="${st.key}">
+  <h3 class="nt-h"><button class="nt-head" type="button" aria-expanded="false" aria-controls="${n.id}-body">${thumb}<span class="nt-main"><span class="nt-tags"><span class="nt-cat nt-cat-${n.cat}">${NCAT[n.cat]}</span><span class="nt-st st-${st.key}">${esc(st.label)}</span>${show ? `<span class="nt-show">${esc(show.title)}</span>` : ''}</span><span class="nt-title">${esc(n.title)}</span><span class="nt-meta">${per && per !== '상시' ? `기간 ${per} · ` : ''}게시 ${kdate(n.date)}</span><span class="nt-sum">${esc(n.summary)}</span></span><span class="pm" aria-hidden="true"></span></button></h3>
+  <div class="nt-body" id="${n.id}-body" hidden>
+    ${n.body.length ? `<ul class="nt-points">${n.body.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}${n.note ? `<p class="nt-note">${esc(n.note)}</p>` : ''}
+    <div class="nt-acts">${acts}</div>
+    ${pics ? `<div class="nt-imgs">${pics}</div>` : ''}
+  </div>
+</article>`;
+}
 
 export { VENUES };

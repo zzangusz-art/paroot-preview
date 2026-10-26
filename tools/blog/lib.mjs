@@ -17,7 +17,7 @@ export function parseFrontmatter(src) {
 }
 
 // 사이트 안 링크로 허용하는 경로(사이트 루트 기준)
-const INTERNAL = /^(shows\/([a-z0-9-]+\/)?|about\/|visit\/|news\/|contact\/|faq\/|blog\/([a-z0-9-]+\/)?)(#[a-z0-9-]+)?$|^#[a-z0-9-]+$/i;
+const INTERNAL = /^(shows\/([a-z0-9-]+\/)?|about\/|notice\/|visit\/|news\/|contact\/|faq\/|blog\/([a-z0-9-]+\/)?)(#[a-z0-9-]+)?$|^#[a-z0-9-]+$/i;
 export const isInternal = href => INTERNAL.test(href) || href === '';
 
 // 인라인: **굵게**, [링크](주소). link(href) 로 상대 경로를 만든다

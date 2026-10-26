@@ -457,6 +457,40 @@
     }
   }
 
+  // ── 10-2) 공지사항·이벤트: 분류 필터, 펼치기, 주소(#id·#event·#audition)로 바로 열기, 링크 복사 ──
+  const nts = $$('.nt');
+  if (nts.length) {
+    const toggle = (nt, open) => {
+      const b = $('.nt-head', nt), body = $('.nt-body', nt);
+      open = open ?? b.getAttribute('aria-expanded') !== 'true';
+      b.setAttribute('aria-expanded', String(open)); body.hidden = !open; nt.classList.toggle('open', open);
+    };
+    nts.forEach(nt => $('.nt-head', nt).addEventListener('click', () => toggle(nt)));
+    const nf = $('#ntFilter');
+    const apply = c => {
+      nts.forEach(nt => { nt.hidden = c !== 'all' && nt.dataset.cat !== c; });
+      nf && $$('[data-nf]', nf).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.nf === c)));
+    };
+    nf && nf.addEventListener('click', e => {
+      const b = e.target.closest('[data-nf]'); if (!b) return;
+      apply(b.dataset.nf);
+      history.replaceState(null, '', b.dataset.nf === 'all' ? location.pathname : '#' + b.dataset.nf);
+    });
+    const fromHash = () => {
+      const h = decodeURIComponent(location.hash.slice(1));
+      if (['event', 'notice', 'audition'].includes(h)) return apply(h);
+      const nt = h && d.getElementById(h);
+      if (nt && nt.classList.contains('nt')) { apply('all'); toggle(nt, true); setTimeout(() => nt.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' }), 80); }
+    };
+    fromHash();
+    addEventListener('hashchange', fromHash);
+    d.addEventListener('click', e => {
+      const b = e.target.closest('[data-copy-link]'); if (!b) return;
+      const url = location.origin + location.pathname + b.dataset.copyLink;
+      (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(() => toast('이 글의 링크를 복사했습니다', 'ok', 1800), () => toast('링크를 복사하지 못했습니다. 주소창의 주소를 이용해 주세요', 'err'));
+    });
+  }
+
   // ── 11) 무대 사진 라이트박스(모달) ──
   const gals = $$('[data-lightbox]');
   if (gals.length) {

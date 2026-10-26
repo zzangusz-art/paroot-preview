@@ -1,5 +1,5 @@
 // 홈: 히어로 필름 → (스크롤) 카드로 줄며 기존 배너 문구 → 소개(단어 밝힘) → 라인업(가로 이동) → 한뼘사이 스포트라이트 → 후기 → 관람 도우미 → 연혁 → 수상·보도 → 오시는 길 → FAQ → 가이드 → 문의
-import { SITE, SHOWS, FAQ, HISTORY, AWARDS, PRESS, VENUES, WHO, TOUR_CITIES, totalReviews, avgRating, showBySlug } from './data.mjs';
+import { SITE, SHOWS, FAQ, HISTORY, AWARDS, PRESS, VENUES, WHO, TOUR_CITIES, totalReviews, avgRating, showBySlug, NOTICES, noticeStatus, noticePeriod, sortedNotices } from './data.mjs';
 import { esc, img, phImg, kdate } from './lib.mjs';
 import { ico } from './layout.mjs';
 import { showCard, ratingBars, reviewCard, faqAcc, venueCard, postCard, lightbox } from './parts.mjs';
@@ -122,6 +122,22 @@ function finder(u) {
 </section>`;
 }
 
+// 공지사항 & 이벤트: 지금 받을 수 있는 이벤트(진행 중·시작 예정·상시) 카드 + 최근 공지·오디션 목록
+function notices(u) {
+  const ev = sortedNotices().filter(n => n.cat === 'event' && noticeStatus(n).key !== 'closed').slice(0, 4);
+  const rest = [...NOTICES].filter(n => n.cat !== 'event').sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
+  const CAT = { notice: '공지', audition: '오디션' };
+  return `<section class="sec sec-soft" id="notice" aria-labelledby="neTitle">
+  <div class="wrap">
+    <div class="sec-head"><div><p class="eyebrow">Notice &amp; Event</p><h2 class="h2" id="neTitle">공지사항 &amp; 이벤트</h2><p class="lead">지금 받을 수 있는 할인·이벤트와 새 소식입니다. 진행 여부는 매일 다시 확인해 표시합니다.</p></div><a class="btn btn-dark" href="${u('notice/')}">전체 보기${ico('arrow')}</a></div>
+    <div class="ne-grid">
+      <div class="ne-events m-swipe">${ev.map((n, k) => { const st = noticeStatus(n), s = n.show ? showBySlug(n.show) : null; return `<a class="ne-card reveal" data-d="${k % 4}" href="${u('notice/')}#${n.id}">${phImg(u, `assets/img/notice/${n.id}-t.webp`, '', { wrapCls: 'ne-img' })}<span class="ne-body"><span class="nt-tags"><span class="nt-st st-${st.key}">${esc(st.label)}</span>${s ? `<span class="nt-show">${esc(s.title)}</span>` : ''}</span><span class="ne-title">${esc(n.title)}</span><span class="ne-per">${esc(noticePeriod(n))}</span></span></a>`; }).join('')}</div>
+      <div class="ne-side reveal" data-d="2"><h3>공지 · 오디션</h3><ul>${rest.map(n => `<li><a href="${u('notice/')}#${n.id}"><span class="nt-cat nt-cat-${n.cat}">${CAT[n.cat]}</span><span class="ne-t">${esc(n.title)}</span><span class="ne-d">${kdate(n.date)}</span></a></li>`).join('')}</ul><a class="ne-more" href="${u('notice/')}#audition">오디션 공고 전체${ico('arrow')}</a></div>
+    </div>
+  </div>
+</section>`;
+}
+
 export function historyBlock() {
   return `<div class="history">
     <div class="hs-side"><p class="eyebrow">History</p><div class="hs-year" aria-hidden="true">${HISTORY[HISTORY.length - 1].year}</div><p class="lead" style="font-size:16px;margin-top:14px">2016년 첫 어린이뮤지컬 기획부터 지금까지, 파릇이 올린 무대의 기록입니다.</p></div>
@@ -202,5 +218,5 @@ export function ctaBand(u) {
 }
 
 export function homeBody(u, posts) {
-  return [hero(u), marquee(), lineup(u), reviews(u), spotlight(u), finder(u), history(), press(u), venues(u), faq(u), blog(u, posts), photos(u), ctaBand(u)].join('\n');
+  return [hero(u), marquee(), lineup(u), reviews(u), spotlight(u), finder(u), notices(u), history(), press(u), venues(u), faq(u), blog(u, posts), photos(u), ctaBand(u)].join('\n');
 }

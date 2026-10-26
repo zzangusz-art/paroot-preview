@@ -393,15 +393,73 @@ export const PRESS = [
   { o: 'K스피릿', d: '2024-05-12', t: "어린이들과 함께 동화 속으로! 뮤지컬 '아기돼지삼형제'", img: 'press/22022699.webp', u: 'https://www.ikoreanspirit.com/news/articleView.html?idxno=75716' },
 ].sort((a, b) => b.d.localeCompare(a.d));
 
-// 오디션 공지(기존 공지사항)
+// 공지사항·이벤트. cat: event 이벤트 / notice 공지 / audition 오디션
+// 이벤트: 네이버 예약 공연 상세의 기간 한정 안내(2026-10-26 확인)를 옮겨 적었다. 이미지는 tools/prepare_notices.py
+// 공지·오디션: 기존 paroot.kr 공지사항 게시판 10건(2026-10-26 이관). 오디션 공고 본문은 원래 이미지 한 장이다.
+// 진행 상태(진행 중·시작 예정·상시·종료)는 빌드하는 날(한국 시간) 기준으로 정한다 → noticeStatus()
 export const NOTICES = [
-  { d: '2025-09-23', t: '연극 한뼘사이 <19차팀> 전 배역 오디션' },
-  { d: '2025-08-13', t: '연극 사내연애 보고서 <4차팀> 전 배역 오디션' },
-  { d: '2025-08-01', t: '연극 비누향기 <7차팀> 은진·동일·멀티맨 역 오디션' },
-  { d: '2025-02-22', t: '연극 한뼘사이 <18차팀> 전 배역 오디션' },
-  { d: '2025-02-04', t: '연극 비누향기 <6차팀> 전 배역 오디션' },
-  { d: '2025-01-21', t: '연극 사내연애 보고서 <3차팀> 전 배역 오디션' },
+  { id: 'ev-flirting-exam', cat: 'event', show: 'flirting', date: '2026-10-26', start: '2026-11-20', end: '2026-11-30', title: '「플러팅」 수험생 할인',
+    summary: '11월 20일부터 30일까지 회차에 수험생 할인 권종을 엽니다. 평일 13,900원, 주말·공휴일 15,900원입니다.',
+    body: ['수험생 본인에 한해 1인 1매 적용됩니다.', '수험표를 꼭 가져오세요. 가져오지 않으면 차액을 결제합니다.'] },
+  { id: 'ev-hanbbeum-exam', cat: 'event', show: 'hanbbeumsai', date: '2026-10-22', start: '2026-11-20', end: '2026-11-30', title: '「한뼘사이」 수험생 특별 할인',
+    summary: '11월 20일(금)부터 30일(월)까지 회차를 평일 14,000원, 주말 17,000원에 볼 수 있습니다.',
+    body: ['수험표를 가져오지 않으면 할인이 적용되지 않습니다.', '수험생 본인에 한해 1인 1매 적용됩니다.'] },
+  { id: 'ev-roommate-exam', cat: 'event', show: 'suspicious-roommate', date: '2026-10-15', start: '2026-11-20', end: '2026-11-30', title: '「수상한 룸메이트」 수험생 특별 할인',
+    summary: '11월 20일부터 30일까지 회차를 평일 13,000원, 주말 15,000원에 볼 수 있습니다. 예매할 때 [수험생 할인] 권종을 고르세요.',
+    body: ['적용 인원은 1인 1매이며 수험생 본인만 받을 수 있습니다.', '티켓을 받을 때 수험표를 꼭 보여 주세요. 가져오지 않으면 차액이 생깁니다.'] },
+  { id: 'ev-office-exam', cat: 'event', show: 'office-romance-report', date: '2026-10-12', start: '2026-11-20', end: '2026-11-30', title: '「사내연애 보고서」 수험생 특별 할인',
+    summary: '2027학년도 수능 수험생은 11월 20일부터 30일까지 회차를 평일 14,900원, 주말 16,900원에 볼 수 있습니다.',
+    body: ['수험표를 꼭 가져오세요. 가져오지 않으면 차액을 결제합니다.', '수험생 본인에 한해 1인 1매 적용됩니다.'] },
+  { id: 'ev-review-sep', cat: 'event', date: '2026-10-08', start: '2026-09-01', end: '2026-09-30', title: '9월 리뷰 이벤트 당첨자 발표',
+    summary: '9월 1일부터 30일까지 「한뼘사이」 「수상한 룸메이트」 「사내연애 보고서」 「플러팅」에 리뷰를 남긴 관객 가운데 당첨자를 발표했습니다.',
+    body: ['당첨자 닉네임은 일부를 가려 아래 이미지에 실었습니다.', '리뷰를 남겨 주신 모든 분께 감사드립니다.'], imgs: 4 },
+  { id: 'ev-flirting-revisit', cat: 'event', show: 'flirting', date: '2026-10-08', title: '「플러팅」 재관람 카드',
+    summary: '다시 볼 때마다 재관람 카드에 적립해 드립니다. 5회를 모으면 「플러팅」 배우 폴라로이드를 드립니다.',
+    body: ['티켓을 받을 때 매표소에서 재관람 카드 발급을 요청해 주세요.', '유료 예매 내역만 적립됩니다.'] },
+  { id: 'ev-office-military', cat: 'event', show: 'office-romance-report', date: '2026-10-07', end: '2026-11-30', title: '「사내연애 보고서」 국군장병 할인',
+    summary: '현역 군인·군무원·사관생도는 평일 14,900원, 주말·공휴일 16,900원에 볼 수 있습니다. 동반 1인까지 적용됩니다.',
+    body: ['군인 할인 권종으로 예매한 뒤 매표소에서 신분증을 보여 주세요.', '현역 군인은 신분증과 휴가·외출·외박증, 군무원은 공무원증, 사관생도는 사관후보생 신분증이 필요합니다.'] },
+  { id: 'ev-flirting-military', cat: 'event', show: 'flirting', date: '2026-08-26', end: '2026-11-30', title: '「플러팅」 군인 할인',
+    summary: '현역 군인·군무원·사관생도는 평일 13,900원, 주말·공휴일 15,900원에 볼 수 있습니다. 동반 1인까지 적용됩니다.',
+    body: ['군인 할인 권종으로 예매한 뒤 매표소에서 증빙 서류를 보여 주세요.', '현역 군인은 신분증과 휴가·외출·외박증, 군무원은 공무원증, 사관생도는 사관후보생 신분증이 필요합니다.'] },
+  { id: 'ev-flirting-chicken', cat: 'event', show: 'flirting', date: '2026-05-29', title: '「플러팅」 리뷰 쓰고 치킨 먹자',
+    summary: '「플러팅」을 보고 리뷰를 남기면 매월 추첨으로 1명에게 BBQ 황금올리브 치킨과 콜라 1.25L를 드립니다.',
+    body: ['예매자에 한해 추첨합니다.', '필요하면 당첨자에게 인증 사진을 요청할 수 있으며, 사진은 파릇 홍보 자료로 쓰일 수 있습니다.'] },
+  { id: 'au-167909437', cat: 'audition', show: 'hanbbeumsai', date: '2025-09-23', title: '연극 「한뼘사이」 19차팀 전 배역 오디션', legacy: 167909437 },
+  { id: 'au-167309987', cat: 'audition', show: 'office-romance-report', date: '2025-08-13', title: '연극 「사내연애 보고서」 4차팀 전 배역 오디션', legacy: 167309987 },
+  { id: 'au-167140434', cat: 'audition', show: 'suspicious-roommate', date: '2025-08-01', title: '연극 「비누향기」 7차팀 은진·동일·멀티맨 역 오디션', legacy: 167140434 },
+  { id: 'au-153305574', cat: 'audition', show: 'hanbbeumsai', date: '2025-02-22', title: '연극 「한뼘사이」 18차팀 전 배역 오디션', legacy: 153305574 },
+  { id: 'au-148182285', cat: 'audition', show: 'suspicious-roommate', date: '2025-02-04', title: '연극 「비누향기」 6차팀 전 배역 오디션', legacy: 148182285 },
+  { id: 'au-144358491', cat: 'audition', show: 'office-romance-report', date: '2025-01-21', title: '연극 「사내연애 보고서」 3차팀 전 배역 오디션', legacy: 144358491 },
+  { id: 'au-86959728', cat: 'audition', show: 'hanbbeumsai', date: '2024-08-27', title: '연극 「한뼘사이」 17차팀 전 배역 오디션', legacy: 86959728 },
+  { id: 'au-78879621', cat: 'audition', show: 'office-romance-report', date: '2024-08-22', title: '연극 「사내연애 보고서」 2차팀 배우 오디션', legacy: 78879621 },
+  { id: 'au-30482479', cat: 'audition', show: 'suspicious-roommate', date: '2024-06-26', title: '연극 「비누향기」 전 배역 첫 오디션', legacy: 30482479 },
+  { id: 'nt-group', cat: 'notice', date: '2024-05-15', title: '공연 단체 관람 문의', legacy: 22354135,
+    summary: '단체 관람은 주식회사 파릇 대표전화 070-8952-2151로 문의해 주세요.',
+    body: ['연극 「한뼘사이」는 30인 이상부터, 연극 「비누향기」(현 「수상한 룸메이트」)와 「사내연애 보고서」는 20인 이상부터 단체 관람이 가능합니다.', '어린이 공연 「늑대숲 또옹돼지 원정대(아기돼지삼형제)」와 「피노키오야 노올자」는 20인 이상부터 단체 관람이 가능합니다.'],
+    note: '2024년 5월 기존 홈페이지에 올린 공지를 옮겼습니다. 「비누향기」는 2026년 8월 「수상한 룸메이트」로 새 단장했습니다.' },
 ];
+const AUDITION_SUMMARY = '공연 개요, 모집 배역, 지원 방법, 진행 일정은 공고 이미지에서 볼 수 있습니다. 지원 기간이 지난 공고입니다.';
+NOTICES.forEach(n => {
+  if (n.cat === 'audition') { n.summary ??= AUDITION_SUMMARY; n.body ??= []; n.imgs ??= 1; }
+  if (n.cat === 'event') n.imgs ??= 1;
+  n.imgs ??= 0;
+});
+// 빌드하는 날(한국 시간). 하루 3번 예약 빌드가 돌아 이벤트 상태가 자동으로 바뀐다
+export const TODAY = process.env.BUILD_DATE || new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+const md = d => `${+d.slice(5, 7)}월 ${+d.slice(8, 10)}일`;
+export const noticePeriod = n => n.cat !== 'event' ? '' : n.start && n.end ? `${md(n.start)} ~ ${md(n.end)}` : n.end ? `${md(n.end)}까지` : '상시';
+export function noticeStatus(n) {
+  if (n.cat === 'audition') return { key: 'closed', label: '지난 공고' };
+  if (n.cat === 'notice') return { key: 'notice', label: '공지' };
+  if (n.end && TODAY > n.end) return { key: 'closed', label: '종료' };
+  if (n.start && TODAY < n.start) return { key: 'soon', label: `${md(n.start)} 시작` };
+  if (!n.start && !n.end) return { key: 'always', label: '상시' };
+  return { key: 'on', label: '진행 중' };
+}
+// 목록 순서: 진행 중·시작 예정·상시 이벤트 → 공지 → 종료 이벤트·지난 오디션, 같은 묶음 안에서는 최신순
+const RANK = { on: 0, soon: 1, always: 2, notice: 3, closed: 4 };
+export const sortedNotices = () => [...NOTICES].sort((a, b) => RANK[noticeStatus(a).key] - RANK[noticeStatus(b).key] || b.date.localeCompare(a.date));
 
 // 누구와 보나요?(관람 도우미)
 export const WHO = [
@@ -421,7 +479,7 @@ export const FAQ = [
   { pages: ['faq'], q: '티켓 가격은 얼마인가요?', a: `네이버 예약 기준(2026년 10월 23일) 연극 정가는 60,000원이고, 할인가는 평일 일반 16,900~19,900원, 주말·공휴일 일반 19,900~21,900원입니다. 어린이 뮤지컬은 1인 할인권 18,000원, 드랙인혜화는 스탠딩 30,000원(할인 20,000~25,000원)입니다.` },
   { pages: ['faq', 'contact'], q: '단체 관람을 하고 싶어요.', a: '20인 이상 단체는 대표전화 070-8952-2151 또는 contact@paroot.kr로 날짜와 인원을 알려 주세요. 일부 회차는 단체 전관 예약으로 운영된 적이 있습니다.' },
   { pages: ['faq', 'contact', 'about'], q: '기업·학교 초청 공연도 가능한가요?', a: '<한뼘사이>는 삼성전자, 포항 POSCO, 건양대학교, 광양제철소 등에서 초청 공연을 했습니다. 공연 기획·제휴 제안은 contact@paroot.kr로 보내 주시면 담당 부서에서 연락드립니다.' },
-  { pages: ['faq', 'contact'], q: '배우 오디션은 어떻게 지원하나요?', a: '작품별 오디션은 홈페이지 소식 게시판에 공지합니다. 프로필과 포트폴리오, 사진 등 본인을 알릴 수 있는 자료를 audition@paroot.kr로 보내 주세요.' },
+  { pages: ['faq', 'contact'], q: '배우 오디션은 어떻게 지원하나요?', a: '작품별 오디션은 홈페이지 공지사항·이벤트 게시판의 오디션 분류에 공지합니다. 프로필과 포트폴리오, 사진 등 본인을 알릴 수 있는 자료를 audition@paroot.kr로 보내 주세요.' },
   { pages: ['faq', 'about'], q: '파릇은 어떤 회사인가요?', a: '주식회사 파릇은 2016년 어린이뮤지컬 <성냥팔이 소녀> 기획으로 시작한 대학로 공연 제작사입니다. 연극 <한뼘사이>, <사내연애 보고서>, <플러팅>, <비누향기>(현 수상한 룸메이트)와 어린이뮤지컬 <늑대숲 또옹돼지 원정대>, <피노키오야 노올자>를 제작·기획·운영합니다.' },
 ];
 

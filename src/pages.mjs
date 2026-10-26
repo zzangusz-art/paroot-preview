@@ -2,10 +2,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SITE, SHOWS, FAQ, VENUES, PRESS, NOTICES, BLOG_CATEGORIES, venueOf, priceFrom, ASOF_LABEL, totalReviews } from './data.mjs';
+import { SITE, SHOWS, FAQ, VENUES, PRESS, NOTICES, BLOG_CATEGORIES, venueOf, priceFrom, ASOF_LABEL, totalReviews, noticeStatus, sortedNotices } from './data.mjs';
 import { esc, won, img, phImg, kdate, nl2br } from './lib.mjs';
 import { ico } from './layout.mjs';
-import { showCard, ratingBars, reviewCard, faqAcc, venueCard, rulesList, crumbs, postCard, mapUrl, ratingLine, lightbox } from './parts.mjs';
+import { showCard, ratingBars, reviewCard, faqAcc, venueCard, rulesList, crumbs, postCard, mapUrl, ratingLine, lightbox, noticeItem } from './parts.mjs';
 import { historyBlock, awardsPress, ctaBand, pressCard } from './home.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -183,14 +183,27 @@ export function visit(u) {
 
 // ── 소식 ──
 export function news(u) {
-  return `${pageHd(u, { crumb: [['홈', ''], ['소식', 'news/']], eyebrow: 'News', title: '보도와 오디션 소식', lead: '언론에 소개된 파릇 공연 이야기와 작품별 오디션 공지입니다.' })}
+  return `${pageHd(u, { crumb: [['홈', ''], ['보도', 'news/']], eyebrow: 'Press', title: '언론 보도', lead: '언론에 소개된 파릇 공연 이야기입니다. 할인·이벤트와 배우 오디션 공지는 공지사항·이벤트에 있습니다.' })}
 <section class="sec-tight"><div class="wrap">
-  <div class="tabs" role="tablist" aria-label="소식 분류"><button role="tab" id="tab-press" aria-controls="pan-press" aria-selected="true">언론 보도 ${PRESS.length}</button><button role="tab" id="tab-aud" aria-controls="pan-aud" aria-selected="false" tabindex="-1">오디션 공지 ${NOTICES.length}</button></div>
-  <div role="tabpanel" id="pan-press" aria-labelledby="tab-press"><div class="press-grid press-lt">${PRESS.map(p => pressCard(u, p)).join('')}</div><p class="muted" style="font-size:13.5px;margin-top:14px">날짜는 기존 파릇 홈페이지 뉴스 게시판에 올린 날짜입니다.</p></div>
-  <div role="tabpanel" id="pan-aud" aria-labelledby="tab-aud" hidden><ul class="press press-lt">${NOTICES.map(n => `<li><div class="pr"><span class="src">오디션</span><span class="tt">${esc(n.t)}</span><span class="dt">${kdate(n.d)}</span><span></span></div></li>`).join('')}</ul>
-    <div class="cc" style="margin-top:24px"><h3>오디션 지원</h3><p>파릇은 언제나 재능 있는 배우를 환영합니다. 프로필과 포트폴리오, 사진 등 본인을 알릴 수 있는 자료를 보내 주시면 담당 부서에서 확인 후 연락드립니다.</p><span class="mail">${SITE.audition}</span><div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-dark btn-s" href="mailto:${SITE.audition}?subject=${encodeURIComponent('[오디션 지원] 이름 / 지원 작품')}">${ico('mail')}메일 쓰기</a><button class="btn btn-line btn-s" type="button" data-copy="${SITE.audition}" data-copy-msg="오디션 메일 주소를 복사했습니다">${ico('copy')}주소 복사</button></div></div>
-  </div>
+  <div class="press-grid press-lt">${PRESS.map(p => pressCard(u, p)).join('')}</div><p class="muted" style="font-size:13.5px;margin-top:14px">날짜는 기존 파릇 홈페이지 뉴스 게시판에 올린 날짜입니다.</p>
+  <div class="cc" style="margin-top:32px"><h3>공지사항·이벤트</h3><p>공연별 할인·이벤트, 단체 관람 안내, 작품별 배우 오디션 공고를 한곳에 모았습니다.</p><div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-dark btn-s" href="${u('notice/')}">공지사항·이벤트 보기${ico('arrow')}</a><a class="btn btn-line btn-s" href="${u('notice/')}#audition">오디션 공고</a></div></div>
 </div></section>`;
+}
+
+// ── 공지사항·이벤트 ──
+export function notice(u) {
+  const n = c => NOTICES.filter(x => x.cat === c).length;
+  const live = NOTICES.filter(x => x.cat === 'event' && ['on', 'soon', 'always'].includes(noticeStatus(x).key)).length;
+  return `${pageHd(u, { crumb: [['홈', ''], ['공지사항·이벤트', 'notice/']], eyebrow: 'Notice & Event', title: '공지사항·이벤트', lead: `공연별 할인·이벤트와 공지, 배우 오디션 공고입니다. 지금 받을 수 있는 이벤트는 ${live}건이며, 진행 여부는 매일 다시 확인해 표시합니다.` })}
+<section class="sec-tight"><div class="wrap">
+  <div class="blog-filter tabs-like" role="group" aria-label="공지 분류" id="ntFilter">
+    <button class="chip" type="button" data-nf="all" aria-pressed="true">전체 ${NOTICES.length}</button><button class="chip" type="button" data-nf="event" aria-pressed="false">이벤트 ${n('event')}</button><button class="chip" type="button" data-nf="notice" aria-pressed="false">공지 ${n('notice')}</button><button class="chip" type="button" data-nf="audition" aria-pressed="false">오디션 ${n('audition')}</button>
+  </div>
+  <div class="nt-list">${sortedNotices().map(x => noticeItem(u, x)).join('')}</div>
+  <p class="muted" style="font-size:13.5px;margin-top:18px">이벤트 내용은 네이버 예약 공연 상세 안내(2026년 10월 26일 확인)를 옮긴 것으로, 실제 적용 권종과 가격은 예매 화면을 기준으로 합니다. 공지·오디션 10건은 기존 파릇 홈페이지 공지사항 게시판에서 옮겼습니다.</p>
+  <div class="cc" style="margin-top:28px"><h3>오디션 지원</h3><p>파릇은 언제나 재능 있는 배우를 환영합니다. 프로필과 포트폴리오, 사진 등 본인을 알릴 수 있는 자료를 보내 주시면 담당 부서에서 확인 후 연락드립니다.</p><span class="mail">${SITE.audition}</span><div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-dark btn-s" href="mailto:${SITE.audition}?subject=${encodeURIComponent('[오디션 지원] 이름 / 지원 작품')}">${ico('mail')}메일 쓰기</a><button class="btn btn-line btn-s" type="button" data-copy="${SITE.audition}" data-copy-msg="오디션 메일 주소를 복사했습니다">${ico('copy')}주소 복사</button></div></div>
+</div></section>
+${ctaBand(u)}`;
 }
 
 // ── 문의 ──
@@ -201,7 +214,7 @@ export function contact(u) {
   <div class="contact-cards">
     <div class="cc reveal"><span class="tag tag-pink">공연·제휴</span><h2 style="font-size:20px">공연 기획·마케팅 제휴</h2><p>기업·학교 초청 공연, 공연 기획, 마케팅 제휴 제안</p><span class="mail">${SITE.email}</span><button class="btn btn-line btn-s" type="button" data-copy="${SITE.email}" data-copy-msg="문의 메일 주소를 복사했습니다">${ico('copy')}주소 복사</button></div>
     <div class="cc reveal" data-d="1"><span class="tag tag-pink">단체 관람</span><h2 style="font-size:20px">20인 이상 단체 관람</h2><p>날짜·회차, 인원, 작품을 알려 주시면 가능 여부를 안내합니다.</p><span class="mail">${SITE.phone}</span><a class="btn btn-line btn-s" href="tel:${SITE.phone.replace(/-/g, '')}">${ico('phone')}전화 걸기</a></div>
-    <div class="cc reveal" data-d="2"><span class="tag tag-pink">오디션</span><h2 style="font-size:20px">배우 오디션 지원</h2><p>프로필·포트폴리오·사진을 보내 주세요. 작품별 공고는 소식 게시판에 올립니다.</p><span class="mail">${SITE.audition}</span><a class="btn btn-line btn-s" href="${u('news/')}">오디션 공지 보기${ico('arrow')}</a></div>
+    <div class="cc reveal" data-d="2"><span class="tag tag-pink">오디션</span><h2 style="font-size:20px">배우 오디션 지원</h2><p>프로필·포트폴리오·사진을 보내 주세요. 작품별 공고는 공지사항·이벤트 게시판에 올립니다.</p><span class="mail">${SITE.audition}</span><a class="btn btn-line btn-s" href="${u('notice/')}#audition">오디션 공고 보기${ico('arrow')}</a></div>
   </div>
 </div></section>
 <section class="sec-tight sec-soft" id="compose"><div class="wrap two-col">

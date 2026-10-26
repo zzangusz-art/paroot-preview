@@ -15,7 +15,7 @@ if (PREVIEW) process.env.SITE_URL = PREVIEW;
 const OUT = path.resolve(ROOT, opt('--out') || 'dist');
 
 const D = await import('./src/data.mjs');
-const { SITE, SHOWS, FAQ, VENUES, HISTORY, AWARDS, PRESS, BLOG_CATEGORIES, KEYWORDS, ASOF, ASOF_LABEL, venueOf, priceFrom, totalReviews, avgRating, TOUR_CITIES } = D;
+const { SITE, SHOWS, FAQ, VENUES, HISTORY, AWARDS, PRESS, BLOG_CATEGORIES, KEYWORDS, ASOF, ASOF_LABEL, venueOf, priceFrom, totalReviews, avgRating, TOUR_CITIES, NOTICES, TODAY, noticeStatus, noticePeriod, sortedNotices } = D;
 const { makeUrl, pageUrl, esc, won } = await import('./src/lib.mjs');
 const S = await import('./src/schema.mjs');
 const { page } = await import('./src/layout.mjs');
@@ -96,8 +96,11 @@ const info = [
   { out: 'visit/index.html', name: '오시는 길', render: P.visit, pri: '0.8',
     title: '대학로 공연장 오시는 길 — 혜화역 출구별 파릇 공연장 | 파릇', description: '라온아트홀(한뼘사이 전용관)·제나아트홀·라온씨어터는 혜화역 2번 출구, 서연아트홀은 4번 출구, 뮤지컬펍 커튼콜은 1번 출구에서 걸어서 5분 이내입니다. 주소·가는 길·주차 안내.',
     extra: () => VENUES.map(v => ({ '@type': 'PerformingArtsTheater', name: v.name, address: { '@type': 'PostalAddress', streetAddress: v.addr.replace(/^서울 종로구 /, ''), addressLocality: '종로구', addressRegion: '서울특별시', addressCountry: 'KR' }, geo: { '@type': 'GeoCoordinates', latitude: v.lat, longitude: v.lng } })), faq: 'visit' },
-  { out: 'news/index.html', name: '소식', render: P.news, pri: '0.5',
-    title: '파릇 보도·오디션 소식 | 파릇', description: '한뼘사이·수상한 룸메이트(비누향기)·사내연애 보고서 캐스팅과 수상, 언론 보도, 작품별 배우 오디션 공지를 모았습니다.' },
+  { out: 'notice/index.html', name: '공지사항·이벤트', render: P.notice, pri: '0.7',
+    title: '공지사항·이벤트 — 대학로 연극 할인·이벤트, 배우 오디션 | 파릇', description: '한뼘사이·사내연애 보고서·플러팅·수상한 룸메이트 수험생 할인과 군인 할인, 리뷰·재관람 이벤트, 단체 관람 공지와 작품별 배우 오디션 공고를 모았습니다.',
+    extra: () => [{ '@type': 'ItemList', name: '파릇 공지사항·이벤트', itemListElement: sortedNotices().map((n, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE.url}notice/#${n.id}`, name: n.title.replace(/[「」]/g, '') })) }] },
+  { out: 'news/index.html', name: '보도', render: P.news, pri: '0.5',
+    title: '파릇 언론 보도 | 파릇', description: '한뼘사이·사내연애 보고서·수상한 룸메이트(비누향기) 캐스팅과 수상 등 언론에 소개된 파릇 공연 이야기를 모았습니다.' },
   { out: 'contact/index.html', name: '문의', render: P.contact, pri: '0.6', type: 'ContactPage',
     title: '단체 관람·초청 공연·제휴 문의 | 파릇', description: `20인 이상 단체 관람, 기업·학교 초청 공연, 공연 기획·마케팅 제휴는 ${SITE.email}, 대표전화 ${SITE.phone}. 배우 오디션은 ${SITE.audition}.`, faq: 'contact' },
   { out: 'faq/index.html', name: '자주 묻는 질문', render: P.faqPage, pri: '0.8',
@@ -176,7 +179,10 @@ ${VENUES.map(v => `- ${v.name}${v.alias ? `(${v.alias})` : ''}: ${v.addr}. 혜�
 ${KEYWORDS.map(([k, h]) => `- ${k}: ${SITE.url}${h}`).join('\n')}
 
 ## 주요 페이지
-- [홈](${SITE.url}) · [공연 전체](${SITE.url}shows/) · [오시는 길](${SITE.url}visit/) · [파릇 소개·연혁](${SITE.url}about/) · [소식](${SITE.url}news/) · [문의](${SITE.url}contact/) · [자주 묻는 질문](${SITE.url}faq/)
+- [홈](${SITE.url}) · [공연 전체](${SITE.url}shows/) · [오시는 길](${SITE.url}visit/) · [파릇 소개·연혁](${SITE.url}about/) · [공지사항·이벤트](${SITE.url}notice/) · [언론 보도](${SITE.url}news/) · [문의](${SITE.url}contact/) · [자주 묻는 질문](${SITE.url}faq/)
+
+## 지금 받을 수 있는 할인·이벤트 (빌드 ${TODAY} 기준)
+${sortedNotices().filter(n => n.cat === 'event' && noticeStatus(n).key !== 'closed').map(n => `- ${n.title.replace(/[「」]/g, '')} [${noticeStatus(n).label}${noticePeriod(n) && noticePeriod(n) !== '상시' ? `, ${noticePeriod(n)}` : ''}]: ${n.summary} — ${SITE.url}notice/#${n.id}`).join('\n')}
 
 ## 대학로 연극 가이드(블로그)
 ${posts.slice(0, 50).map(p => `- [${p.title}](${SITE.url}blog/${p.slug}/): ${p.description}`).join('\n')}

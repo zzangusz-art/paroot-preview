@@ -22,6 +22,7 @@ const ICONS = {
   phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/>',
   copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/>',
   award: '<circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/>',
+  bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15L6 16z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/>',
   chev: '<path d="M6 9l6 6 6-6"/>',
   share: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/>',
   pause: '<path d="M8 5v14M16 5v14"/>',
@@ -35,7 +36,8 @@ const NAV = [
   { label: '공연', href: 'shows/', sub: [['shows/', '전체 공연', '연극 · 어린이 뮤지컬 · 쇼'], ...SHOWS.map(s => [`shows/${s.slug}/`, s.title, `${s.kind} · ${s.genre}`])] },
   { label: '오시는 길', href: 'visit/' },
   { label: '파릇 소개', href: 'about/' },
-  { label: '소식', href: 'news/' },
+  { label: '공지·이벤트', href: 'notice/' },
+  { label: '보도', href: 'news/' },
   { label: '연극 가이드', href: 'blog/' },
   { label: '문의', href: 'contact/' },
 ];
@@ -91,7 +93,7 @@ function footer(u) {
     <div class="ft-brand"><img src="${u('assets/img/brand/logo-h-white.png')}" alt="${SITE.brand} PAROOT" width="320" height="57" loading="lazy"><p>${esc(SITE.en)}<br>${esc(SITE.tagline)} ${esc(SITE.intro)}</p></div>
     <div class="ft-links">
       <div><b>공연</b><ul>${SHOWS.map(s => `<li><a href="${u(`shows/${s.slug}/`)}">${esc(s.title)}</a></li>`).join('')}</ul></div>
-      <div><b>파릇</b><ul><li><a href="${u('about/')}">회사 소개·연혁</a></li><li><a href="${u('news/')}">보도·오디션 소식</a></li><li><a href="${u('visit/')}">공연장 오시는 길</a></li><li><a href="${u('faq/')}">자주 묻는 질문</a></li><li><a href="${u('blog/')}">대학로 연극 가이드</a></li></ul></div>
+      <div><b>파릇</b><ul><li><a href="${u('about/')}">회사 소개·연혁</a></li><li><a href="${u('notice/')}">공지사항·이벤트</a></li><li><a href="${u('news/')}">언론 보도</a></li><li><a href="${u('visit/')}">공연장 오시는 길</a></li><li><a href="${u('faq/')}">자주 묻는 질문</a></li><li><a href="${u('blog/')}">대학로 연극 가이드</a></li></ul></div>
       <div><b>문의</b><ul><li><a href="${u('contact/')}">공연·제휴·단체 관람</a></li><li><a href="mailto:${SITE.email}">${SITE.email}</a></li><li><a href="mailto:${SITE.audition}">${SITE.audition}</a></li><li><a href="tel:${SITE.phone.replace(/-/g, '')}">${SITE.phone}</a></li><li><a href="${u('privacy/')}">개인정보처리방침</a></li></ul></div>
     </div>
   </div>

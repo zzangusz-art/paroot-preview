@@ -102,7 +102,7 @@ function validate(md, { allowed, slugs }) {
 const grams = s => { const t = s.replace(/\s+/g, ''); const g = new Set(); for (let i = 0; i < t.length - 1; i++) g.add(t.slice(i, i + 2)); return g; };
 const sim = (a, b) => { const A = grams(a), B = grams(b); let n = 0; A.forEach(x => B.has(x) && n++); return n / Math.max(1, A.size + B.size - n); };
 
-const LINKS = ['shows/', 'visit/', 'faq/', 'about/', 'contact/', 'news/', ...SHOWS.map(s => `shows/${s.slug}/`)];
+const LINKS = ['shows/', 'visit/', 'faq/', 'about/', 'contact/', 'news/', 'notice/', ...SHOWS.map(s => `shows/${s.slug}/`)];
 const SYSTEM = sheet => `당신은 대학로 공연 제작사 "파릇"(주식회사 파릇) 홈페이지의 「대학로 연극 가이드」 담당 에디터입니다. 대학로·혜화에서 공연을 보려는 사람이 검색창이나 AI 비서에게 묻는 질문에, 파릇이 직접 확인한 사실로 답하는 글을 씁니다. 독자는 데이트 코스를 찾는 20~30대, 친구 모임, 아이와 처음 공연을 보는 부모, 연극이 처음인 사람입니다.
 
 # 반드시 지킬 것
