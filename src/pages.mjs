@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { SITE, SHOWS, FAQ, VENUES, PRESS, NOTICES, BLOG_CATEGORIES, venueOf, priceFrom, ASOF_LABEL, totalReviews } from './data.mjs';
 import { esc, won, img, phImg, kdate, nl2br } from './lib.mjs';
 import { ico } from './layout.mjs';
-import { showCard, ratingBars, reviewCard, faqAcc, venueCard, rulesList, crumbs, postCard, mapUrl, ratingLine } from './parts.mjs';
+import { showCard, ratingBars, reviewCard, faqAcc, venueCard, rulesList, crumbs, postCard, mapUrl, ratingLine, lightbox } from './parts.mjs';
 import { historyBlock, awardsPress, ctaBand, pressCard } from './home.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -17,15 +17,14 @@ function pageHd(u, { crumb, eyebrow, title, lead }) {
   return `<section class="page-hd"><div class="wrap">${crumbs(u, crumb)}${eyebrow ? `<p class="eyebrow">${eyebrow}</p>` : ''}<h1>${title}</h1>${lead ? `<p class="lead">${lead}</p>` : ''}</div></section>`;
 }
 
-const lightbox = `<div class="modal" id="modalImg" hidden role="dialog" aria-modal="true" aria-labelledby="lbTitle"><div class="modal-scrim" data-close></div><div class="modal-panel modal-wide"><div class="sheet-grip" aria-hidden="true"></div><div class="modal-hd"><h2 id="lbTitle">무대 사진</h2><button class="x-btn" type="button" data-close aria-label="닫기">${ico('close')}</button></div><div class="modal-body lb-body"><div class="ph"><img id="lbImg" src="data:," alt=""></div><div class="lb-nav"><button class="btn btn-line btn-s" type="button" data-lb="-1">이전</button><span id="lbCount" class="muted"></span><button class="btn btn-line btn-s" type="button" data-lb="1">다음</button></div></div></div></div>`;
 
 // ── 공연 전체 ──
 export function showsIndex(u) {
   // 휴대폰에서는 표가 공연별 카드로 바뀐다(data-label 이 칸 이름)
   const rows = SHOWS.map(s => { const v = venueOf(s); return `<tr><th scope="row"><a href="${u(`shows/${s.slug}/`)}">${esc(s.title)}</a></th><td data-label="장르"><span>${CAT[s.cat]} · ${esc(s.genre)}</span></td><td data-label="공연장"><span>${esc(v.name)}<br><small class="muted">혜화역 ${v.exit}번 출구</small></span></td><td data-label="시간"><span>${s.runtime}분</span></td><td data-label="관람 연령"><span>${esc(s.age.replace(/\(.*\)/, ''))}</span></td><td data-label="회차"><span>${s.schedule.map(([d, t]) => `${d} ${t}`).join('<br>')}</span></td><td data-label="가격"><span>${won(priceFrom(s))}~</span></td><td data-label="관람평"><span>${s.rating ? `★${s.rating.avg.toFixed(2)} (${s.rating.count.toLocaleString('ko-KR')})` : '—'}</span></td></tr>`; }).join('');
-  return `${pageHd(u, { crumb: [['홈', ''], ['공연', 'shows/']], eyebrow: 'Shows', title: '대학로 연극·뮤지컬<br>파릇 공연 전체', lead: `연극 3편, 어린이 뮤지컬 2편, 심야 쇼 1편. 모두 혜화역에서 걸어서 5분 안의 대학로 공연장에서 열립니다(${ASOF_LABEL} 기준).` })}
+  return `${pageHd(u, { crumb: [['홈', ''], ['공연', 'shows/']], eyebrow: 'Shows', title: '대학로 연극·뮤지컬<br>파릇 공연 전체', lead: `연극 ${SHOWS.filter(s => s.cat === 'play').length}편, 어린이 뮤지컬 ${SHOWS.filter(s => s.cat === 'kids').length}편, 심야 쇼 ${SHOWS.filter(s => s.cat === 'show').length}편. 모두 혜화역에서 걸어서 5분 안의 대학로 공연장에서 열립니다(${ASOF_LABEL} 기준).` })}
 <section class="sec-tight"><div class="wrap">
-  <p class="answer">대학로·혜화에서 지금 볼 수 있는 파릇 공연은 로맨틱 코미디 「한뼘사이」, 힐링 코미디 「수상한 룸메이트」(원작 비누향기), 오피스 로맨틱 코미디 「사내연애 보고서」, 어린이 참여형 뮤지컬 「늑대숲 또옹돼지 원정대」와 「피노키오야 노올자」, 금·토 심야 드랙퀸 쇼 「드랙인혜화」입니다.</p>
+  <p class="answer">대학로·혜화에서 지금 볼 수 있는 파릇 공연은 로맨틱 코미디 「한뼘사이」, 오피스 로맨틱 코미디 「사내연애 보고서」, 섹시 코미디 「플러팅」, 금·토 심야 드랙퀸 쇼 「드랙인혜화」, 어린이 참여형 뮤지컬 「늑대숲 또옹돼지 원정대」와 「피노키오야 노올자」, 힐링 코미디 「수상한 룸메이트」(원작 비누향기)입니다.</p>
   <div class="blog-filter tabs-like" role="group" aria-label="공연 분류" id="showFilter">
     <button class="chip" type="button" data-sf="all" aria-pressed="true">전체 ${SHOWS.length}</button>
     ${['play', 'kids', 'show'].map(c => `<button class="chip" type="button" data-sf="${c}" aria-pressed="false" id="${c === 'kids' ? 'kids' : c}">${CAT[c]} ${SHOWS.filter(s => s.cat === c).length}</button>`).join('')}
@@ -127,7 +126,7 @@ export function about(u) {
 <section class="sec-tight"><div class="wrap two-col">
   <div><p class="eyebrow">Performance Group Paroot</p><h2 class="h2" style="font-size:clamp(26px,3.4vw,40px)">대학로 공연의 중심에서<br>관객의 저녁을 만듭니다</h2></div>
   <div class="prose" style="font-size:17px">
-    <p class="answer" style="margin-bottom:22px">주식회사 파릇은 2016년 어린이뮤지컬 「성냥팔이 소녀」의 기획·운영을 시작으로 연극 「한뼘사이」, 「비누향기」(현 「수상한 룸메이트」), 「사내연애 보고서」와 어린이뮤지컬 「늑대숲 또옹돼지 원정대」, 「피노키오야 노올자」를 제작·기획·운영해 왔습니다. 2026년 10월에는 대학로의 밤을 위한 드랙퀸 쇼 「드랙인혜화」를 열었습니다.</p>
+    <p class="answer" style="margin-bottom:22px">주식회사 파릇은 2016년 어린이뮤지컬 「성냥팔이 소녀」의 기획·운영을 시작으로 연극 「한뼘사이」, 「사내연애 보고서」, 「플러팅」, 「비누향기」(현 「수상한 룸메이트」)와 어린이뮤지컬 「늑대숲 또옹돼지 원정대」, 「피노키오야 노올자」를 제작·기획·운영해 왔습니다. 2026년 10월에는 대학로의 밤을 위한 드랙퀸 쇼 「드랙인혜화」를 열었습니다.</p>
     <p>파릇이 만드는 공연의 기준은 하나입니다. 공연이 처음인 사람도 부담 없이 즐길 수 있을 것. 연령, 성별과 상관없이 가족과 연인 모두가 편하게 웃고 나올 수 있는 무대를 목표로, 관객의 반응이 녹아 있는 트렌디한 공연을 만듭니다.</p>
     <p>장르와 연령별로 관객이 원하는 것을 꾸준히 찾고, 그 결과를 다음 무대에 반영하는 공연 제작·기획사로 자라는 것이 파릇의 목표입니다.</p>
   </div>

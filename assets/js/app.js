@@ -438,6 +438,25 @@
     if (location.hash === '#kids') apply('kids');
   }
 
+  // ── 10-1) 홈 공연사진 줄: 마우스·키보드로 고른 장이 펼쳐지고, 화면에 보이는 동안 4.2초마다 다음 장(진행 막대 끝나면) ──
+  const reel = $('#reel');
+  if (reel) {
+    const items = $$('.reel-item', reel);
+    const desk = () => matchMedia('(min-width: 761px)').matches;
+    const on = i => items.forEach((li, k) => li.classList.toggle('on', k === i));
+    const cur = () => items.findIndex(li => li.classList.contains('on'));
+    items.forEach((li, k) => {
+      li.addEventListener('mouseenter', () => { if (desk()) { on(k); reel.classList.add('paused'); } });
+      li.addEventListener('focusin', () => { on(k); reel.classList.add('paused'); });
+    });
+    reel.addEventListener('mouseleave', () => reel.classList.remove('paused'));
+    reel.addEventListener('focusout', e => { if (!reel.contains(e.relatedTarget)) reel.classList.remove('paused'); });
+    if (!reduce) {
+      reel.addEventListener('animationend', e => { if (e.animationName === 'reelbar' && desk()) on((cur() + 1) % items.length); });
+      new IntersectionObserver(([en]) => reel.classList.toggle('auto', en.isIntersecting), { threshold: .35 }).observe(reel);
+    }
+  }
+
   // ── 11) 무대 사진 라이트박스(모달) ──
   const gals = $$('[data-lightbox]');
   if (gals.length) {

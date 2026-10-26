@@ -4,7 +4,7 @@
       ../motion/cache/clips/ (홍보 영상에서 뽑은 4K 프레임)
 출력: assets/img/shows/<slug>/poster.webp(4:5) · thumb.webp(320×400) · cover.webp(가로) · detail/NN.webp · gallery/NN.webp
       assets/img/stage/*.webp(영상 스틸) · assets/img/brand/(로고 축소본·아이콘)
-사용: python -I tools/prepare_images.py   (paroot-site 폴더에서)
+사용: python -I tools/prepare_images.py   (paroot-site 폴더에서, 공연 일부만: ... prepare_images.py flirting)
 """
 import json
 import shutil
@@ -33,6 +33,12 @@ SHOWS = {
     'wolf-forest-piglets': {'dir': 'wolf-forest-pigs', 'poster': ('legacy/085.jpg', .45), 'cover': 'wolf-forest-pigs/02.jpg',
                             'detail': ['04', '05', '06', '07', '08'],
                             'gallery': ['legacy/027.jpg', 'legacy/029.jpg', 'legacy/043.jpg', 'legacy/038.jpg', 'legacy/044.jpg', 'legacy/031.jpg', 'legacy/046.jpg', 'legacy/040.jpg']},
+    # 플러팅: 네이버 예약 1550184(2026-10-26 수집). 포스터는 상세 09, 가로 키비주얼이 없어 상세 이미지 속 무대 사진을 잘라 커버·무대 사진으로 쓴다
+    # (상자 = 원본에서 자를 영역 x0,y0,x1,y1). 상세에서 03 리뷰 치킨 이벤트·04 9월 리뷰 당첨·05 재관람 카드·06 군인 할인(11/30까지)·07 수험생 할인(11/20~30) 제외
+    'flirting': {'dir': 'flirting', 'poster': ('flirting/09.jpg', 1), 'cover': ('flirting/10.jpg', (0, 2700, 860, 3300)),
+                 'detail': ['08', '10', '11', '12', '13', '14'],
+                 'gallery': [('flirting/10.jpg', (0, 2720, 860, 3300)), ('flirting/10.jpg', (0, 5100, 860, 5680)), ('flirting/14.jpg', (0, 3290, 860, 3881)),
+                             ('flirting/11.jpg', (0, 4260, 860, 4860)), ('flirting/10.jpg', (0, 1560, 860, 2180)), ('flirting/10.jpg', (0, 3860, 860, 4440))]},
     'pinocchio': {'dir': 'pinocchio', 'poster': ('legacy/086.jpg', .4), 'cover': 'pinocchio/02.jpg',
                   'detail': ['04', '05', '06', '07', '08'],
                   'gallery': ['legacy/076.png', 'legacy/060.png', 'legacy/079.png', 'legacy/062.png', 'legacy/080.png', 'legacy/073.png', 'legacy/081.png', 'legacy/078.jpg']},
@@ -40,17 +46,22 @@ SHOWS = {
 # 영상 스틸(홍보 영상 원본 프레임) — [이름, 클립, 프레임]
 STILLS = [('exterior', 'exterior', 3), ('crowd-a', 'crowdA', 12), ('crowd-b', 'crowdB', 20), ('laugh', 'laugh', 10),
           ('hat', 'hat', 14), ('dress', 'dress', 30), ('couple', 'couple', 24), ('couple-2', 'couple', 6), ('spot', 'spot', 10), ('cap', 'cap', 6)]
-# 기존 사이트 무대 기록(작품명 미표기 사진) → 회사 소개 갤러리
-ARCHIVE = ['legacy/090.jpg', 'legacy/091.jpg', 'legacy/092.jpg', 'legacy/093.jpg', 'legacy/094.jpg', 'legacy/095.jpg']
+# 기존 사이트 홈 하단 「공연사진」 갤러리 9장(01~06 작품명 미표기) → 회사 소개 무대 기록·홈 공연사진 줄
+# 07~09 는 같은 갤러리의 늑대숲 또옹돼지 원정대 장면(홈 하단 공연사진 줄에서 9장 모두 사용)
+ARCHIVE = ['legacy/090.jpg', 'legacy/091.jpg', 'legacy/092.jpg', 'legacy/093.jpg', 'legacy/094.jpg', 'legacy/095.jpg', 'legacy/030.jpg', 'legacy/029.jpg', 'legacy/028.jpg']
 
 
 SM_W = 560  # 작은 사본 너비: 모바일 2열 칸(약 175px) × 화면 배율 3
 
 
 def load(rel):
+    """rel 이 (파일, (x0, y0, x1, y1)) 이면 그 영역만 잘라 쓴다."""
+    box = None
+    if isinstance(rel, tuple):
+        rel, box = rel
     im = Image.open(SRC / rel)
-    im = ImageOps.exif_transpose(im)
-    return im.convert('RGB')
+    im = ImageOps.exif_transpose(im).convert('RGB')
+    return im.crop(box) if box else im
 
 
 def save(im, path, q=80, maxw=None):
@@ -71,9 +82,11 @@ def crop_ratio(im, r, fy=.5):
     return im.crop((0, y, w, y + nh))
 
 
-def main():
-    report = {}
+def main(only=None):
+    report = json.loads((ROOT / 'src' / 'images.json').read_text(encoding='utf-8')) if only else {}
     for slug, c in SHOWS.items():
+        if only and slug not in only:
+            continue
         d = OUT / 'shows' / slug
         if d.exists():
             shutil.rmtree(d)
@@ -100,6 +113,11 @@ def main():
             save(im, d / 'gallery' / f'{i:02d}-sm.webp', 76, SM_W)  # 모바일 2열 격자용(srcset)
         report[slug] = {'detail': [[n, *s] for n, s in zip(c['detail'], det)], 'gallery': [list(s) for s in gal]}
         print(slug, 'detail', len(det), 'gallery', len(gal))
+    if only:  # 공연 몇 개만: 스틸·로고는 건드리지 않고 목록만 갱신
+        report = {k: report[k] for k in SHOWS if k in report}
+        (ROOT / 'src' / 'images.json').write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding='utf-8')
+        print('ok (일부)')
+        return
     # 영상 스틸
     st = OUT / 'stage'
     st.mkdir(parents=True, exist_ok=True)
@@ -128,4 +146,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import sys
+    main(sys.argv[1:] or None)

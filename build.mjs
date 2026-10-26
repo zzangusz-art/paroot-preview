@@ -62,8 +62,8 @@ const lastPost = posts[0]?.date || ASOF;
 // ── 홈 ──
 {
   const out = 'index.html', url = pageUrl(out);
-  const t = '대학로 연극·혜화 연극 | 파릇 — 한뼘사이·수상한 룸메이트·사내연애 보고서';
-  const d = `대학로·혜화에서 연극과 어린이 뮤지컬을 만드는 공연 제작사 파릇. 2017년부터 오픈런 중인 로맨틱 코미디 「한뼘사이」, 「수상한 룸메이트」, 「사내연애 보고서」, 어린이 뮤지컬 「늑대숲 또옹돼지 원정대」·「피노키오야 노올자」, 심야 쇼 「드랙인혜화」 예매·오시는 길.`;
+  const t = '대학로 연극·혜화 연극 | 파릇 — 한뼘사이·사내연애 보고서·플러팅';
+  const d = `대학로·혜화에서 연극과 어린이 뮤지컬을 만드는 공연 제작사 파릇. 2017년부터 오픈런 중인 로맨틱 코미디 「한뼘사이」, 「사내연애 보고서」, 섹시 코미디 「플러팅」, 심야 쇼 「드랙인혜화」, 어린이 뮤지컬 「늑대숲 또옹돼지 원정대」·「피노키오야 노올자」, 「수상한 룸메이트」 예매·오시는 길.`;
   emit({ out, pri: '1.0', mod: lastPost > ASOF ? lastPost : ASOF, bodyClass: 'home', title: t, description: d,
     keywords: ['대학로 연극', '혜화 연극', '대학로 연극 추천', '혜화 연극 추천', ...SHOWS.map(s => s.title), '파릇'],
     schema: S.graph(S.organization(), S.website(), S.webpage({ url, title: t, description: d }), S.showList(url), S.faqPage(FAQ.filter(f => f.pages.includes('home')), url)),
@@ -92,7 +92,7 @@ for (const s of SHOWS) {
 // ── 안내 페이지 ──
 const info = [
   { out: 'about/index.html', name: '파릇 소개', render: P.about, pri: '0.7', type: 'AboutPage',
-    title: '파릇 소개·연혁 — 대학로 공연 제작사 주식회사 파릇', description: '주식회사 파릇은 2016년 어린이뮤지컬 기획으로 시작해 연극 「한뼘사이」 「비누향기(수상한 룸메이트)」 「사내연애 보고서」와 어린이뮤지컬을 제작·기획·운영하는 대학로 공연 제작사입니다. 연혁·수상·회사 정보.', extra: () => [S.historyPage()] },
+    title: '파릇 소개·연혁 — 대학로 공연 제작사 주식회사 파릇', description: '주식회사 파릇은 2016년 어린이뮤지컬 기획으로 시작해 연극 「한뼘사이」 「사내연애 보고서」 「플러팅」 「비누향기(수상한 룸메이트)」와 어린이뮤지컬을 제작·기획·운영하는 대학로 공연 제작사입니다. 연혁·수상·회사 정보.', extra: () => [S.historyPage()] },
   { out: 'visit/index.html', name: '오시는 길', render: P.visit, pri: '0.8',
     title: '대학로 공연장 오시는 길 — 혜화역 출구별 파릇 공연장 | 파릇', description: '라온아트홀(한뼘사이 전용관)·제나아트홀·라온씨어터는 혜화역 2번 출구, 서연아트홀은 4번 출구, 뮤지컬펍 커튼콜은 1번 출구에서 걸어서 5분 이내입니다. 주소·가는 길·주차 안내.',
     extra: () => VENUES.map(v => ({ '@type': 'PerformingArtsTheater', name: v.name, address: { '@type': 'PostalAddress', streetAddress: v.addr.replace(/^서울 종로구 /, ''), addressLocality: '종로구', addressRegion: '서울특별시', addressCountry: 'KR' }, geo: { '@type': 'GeoCoordinates', latitude: v.lat, longitude: v.lng } })), faq: 'visit' },

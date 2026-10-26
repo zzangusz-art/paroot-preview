@@ -2,7 +2,7 @@
 import { SITE, SHOWS, FAQ, HISTORY, AWARDS, PRESS, VENUES, WHO, TOUR_CITIES, totalReviews, avgRating, showBySlug } from './data.mjs';
 import { esc, img, phImg, kdate } from './lib.mjs';
 import { ico } from './layout.mjs';
-import { showCard, ratingBars, reviewCard, faqAcc, venueCard, postCard } from './parts.mjs';
+import { showCard, ratingBars, reviewCard, faqAcc, venueCard, postCard, lightbox } from './parts.mjs';
 
 const H = () => showBySlug('hanbbeumsai');
 
@@ -169,6 +169,21 @@ function faq(u) {
 </section>`;
 }
 
+// 공연사진(기존 paroot.kr 홈 하단 「공연사진」 갤러리 9장): 마우스를 올리거나 차례로 넘어가며 한 장씩 펼쳐지고, 누르면 크게 본다
+const PHOTOS = [
+  ...[1, 2, 3, 4, 5, 6].map(i => ({ i, cap: '파릇 무대 기록', alt: `파릇 연극 공연 장면 ${i}` })),
+  ...[7, 8, 9].map(i => ({ i, cap: '늑대숲 또옹돼지 원정대', alt: `어린이 뮤지컬 늑대숲 또옹돼지 원정대 공연 장면 ${i - 6}` })),
+];
+function photos(u) {
+  return `<section class="sec sec-dark reel-sec" id="photos" aria-labelledby="phoTitle">
+  <div class="wrap">
+    <div class="sec-head"><div><p class="eyebrow">Stage Photos</p><h2 class="h2" id="phoTitle">공연사진</h2><p class="lead">파릇의 지난 공연을 사진으로 확인해 보세요.</p></div><span class="reel-hint">사진에 마우스를 올리면 펼쳐지고, 누르면 크게 볼 수 있습니다</span></div>
+    <ul class="reel reveal" id="reel">${PHOTOS.map((p, k) => `<li class="reel-item${k ? '' : ' on'}"><button class="reel-btn" type="button" data-lightbox="${u(`assets/img/stage/archive-${String(p.i).padStart(2, '0')}.webp`)}" data-alt="${esc(p.alt)}" aria-label="${esc(p.alt)} 크게 보기">${img(u, `assets/img/stage/archive-${String(p.i).padStart(2, '0')}.webp`, p.alt)}<span class="reel-no" aria-hidden="true">${String(k + 1).padStart(2, '0')}</span><span class="reel-cap"><small>STAGE ${String(k + 1).padStart(2, '0')}</small>${esc(p.cap)}</span></button></li>`).join('')}</ul>
+  </div>
+</section>
+${lightbox}`;
+}
+
 function blog(u, posts) {
   if (!posts.length) return '';
   return `<section class="sec sec-soft" id="guide" aria-labelledby="bgTitle">
@@ -187,5 +202,5 @@ export function ctaBand(u) {
 }
 
 export function homeBody(u, posts) {
-  return [hero(u), marquee(), lineup(u), reviews(u), spotlight(u), finder(u), history(), press(u), venues(u), faq(u), blog(u, posts), ctaBand(u)].join('\n');
+  return [hero(u), marquee(), lineup(u), reviews(u), spotlight(u), finder(u), history(), press(u), venues(u), faq(u), blog(u, posts), photos(u), ctaBand(u)].join('\n');
 }

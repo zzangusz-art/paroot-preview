@@ -73,7 +73,7 @@ function schedules(s) {
 export function event(s, url, image) {
   const v = venueOf(s);
   const prices = s.prices.map(p => p.price);
-  const age = s.cat === 'kids' ? '2-' : s.id === 'drag' ? '19-' : '12-';
+  const age = s.cat === 'kids' ? '2-' : (s.age.match(/만 (\d+)세/)?.[1] ?? '12') + '-';   // 연극 12·15세, 드랙 19세
   return {
     '@type': s.cat === 'show' ? 'Event' : 'TheaterEvent',
     '@id': url + '#event',

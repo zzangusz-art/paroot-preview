@@ -70,4 +70,7 @@ export function postCard(u, p, { lazy = true } = {}) {
   return `<a class="post-card reveal" href="${u(`blog/${p.slug}/`)}">${phImg(u, p.thumb, '', { wrapCls: 'pc-cover', lazy })}<span class="pc-cat">${esc(p.category)}</span><span class="pc-title">${esc(p.title)}</span><p class="pc-desc">${esc(p.description)}</p><span class="pc-meta">${kdate(p.date)} · ${p.minutes}분 읽기</span></a>`;
 }
 
+// 사진 크게 보기(라이트박스) — [data-lightbox] 버튼이 있는 페이지에 한 번 넣는다
+export const lightbox = `<div class="modal" id="modalImg" hidden role="dialog" aria-modal="true" aria-labelledby="lbTitle"><div class="modal-scrim" data-close></div><div class="modal-panel modal-wide"><div class="sheet-grip" aria-hidden="true"></div><div class="modal-hd"><h2 id="lbTitle">무대 사진</h2><button class="x-btn" type="button" data-close aria-label="닫기">${ico('close')}</button></div><div class="modal-body lb-body"><div class="ph"><img id="lbImg" src="data:," alt=""></div><div class="lb-nav"><button class="btn btn-line btn-s" type="button" data-lb="-1">이전</button><span id="lbCount" class="muted"></span><button class="btn btn-line btn-s" type="button" data-lb="1">다음</button></div></div></div></div>`;
+
 export { VENUES };
