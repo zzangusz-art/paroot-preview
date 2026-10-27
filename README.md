@@ -80,7 +80,12 @@ GitHub Actions가 **매일 09:05 · 13:05 · 18:05(KST)** 에 `_topics.json`의 
 - **방문 분석**: `src/data.mjs` `SITE.analytics`에 ID를 넣거나 Railway Variables로 `GA4_ID`·`GTM_ID`·`NAVER_WA`·`CLARITY_ID`. 운영 빌드에서만 켜지고(미리보기 데이터 섞임 방지), 켜면 개인정보 처리 안내에 「방문 분석 도구와 쿠키」가 자동으로 붙는다.
   - GA4는 사이트에 직접(gtag) 설치되어 있으므로 **GTM 안에 GA4 구성 태그를 또 만들지 않는다**(중복 집계). GTM은 광고 픽셀(메타·카카오·구글 애즈 등) 추가용.
   - 이벤트(GA4 이벤트 + GTM dataLayer 같은 이름): `book_click`(show·placement·link_url) — GA4 「주요 이벤트」로 표시, `book_drawer_open`, `show_quick_view`(show), `contact_call`, `contact_email`, `share`, `copy_info`, `photo_view`, `finder_select`(audience), `list_filter`(list·category), `video_sound`, `video_replay`, `blog_more`, `read_progress`(percent·post).
-  - GA4 맞춤 측정기준(이벤트 범위)으로 `show`, `placement`, `percent`, `post`, `audience`, `category`를 등록하면 보고서에서 공연별·위치별로 볼 수 있다.
+  - GA4 맞춤 측정기준(이벤트 범위)으로 `show`, `placement`, `percent`, `post`, `audience`, `category`, `list`를 등록해 두었다(공연별·위치별 보고서).
+- **연결된 계정(2026-10-27 설정)**: 구글 계정 하나에 모두 있음
+  - Search Console: URL 접두어 속성 `https://parootent.kr/`(HTML 태그 인증), sitemap·RSS 제출 완료.
+  - GA4: 계정 「파릇」 → 속성 「파릇 홈페이지 (parootent.kr)」(p560887563) → 웹 스트림 측정 ID `G-K978Y2GH8Q`.
+  - GTM: 계정 「파릇」 → 컨테이너 `parootent.kr` `GTM-PSL5DD88`(빈 초기 버전 게시됨, 태그 없음).
+  - 환경 변수(`GA4_ID` 등)는 형식이 맞을 때만 코드 기본값을 덮어쓴다(빈 값·오타면 기본값 유지).
   - 네이버: 예매 클릭 때 전환(신청/예약, `wcs.cnv("4")`)도 보낸다 — 네이버 검색광고 프리미엄 로그분석을 연결하면 광고 전환으로 잡힌다.
 
 ## (참고) 기존 도메인 www.paroot.kr 전환 시
