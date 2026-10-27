@@ -28,7 +28,7 @@ export const SITE = {
   // 방문 분석: ID를 넣으면 운영 빌드(SITE_MODE=production, 검색 노출 허용)에서만 켜진다. 미리보기에는 넣지 않아 데이터가 섞이지 않음.
   // 코드에 적거나 Railway·GitHub Variables(GA4_ID 등)로 넣는다. GTM 안에는 GA4 구성 태그를 따로 만들지 않는다(중복 집계).
   analytics: {
-    ga4: process.env.GA4_ID || '',          // Google 애널리틱스 4 측정 ID(G-XXXXXXXXXX)
+    ga4: process.env.GA4_ID || 'G-K978Y2GH8Q',        // Google 애널리틱스 4 측정 ID(G-XXXXXXXXXX)
     gtm: process.env.GTM_ID || '',          // Google 태그 관리자 컨테이너 ID(GTM-XXXXXXX): 광고 픽셀 등 추가 태그용
     naver: process.env.NAVER_WA || '',      // 네이버 애널리틱스 사이트 ID(wcs_add["wa"])
     clarity: process.env.CLARITY_ID || '',  // Microsoft Clarity 프로젝트 ID(히트맵·세션 녹화, 무료)
