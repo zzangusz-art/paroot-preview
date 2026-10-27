@@ -23,7 +23,7 @@ export const SITE = {
   audition: 'audition@paroot.kr',
   address: { full: '서울특별시 종로구 대학로10길 11 (동숭동)', street: '대학로10길 11', locality: '종로구', region: '서울특별시', lat: 37.5818058, lng: 127.0027291 },
   naverVerification: ['0dcf0bc6d5fe1e94c1f93a5722120aa32982a080'],   // 소유 확인 값 목록(기존 paroot.kr 값 + parootent.kr 등록 때 받은 값)
-  googleVerification: ['PjDzXil-JkcPee5c7KrbCQ8kWv1p20vkWmYl3i4yQwI'],
+  googleVerification: ['PjDzXil-JkcPee5c7KrbCQ8kWv1p20vkWmYl3i4yQwI', '03mKi9a9dAxCPG26DP74MZK8t0otUkQSmP3jRbXeGVI'], // 기존 paroot.kr 값 + parootent.kr 서치콘솔(URL 접두어) 값
   agencyScript: '',
   // 방문 분석: ID를 넣으면 운영 빌드(SITE_MODE=production, 검색 노출 허용)에서만 켜진다. 미리보기에는 넣지 않아 데이터가 섞이지 않음.
   // 코드에 적거나 Railway·GitHub Variables(GA4_ID 등)로 넣는다. GTM 안에는 GA4 구성 태그를 따로 만들지 않는다(중복 집계).
