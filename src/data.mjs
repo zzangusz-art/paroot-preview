@@ -5,6 +5,9 @@
 export const ASOF = '2026-10-23';
 export const ASOF_LABEL = '2026년 10월 23일';
 
+// 방문 분석 ID: 환경 변수(Railway Variables 등)가 형식에 맞을 때만 그 값을 쓰고, 비었거나 틀리면(공백 등) 기본값을 쓴다
+const envId = (key, re, fallback = '') => { const v = (process.env[key] || '').trim(); return re.test(v) ? v : fallback; };
+
 export const SITE = {
   name: '주식회사 파릇',
   brand: '파릇',
@@ -28,10 +31,10 @@ export const SITE = {
   // 방문 분석: ID를 넣으면 운영 빌드(SITE_MODE=production, 검색 노출 허용)에서만 켜진다. 미리보기에는 넣지 않아 데이터가 섞이지 않음.
   // 코드에 적거나 Railway·GitHub Variables(GA4_ID 등)로 넣는다. GTM 안에는 GA4 구성 태그를 따로 만들지 않는다(중복 집계).
   analytics: {
-    ga4: process.env.GA4_ID || 'G-K978Y2GH8Q',        // Google 애널리틱스 4 측정 ID(G-XXXXXXXXXX)
-    gtm: process.env.GTM_ID || 'GTM-PSL5DD88',        // Google 태그 관리자 컨테이너 ID(GTM-XXXXXXX): 광고 픽셀 등 추가 태그용
-    naver: process.env.NAVER_WA || '',      // 네이버 애널리틱스 사이트 ID(wcs_add["wa"])
-    clarity: process.env.CLARITY_ID || '',  // Microsoft Clarity 프로젝트 ID(히트맵·세션 녹화, 무료)
+    ga4: envId('GA4_ID', /^G-[A-Z0-9]{4,}$/, 'G-K978Y2GH8Q'),     // Google 애널리틱스 4 측정 ID(G-XXXXXXXXXX), 계정 '파릇'
+    gtm: envId('GTM_ID', /^GTM-[A-Z0-9]{4,}$/, 'GTM-PSL5DD88'),   // Google 태그 관리자 컨테이너 ID(GTM-XXXXXXX), 계정 '파릇': 광고 픽셀 등 추가 태그용
+    naver: envId('NAVER_WA', /^[a-z0-9]{6,}$/i),                  // 네이버 애널리틱스 사이트 ID(wcs_add["wa"])
+    clarity: envId('CLARITY_ID', /^[a-z0-9]{6,}$/i),              // Microsoft Clarity 프로젝트 ID(히트맵·세션 녹화, 무료)
   },
   // IndexNow(네이버·빙 등에 새 글·수정 페이지를 바로 알림) 키. 공개해도 되는 값이며 사이트 루트에 <키>.txt로 올라간다.
   indexNowKey: '7e20120d4a0fbd218e2f4b7599e3b84a',
