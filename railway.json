@@ -5,7 +5,7 @@
     "buildCommand": "node build.mjs --out .site/check && node tools/blog-ai/generate.mjs --check"
   },
   "deploy": {
-    "startCommand": "node tools/serve.mjs",
+    "startCommand": "node tools/serve.mjs --production --url https://parootent.kr/",
     "healthcheckPath": "/",
     "healthcheckTimeout": 120,
     "restartPolicyType": "ON_FAILURE",

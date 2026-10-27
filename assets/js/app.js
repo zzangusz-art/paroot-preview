@@ -555,5 +555,52 @@
     });
   }
 
+  // ── 13) 방문 분석 이벤트: 운영 빌드에 GA4·GTM·네이버 애널리틱스가 있을 때만 보낸다(없으면 아무것도 안 함) ──
+  //  book_click(네이버 예약으로 이동)을 GA4 「주요 이벤트」로 표시해 전환으로 본다. GTM은 같은 이름의 dataLayer 이벤트로 받는다.
+  const A = window.PAROOT_ANALYTICS;
+  if (A) {
+    const track = (name, p = {}) => {
+      const params = { page_path: location.pathname, ...p };
+      (window.dataLayer = window.dataLayer || []).push({ event: name, ...params });
+      if (A.ga4 && window.gtag) gtag('event', name, params);
+    };
+    window.paroot.track = track;
+    const showOf = href => SHOWS.find(s => href.startsWith(s.booking));
+    d.addEventListener('click', e => {
+      const a = e.target.closest('a[href]');
+      if (a) {
+        const href = a.getAttribute('href');
+        if (/booking\.naver\.com/.test(a.href)) {
+          const s = showOf(a.href), where = a.closest('.mbar, .post-shows, .toc, .drawer, .modal, section[id]');
+          track('book_click', { show: a.dataset.book || (s && s.title) || '', placement: where ? where.id || where.classList[0] : '', link_url: a.href });
+          if (A.naver && window.wcs && window.wcs_do) { try { wcs_do({ cnv: wcs.cnv('4', '1') }); } catch (_) { /* 네이버 전환 스크립트 없음 */ } } // 4 = 신청/예약
+        } else if (href.startsWith('tel:')) track('contact_call', { number: href.slice(4) });
+        else if (href.startsWith('mailto:')) track('contact_email', { address: href.slice(7).split('?')[0] });
+      }
+      const t = e.target.closest('[data-qv],[data-open="drawerBook"],[data-share],[data-copy],[data-lightbox],[data-who],#filmSound,#filmReplay,#postMore,.blog-filter [data-cat],#ntFilter [data-nf],#showFilter [data-cat],.lu-filter [data-cat]');
+      if (!t) return;
+      const label = t.textContent.trim().replace(/\s+/g, ' ').slice(0, 40);
+      if (t.matches('[data-qv]')) track('show_quick_view', { show: (byId(t.dataset.qv) || {}).title || '' });
+      else if (t.matches('[data-open="drawerBook"]')) track('book_drawer_open');
+      else if (t.matches('[data-share]')) track('share', { method: navigator.share ? 'native' : 'copy' });
+      else if (t.matches('[data-copy]')) track('copy_info', { item: label });
+      else if (t.matches('[data-lightbox]')) track('photo_view', { image: t.dataset.lightbox.split('/').slice(-3).join('/') });
+      else if (t.matches('[data-who]')) track('finder_select', { audience: label });
+      else if (t.id === 'filmSound') track('video_sound', { on: t.getAttribute('aria-pressed') !== 'true' });
+      else if (t.id === 'filmReplay') track('video_replay');
+      else if (t.id === 'postMore') track('blog_more');
+      else track('list_filter', { list: t.closest('#ntFilter') ? 'notice' : t.closest('.blog-filter') ? 'blog' : 'shows', category: label });
+    }, true);
+    // 가이드 글: 읽은 깊이(25·50·75·100%) — 어떤 글이 끝까지 읽히는지
+    if ($('.readbar') && prose) {
+      const marks = [25, 50, 75, 100], sent = new Set();
+      onScrollFns.push(() => {
+        const r = prose.getBoundingClientRect();
+        const pct = clamp(-r.top / Math.max(1, r.height - innerHeight)) * 100;
+        for (const m of marks) if (pct >= m - 1 && !sent.has(m)) { sent.add(m); track('read_progress', { percent: m, post: location.pathname.split('/').filter(Boolean).pop() || '' }); }
+      });
+    }
+  }
+
   runScroll();
 })();

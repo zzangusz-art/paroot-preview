@@ -1,5 +1,6 @@
 // 공통 레이아웃: <head>(메타·OG·JSON-LD), 헤더·메뉴 드로어·예매 드로어, 모달, 토스트, 푸터
 import { SITE, SHOWS, venueOf, priceFrom } from './data.mjs';
+import { analyticsHead, analyticsBodyTop, analyticsBodyEnd } from './analytics.mjs';
 import { esc, jsonld, won } from './lib.mjs';
 
 // 아이콘(스프라이트)
@@ -122,12 +123,12 @@ export function page({ title, description, url, schema, section, ogImage = 'asse
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>${esc(title)}</title>
+${analyticsHead()}<title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 ${keywords.length ? `<meta name="keywords" content="${esc(keywords.join(', '))}">\n` : ''}<link rel="canonical" href="${url}">
 ${noindex ? '<meta name="robots" content="noindex, nofollow">' : '<meta name="robots" content="index, follow, max-image-preview:large">'}
-<meta name="naver-site-verification" content="${SITE.naverVerification}">
-<meta name="google-site-verification" content="${SITE.googleVerification}">
+${[].concat(SITE.naverVerification).map(v => `<meta name="naver-site-verification" content="${v}">`).join('\n')}
+${[].concat(SITE.googleVerification).map(v => `<meta name="google-site-verification" content="${v}">`).join('\n')}
 <meta name="theme-color" content="#0E0D12">
 <meta property="og:type" content="${ogType}">
 <meta property="og:site_name" content="${SITE.name}">
@@ -150,7 +151,7 @@ ${published ? `<meta property="article:published_time" content="${published}T09:
 ${head}${jsonld(schema)}
 </head>
 <body class="${bodyClass}" data-root="${u('')}">
-${sprite}
+${analyticsBodyTop()}${sprite}
 <a class="skip" href="#main">본문 바로가기</a>
 ${header(u, section)}
 <main id="main">
@@ -164,6 +165,6 @@ ${modals()}
 <script type="application/json" id="showData">${JSON.stringify(showData(u)).replace(/</g, '\\u003c')}</script>
 <script src="${u('assets/js/app.js')}?v=${v}" defer></script>
 ${extraScripts}
-</body>
+${analyticsBodyEnd()}</body>
 </html>`;
 }

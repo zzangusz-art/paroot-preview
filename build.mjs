@@ -19,6 +19,9 @@ const { SITE, SHOWS, FAQ, VENUES, HISTORY, AWARDS, PRESS, BLOG_CATEGORIES, KEYWO
 const { makeUrl, pageUrl, esc, won } = await import('./src/lib.mjs');
 const S = await import('./src/schema.mjs');
 const { page } = await import('./src/layout.mjs');
+const { setTracking } = await import('./src/analytics.mjs');
+// 방문 분석 태그는 운영 빌드에서만(미리보기 데이터가 섞이지 않게). 점검용으로 미리보기에 켜려면 ANALYTICS_PREVIEW=1
+setTracking(!PREVIEW || !!process.env.ANALYTICS_PREVIEW);
 const { homeBody } = await import('./src/home.mjs');
 const P = await import('./src/pages.mjs');
 const { loadPosts, renderMarkdown } = await import('./tools/blog/lib.mjs');
@@ -151,11 +154,13 @@ for (const p of posts) {
 
 // ── sitemap · robots · llms ──
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${pages.map(p => `<url><loc>${pageUrl(p.out)}</loc><lastmod>${p.mod}</lastmod><priority>${p.pri}</priority></url>`).join('\n')}\n</urlset>\n`);
+// IndexNow 키 파일(네이버·빙이 키 소유 확인에 씀)
+if (SITE.indexNowKey) write(`${SITE.indexNowKey}.txt`, SITE.indexNowKey);
 write('robots.txt', PREVIEW
   ? 'User-agent: *\nDisallow: /\n'
   : ['# 검색엔진과 AI 검색·답변 엔진의 수집을 모두 허용합니다', 'User-agent: *', 'Allow: /', '',
     ...['Googlebot', 'Bingbot', 'Yeti', 'Daumoa', 'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Applebot', 'Applebot-Extended', 'CCBot'].flatMap(b => [`User-agent: ${b}`, 'Allow: /', '']),
-    `Sitemap: ${SITE.url}sitemap.xml`, ''].join('\n'));
+    `Sitemap: ${SITE.url}sitemap.xml`, `Sitemap: ${SITE.url}blog/feed.xml`, ''].join('\n'));
 
 const showLines = SHOWS.map(s => { const v = venueOf(s); return `### ${s.full}${s.original ? ` (원작 「${s.original}」)` : ''}\n- 장르: ${s.kind} · ${s.genre}\n- 한 줄: ${s.hook}\n- 공연장: ${v.name}${v.alias ? `(${v.alias})` : ''}, ${v.addr} — ${v.walk}\n- 개막: ${s.sinceLabel}\n- 공연 시간 ${s.runtime}분, 관람 연령 ${s.age}\n- 회차: ${s.schedule.map(([d, t]) => `${d} ${t}`).join(' / ')}\n- 가격(네이버 예약, ${ASOF_LABEL}): ${s.prices.map(p => `${p.name} ${won(p.price)}`).join(', ')} (정가 ${won(Math.max(...s.prices.map(p => p.normal)))})\n- 예매: ${s.booking.url}${s.rating ? `\n- 네이버 예약 관람평 평균 ${s.rating.avg} (${s.rating.count.toLocaleString('ko-KR')}건, ${s.rating.asof} 기준)` : ''}${s.credits ? `\n- ${s.credits}` : ''}\n- 상세: ${SITE.url}shows/${s.slug}/`; }).join('\n\n');
 const llms = `# ${SITE.name} (${SITE.nameEn}) — 대학로 연극·혜화 연극
