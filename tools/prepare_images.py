@@ -96,6 +96,7 @@ def main(only=None):
         save(p.resize((320, 400), Image.LANCZOS), d / 'thumb.webp', 80)
         cv = load(c['cover'])
         save(cv, d / 'cover.webp', 80, 1600)
+        save(cv, d / 'cover-sm.webp', 76, SM_W)  # 보도 카드 등 작은 칸용(srcset)
         # 공유 이미지(1200×630): 가로 키비주얼을 자른다
         og = crop_ratio(cv, 1200 / 630, .45).resize((1200, 630), Image.LANCZOS)
         og.save(d / 'og.jpg', 'JPEG', quality=86, optimize=True, progressive=True)

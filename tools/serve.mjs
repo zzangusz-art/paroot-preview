@@ -14,7 +14,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = Number(process.env.PORT) || 5530;
 const PROD = process.env.SITE_MODE === 'production';
 const PUBLIC = process.env.SITE_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}/` : `http://localhost:${PORT}/`);
-const SITE_DIR = path.join(ROOT, '.site');
+const SITE_DIR = path.join(ROOT, '.site', String(PORT)); // 포트마다 따로(서버 여러 개를 띄워도 서로 지우지 않게)
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
@@ -152,7 +152,8 @@ const server = http.createServer((req, res) => {
 });
 
 // ── 시작 ──
-fs.rmSync(SITE_DIR, { recursive: true, force: true }); // 지난 실행이 남긴 빌드 정리
+// 지난 실행이 남긴 빌드와 Railway 빌드 단계의 검사용 빌드(.site/check) 정리
+for (const d of [SITE_DIR, path.join(ROOT, '.site', 'check')]) fs.rmSync(d, { recursive: true, force: true });
 server.listen(PORT, () => console.log(`파릇 사이트 서버: http://localhost:${PORT} (${PROD ? '운영' : '미리보기'})`));
 const ok = await build();
 if (!ok && !live) { console.error('첫 빌드에 실패해 종료합니다.'); process.exit(1); }

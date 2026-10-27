@@ -393,6 +393,7 @@
     const more = $('#postMore');
     async function load() { if (!all) { const r = await fetch('posts.json'); all = await r.json(); } return all; }
     async function render(append) {
+      list.classList.add('ready');
       if (!append) list.innerHTML = skel(Math.min(6, shown));
       else list.insertAdjacentHTML('beforeend', `<div class="skel-wrap" style="display:contents">${skel(3)}</div>`);
       const ps = (await load()).filter(p => cat === 'all' || p.category === cat);

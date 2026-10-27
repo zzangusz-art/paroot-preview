@@ -252,7 +252,7 @@ export function blogIndex(u, posts) {
   return `${pageHd(u, { crumb: [['홈', ''], ['대학로 연극 가이드', 'blog/']], eyebrow: 'Daehak-ro Guide', title: '대학로 연극 가이드', lead: '공연 고르는 법, 데이트·모임 동선, 아이와 처음 보는 공연, 관람 매너까지. 파릇 공연기획팀이 현장에서 받는 질문으로 정리합니다.' })}
 <section class="sec-tight"><div class="wrap">
   <div class="blog-filter" role="group" aria-label="글 분류"><button class="chip" type="button" data-cat="all" aria-pressed="true">전체</button>${BLOG_CATEGORIES.map(c => `<button class="chip" type="button" data-cat="${esc(c)}" aria-pressed="false">${esc(c)}</button>`).join('')}</div>
-  <div class="posts" id="postList" data-initial="9">${posts.slice(0, 9).map((p, i) => postCard(u, p, { lazy: i > 2 })).join('')}</div>
+  <div class="posts" id="postList" data-initial="9">${posts.map((p, i) => postCard(u, p, { lazy: i > 2 })).join('')}</div>
   <div class="more-wrap"><button class="btn btn-dark" type="button" id="postMore"${posts.length > 9 ? '' : ' hidden'}>더 보기</button></div>
 </div></section>`;
 }
