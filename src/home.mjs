@@ -99,9 +99,12 @@ function reviews(u) {
   return `<section class="sec sec-soft" id="reviews" aria-labelledby="rvTitleSec">
   <div class="wrap">
     <div class="sec-head"><div><p class="eyebrow">Reviews</p><h2 class="h2" id="rvTitleSec">관객이 먼저 쓴<br>${totalReviews().toLocaleString('ko-KR')}건의 관람평</h2><p class="lead">네이버 예약에 공개된 관람평을 작품별로 모았습니다(${asofRange(rated)} 기준). 후기는 맞춤법을 고치지 않고 원문 그대로 옮겼습니다.</p></div></div>
-    <div class="rv-summary">${rated.map(s => `<div class="rv-stat reveal">
-      <a class="rs-head" href="${u(`shows/${s.slug}/`)}" data-qv="${s.id}">${phImg(u, `assets/img/shows/${s.slug}/thumb.webp`, `${s.title} 포스터`, { wrapCls: 'rs-img' })}<span class="rs-meta"><span class="t">${esc(s.title)}</span><span class="rs-kind">${esc(s.genre)}</span><span class="n"><b>${s.rating.avg.toFixed(2)}</b><span class="star5" style="--r:${(s.rating.avg / 5 * 100).toFixed(1)}%" aria-label="5점 만점에 ${s.rating.avg.toFixed(2)}점">★★★★★</span></span><span class="rs-cnt">관람평 ${s.rating.count.toLocaleString('ko-KR')}건</span></span></a>
+    <div class="rail" data-rail>
+      <div class="rail-nav"><button class="rail-btn" type="button" data-rail-prev aria-label="이전 공연 평점">${ico('arrow')}</button><button class="rail-btn" type="button" data-rail-next aria-label="다음 공연 평점">${ico('arrow')}</button></div>
+      <div class="rv-summary rail-track">${rated.map((s, k) => `<div class="rv-stat reveal" data-d="${k % 4}">
+      <a class="rs-head" href="${u(`shows/${s.slug}/`)}" data-qv="${s.id}">${phImg(u, `assets/img/shows/${s.slug}/thumb.webp`, `${s.title} 포스터`, { wrapCls: 'rs-img' })}<span class="rs-meta"><span class="t">${esc(s.title)}</span><span class="rs-kind">${esc(s.genre)}</span></span><span class="n"><b>${s.rating.avg.toFixed(2)}</b><span class="star5" style="--r:${(s.rating.avg / 5 * 100).toFixed(1)}%" aria-label="5점 만점에 ${s.rating.avg.toFixed(2)}점">★★★★★</span></span><span class="rs-cnt">관람평 ${s.rating.count.toLocaleString('ko-KR')}건</span></a>
       ${ratingBars(s)}</div>`).join('')}</div>
+    </div>
     ${kw.length ? `<div class="kw" aria-label="관객이 고른 키워드">${kw.map(([k, n]) => `<span>“${esc(k)}” <b>${n}</b></span>`).join('')}<span class="muted" style="border:0;background:none;font-weight:500">수상한 룸메이트·피노키오야 노올자 관람평 키워드 투표 합계</span></div>` : ''}
   </div>
   <div class="rv-rows">${row(r1, '', 110)}${row(r2, 'rev', 125)}</div>

@@ -438,6 +438,22 @@
     if (location.hash === '#kids') apply('kids');
   }
 
+  // ── 10-0) 한 줄 레일(홈 관람평 요약): 다 들어가면 그대로, 넘치면 좌우 버튼·끝 흐림으로 한 장씩 넘김 ──
+  $$('[data-rail]').forEach(w => {
+    const t = $('.rail-track', w), prev = $('[data-rail-prev]', w), next = $('[data-rail-next]', w);
+    const step = () => { const c = t.firstElementChild; return c ? c.getBoundingClientRect().width + (parseFloat(getComputedStyle(t).columnGap) || 14) : 240; };
+    const upd = () => {
+      const ovf = t.scrollWidth > t.clientWidth + 2, s0 = t.scrollLeft < 4, s1 = t.scrollLeft + t.clientWidth > t.scrollWidth - 4;
+      w.classList.toggle('ovf', ovf); w.classList.toggle('at-start', s0); w.classList.toggle('at-end', s1);
+      prev.disabled = s0; next.disabled = s1;
+    };
+    prev.addEventListener('click', () => t.scrollBy({ left: -step(), behavior: reduce ? 'auto' : 'smooth' }));
+    next.addEventListener('click', () => t.scrollBy({ left: step(), behavior: reduce ? 'auto' : 'smooth' }));
+    t.addEventListener('scroll', upd, { passive: true });
+    addEventListener('resize', upd, { passive: true });
+    upd();
+  });
+
   // ── 10-1) 홈 공연사진 줄: 마우스·키보드로 고른 장이 펼쳐지고, 화면에 보이는 동안 4.2초마다 다음 장(진행 막대 끝나면) ──
   const reel = $('#reel');
   if (reel) {
