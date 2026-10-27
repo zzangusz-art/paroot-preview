@@ -70,7 +70,20 @@ GitHub Actions가 **매일 09:05 · 13:05 · 18:05(KST)** 에 `_topics.json`의 
 - Railway 화면 Settings → Networking에서 **Generate Domain**을 눌러야 공개 주소가 생깁니다.
 - 로컬에서 같은 서버로 보기: `npm start` → http://localhost:5530
 
-## 운영 도메인 전환(www.paroot.kr)
+## 운영 주소·검색 색인·방문 분석 (parootent.kr)
+- **대표 주소: https://parootent.kr/** (Cloudflare DNS → Railway). Railway는 `railway.json`의 `node tools/serve.mjs --production --url https://parootent.kr/`로 운영 모드(검색 노출 허용)로 돈다. www.parootent.kr·*.up.railway.app 요청은 대표 주소로 301. GitHub Pages 미리보기는 계속 noindex.
+- **색인**
+  - 구글: Search Console에 `https://parootent.kr/` 속성(HTML 태그 확인) → sitemap `sitemap.xml`·`blog/feed.xml` 제출. 구글은 IndexNow를 쓰지 않아 sitemap·내부 링크로 수집한다.
+  - 네이버: 서치어드바이저에 사이트 등록(HTML 태그 확인) → 요청 → 사이트맵 제출(`sitemap.xml`), RSS 제출(`blog/feed.xml`), 주요 페이지 「웹 페이지 수집」 요청.
+  - IndexNow(네이버·빙 등): 서버가 빌드할 때마다(시작 때·매시 정각) 새로 공개됐거나 lastmod가 바뀐 주소를 자동으로 알린다. 수동: `node tools/indexnow.mjs --all https://parootent.kr/sitemap.xml`(`--dry`는 목록만). 키: `SITE.indexNowKey`, 키 파일은 사이트 루트 `<키>.txt`.
+  - 소유 확인 메타: `src/data.mjs`의 `naverVerification`·`googleVerification` 배열에 값을 추가한다(기존 paroot.kr 값과 함께 둬도 됨).
+- **방문 분석**: `src/data.mjs` `SITE.analytics`에 ID를 넣거나 Railway Variables로 `GA4_ID`·`GTM_ID`·`NAVER_WA`·`CLARITY_ID`. 운영 빌드에서만 켜지고(미리보기 데이터 섞임 방지), 켜면 개인정보 처리 안내에 「방문 분석 도구와 쿠키」가 자동으로 붙는다.
+  - GA4는 사이트에 직접(gtag) 설치되어 있으므로 **GTM 안에 GA4 구성 태그를 또 만들지 않는다**(중복 집계). GTM은 광고 픽셀(메타·카카오·구글 애즈 등) 추가용.
+  - 이벤트(GA4 이벤트 + GTM dataLayer 같은 이름): `book_click`(show·placement·link_url) — GA4 「주요 이벤트」로 표시, `book_drawer_open`, `show_quick_view`(show), `contact_call`, `contact_email`, `share`, `copy_info`, `photo_view`, `finder_select`(audience), `list_filter`(list·category), `video_sound`, `video_replay`, `blog_more`, `read_progress`(percent·post).
+  - GA4 맞춤 측정기준(이벤트 범위)으로 `show`, `placement`, `percent`, `post`, `audience`, `category`를 등록하면 보고서에서 공연별·위치별로 볼 수 있다.
+  - 네이버: 예매 클릭 때 전환(신청/예약, `wcs.cnv("4")`)도 보낸다 — 네이버 검색광고 프리미엄 로그분석을 연결하면 광고 전환으로 잡힌다.
+
+## (참고) 기존 도메인 www.paroot.kr 전환 시
 - 기본 주소는 `src/data.mjs`의 `SITE.url`(`https://www.paroot.kr/`). 미리보기는 `node build.mjs --preview <주소>` 로 모든 페이지 noindex·robots `Disallow: /`.
 - 운영 빌드: 저장소 Variables에 `SITE_MODE=production`(+필요하면 `SITE_URL`). GitHub Pages Custom domain 에 `www.paroot.kr`, DNS(현재 imweb)를 GitHub Pages로 연결.
 - 기존 imweb 주소(`/play1`~`/play5`, `/paroot`, `/news`, `/notice`, `/contact`)는 새 주소로 301 리다이렉트가 필요합니다: play1→shows/hanbbeumsai/, play2→shows/suspicious-roommate/, play3→shows/wolf-forest-piglets/, play4→shows/office-romance-report/, play5→shows/pinocchio/, paroot→about/, news→news/, notice→notice/, contact·contact0→contact/, casting→about/.
