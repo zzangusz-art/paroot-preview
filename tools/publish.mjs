@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOOK = process.argv.includes('--hook');
 const LOG = path.join(ROOT, '..', 'deploy.log');
-const env = { ...process.env, GIT_TERMINAL_PROMPT: '0' };
+const env = { ...process.env, GIT_TERMINAL_PROMPT: '0', PYTHONIOENCODING: 'utf-8' };
 
 // 훅 모드: 하위 명령 출력은 deploy.log로 보내고, 화면(stdout)에는 Claude Code가 읽을 JSON만 남긴다
 let logFd = 'inherit';

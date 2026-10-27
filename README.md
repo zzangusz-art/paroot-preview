@@ -26,7 +26,8 @@
 ## 수정 → 반영
 1. 가격·회차·문구는 `src/data.mjs`, 화면은 `src/*.mjs`, 디자인은 `assets/css/style.css`
 2. `build.bat` (또는 `node build.mjs`) — 모든 페이지·JSON-LD·sitemap·robots·llms.txt·RSS가 같이 갱신되고 깨진 링크·JSON-LD 오류를 검사합니다
-3. `publish.bat` — 썸네일·빌드·글 검증 → 커밋 → AI가 올린 글 받기 → 푸시 (저장소 연결 후)
+3. `publish.bat` 또는 상위 폴더의 `../deploy.bat` — 썸네일·빌드·글 검증 → 커밋 → AI가 올린 글 받기 → 푸시. 푸시하면 GitHub Pages와 Railway가 각각 2~3분 뒤 반영합니다. 바뀐 게 없으면 아무것도 하지 않습니다.
+   - Claude Code가 `6. 파릇` 폴더에서 작업을 마칠 때마다 `deploy.bat --hook`이 자동으로 돕니다(`../.claude/settings.json`의 Stop 훅). 기록은 `../deploy.log`. 빌드·검증에 실패하면 커밋·푸시하지 않고 Claude에게 원인을 돌려줘 고치게 합니다.
 
 **공연 순서**는 `src/data.mjs`의 `SHOWS` 배열 순서가 곧 사이트 전체(메뉴·라인업·목록·푸터·비교표) 순서입니다. 히어로 필름 속 포스터 순서는 `../motion/video/comp.js`의 `SHOWS`를 같이 바꾸고 `../motion/render_all.sh`(또는 `render.bat`)로 다시 렌더합니다.
 
@@ -59,7 +60,15 @@ GitHub Actions가 **매일 09:05 · 13:05 · 18:05(KST)** 에 `_topics.json`의 
 ## 배포 (GitHub Pages 미리보기)
 - 저장소: https://github.com/zzangusz-art/paroot-preview (공개 — 무료 계정 Pages는 공개 저장소만 가능하므로 프롬프트·검증 규칙도 공개됩니다)
 - 미리보기 주소: https://zzangusz-art.github.io/paroot-preview/ — 모든 페이지 noindex, robots.txt `Disallow: /` (검색 노출 안 됨)
-- 이 폴더가 곧 git 저장소입니다(소스만 올리고 `dist/`·`node_modules/`는 제외). AI가 GitHub에서 글을 커밋하므로 로컬에서 고치기 전에 `git pull`로 받아 두면 충돌이 없습니다. 올릴 때는 `publish.bat`.
+- 이 폴더가 곧 git 저장소입니다(소스만 올리고 `dist/`·`node_modules/`는 제외). AI가 GitHub에서 글을 커밋하므로 로컬에서 고치기 전에 `git pull`로 받아 두면 충돌이 없습니다. 올릴 때는 `publish.bat`(또는 `../deploy.bat`).
+
+## 배포 (Railway)
+- Railway 프로젝트 `beneficial-adventure` → 서비스 `paroot-preview`가 이 저장소 `main`에 연결돼 있어 푸시마다 자동 배포됩니다.
+- 설정은 `railway.json`: 빌드 단계에서 `node build.mjs`·글 검증을 돌려 실패하면 배포하지 않고(이전 판 유지), 실행은 `npm start` = `node tools/serve.mjs`.
+- `tools/serve.mjs`는 외부 패키지 없는 정적 서버입니다. 시작할 때와 **매시 정각**에 다시 빌드해 예약 글을 제시간(09:00·13:00·18:00)에 공개합니다(GitHub Pages는 예약 실행이 최대 1시간쯤 늦을 수 있음). brotli/gzip 압축, 영상 Range 요청, 301(끝 `/`), 404 페이지를 처리합니다.
+- 기본은 미리보기(모든 페이지 noindex, 주소는 Railway 공개 도메인). 운영으로 쓰려면 Railway 서비스 Variables에 `SITE_MODE=production`, `SITE_URL=https://www.paroot.kr/`.
+- Railway 화면 Settings → Networking에서 **Generate Domain**을 눌러야 공개 주소가 생깁니다.
+- 로컬에서 같은 서버로 보기: `npm start` → http://localhost:5530
 
 ## 운영 도메인 전환(www.paroot.kr)
 - 기본 주소는 `src/data.mjs`의 `SITE.url`(`https://www.paroot.kr/`). 미리보기는 `node build.mjs --preview <주소>` 로 모든 페이지 noindex·robots `Disallow: /`.
