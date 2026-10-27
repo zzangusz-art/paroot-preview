@@ -280,7 +280,8 @@
     const rail = $('.lu-rail', pin), stage = $('.lu-stage', pin);
     const filter = $('.lu-filter');
     let maxX = 0;
-    const can = () => !reduce && innerWidth >= 900 && innerHeight >= 620;
+    const wide = matchMedia('(min-width: 900px) and (min-height: 620px)');
+    const can = () => !reduce && wide.matches; // innerWidth를 읽으면 레이아웃을 강제로 다시 계산해 느려짐
     function measure() {
       if (!can()) { pin.classList.remove('pinned'); pin.style.removeProperty('--lu-h'); rail.style.removeProperty('transform'); return; }
       pin.classList.add('pinned');
