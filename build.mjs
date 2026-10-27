@@ -24,6 +24,7 @@ const P = await import('./src/pages.mjs');
 const { loadPosts, renderMarkdown } = await import('./tools/blog/lib.mjs');
 
 const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(new Date());
+const nowKST = today + ' ' + new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false }).format(new Date());
 
 // ── 준비 ──
 fs.rmSync(OUT, { recursive: true, force: true });
@@ -48,7 +49,7 @@ const bc = items => S.breadcrumb(items.map(([name, rel]) => ({ name, url: SITE.u
 
 // ── 블로그 글 ──
 const BLOG = path.join(ROOT, 'content/blog');
-const posts = loadPosts(BLOG, { today }).map(p => {
+const posts = loadPosts(BLOG, { now: process.env.BUILD_NOW || nowKST }).map(p => {
   const link = h => h.startsWith('#') ? h : '../../' + h; // blog/<slug>/index.html 기준
   const r = renderMarkdown(p.main, link);
   const thumbRel = `assets/img/blog/${p.slug}.jpg`;

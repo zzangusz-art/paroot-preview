@@ -268,10 +268,15 @@ export function blogPost(u, p, posts) {
     <div class="prose">${p.html}
     ${p.faq.length ? `<h2 id="h-faq">자주 묻는 질문</h2>${faqAcc(p.faq, 'pfaq')}` : ''}
     </div>
-    ${show ? `<div class="post-cta"><img src="${u(`assets/img/shows/${show.slug}/thumb.webp`)}" alt="" width="100" height="125" loading="lazy"><div><b>${esc(show.title)}</b><p>${esc(show.hook)}</p><div class="sh-cta"><a class="btn btn-light btn-s" href="${u(`shows/${show.slug}/`)}">공연 정보</a><a class="btn btn-pink btn-s" href="${show.booking.url}" target="_blank" rel="noopener" data-book="${esc(show.title)}">예매${ico('ext')}</a></div></div></div>` : ''}
+    ${(() => {
+      // 본문에 링크로 나온 공연 + 머리말 show → 예매로 바로 이어지는 카드(주 공연이 맨 앞)
+      const linked = [...new Set([...(show ? [show.slug] : []), ...[...p.html.matchAll(/shows\/([a-z0-9-]+)\//g)].map(m => m[1])])].map(sl => SHOWS.find(s => s.slug === sl)).filter(Boolean);
+      if (!linked.length) return '';
+      return `<div class="post-shows"><b class="ps-h">${linked.length > 1 ? '이 글에 나온 공연 예매' : `「${esc(linked[0].title)}」 예매`}</b><div class="ps-list">${linked.map((s, k) => `<div class="ps${k === 0 && show ? ' ps-main' : ''}"><a class="ps-img" href="${u(`shows/${s.slug}/`)}"><img src="${u(`assets/img/shows/${s.slug}/thumb.webp`)}" alt="${esc(s.title)} 포스터" width="64" height="80" loading="lazy"></a><div class="ps-b"><a class="ps-t" href="${u(`shows/${s.slug}/`)}">${esc(s.title)}</a><span class="ps-m">${esc(s.kind)} · ${esc(venueOf(s).name)} · ${s.runtime}분 · ${won(priceFrom(s))}부터${s.rating ? ` · ★${s.rating.avg.toFixed(2)}` : ''}</span>${k === 0 && show ? `<span class="ps-hook">${esc(s.hook)}</span>` : ''}</div><a class="btn btn-pink btn-s" href="${s.booking.url}" target="_blank" rel="noopener" data-book="${esc(s.title)}">예매${ico('ext')}</a></div>`).join('')}</div><p class="ps-note">가격은 ${ASOF_LABEL} 네이버 예약 기준 조건 없는 가장 낮은 일반 가격입니다.</p></div>`;
+    })()}
     <div class="sh-cta" style="margin-top:28px"><button class="btn btn-line btn-s" type="button" data-share>${ico('share')}글 공유</button><a class="btn btn-line btn-s" href="${u('blog/')}">목록으로</a></div>
   </article>
-  <aside class="toc" aria-label="목차"><b>CONTENTS</b><ol>${p.toc.map(t => `<li><a href="#${t.id}">${esc(t.t)}</a></li>`).join('')}${p.faq.length ? '<li><a href="#h-faq">자주 묻는 질문</a></li>' : ''}</ol></aside>
+  <aside class="toc" aria-label="목차"><b>CONTENTS</b><ol>${p.toc.map(t => `<li><a href="#${t.id}">${esc(t.t)}</a></li>`).join('')}${p.faq.length ? '<li><a href="#h-faq">자주 묻는 질문</a></li>' : ''}</ol>${show ? `<a class="btn btn-pink btn-s toc-book" href="${show.booking.url}" target="_blank" rel="noopener" data-book="${esc(show.title)}">${ico('ticket')}${esc(show.title)} 예매</a>` : ''}</aside>
 </div></section>
 ${rel.length ? `<section class="sec-tight sec-soft"><div class="wrap"><h2 class="h2" style="font-size:clamp(22px,2.6vw,30px);margin-bottom:24px">이어서 읽기</h2><div class="posts">${rel.map(x => postCard(u, x)).join('')}</div></div></section>` : ''}`;
 }

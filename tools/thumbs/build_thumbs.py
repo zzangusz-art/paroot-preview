@@ -120,7 +120,11 @@ def build(meta, out):
     if pick:
         src = os.path.join(IMG, pick)
     elif show and os.path.exists(os.path.join(IMG, 'shows', show, 'poster.webp')):
-        src = os.path.join(IMG, 'shows', show, 'poster.webp')
+        # 같은 공연 글이 여러 편이라 포스터와 무대 사진을 slug 해시로 돌려 쓴다(목록에서 같은 그림이 이어지지 않게)
+        gdir = os.path.join(IMG, 'shows', show, 'gallery')
+        cands = [os.path.join(IMG, 'shows', show, 'poster.webp')] + ([os.path.join(gdir, f) for f in sorted(os.listdir(gdir)) if f.endswith('.webp') and not f.endswith('-sm.webp')] if os.path.isdir(gdir) else [])
+        h = int(hashlib.md5(meta['slug'].encode()).hexdigest(), 16)
+        src = cands[h % len(cands)]
     else:
         lst = STILLS.get(meta.get('category', ''), STILLS['공연 고르기'])
         h = int(hashlib.md5(meta['slug'].encode()).hexdigest(), 16)

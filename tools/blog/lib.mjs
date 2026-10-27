@@ -86,8 +86,9 @@ export function splitFaq(body) {
   return { body: body.replace(m[0], '\n'), faq };
 }
 
-// 글 목록(최신순). 미래 날짜 글은 빌드에 넣지 않는다(예약 발행)
-export function loadPosts(dir, { today } = {}) {
+// 글 목록(최신순). 예약 발행: now('YYYY-MM-DD HH:MM', 한국 시간)를 주면 date+time 이 아직 안 된 글은 빼고,
+// today 만 주면 날짜로만 거른다. 하루 3번 예약 빌드(09:05·13:05·18:05)가 09:00·13:00·18:00 글을 차례로 공개한다
+export function loadPosts(dir, { today, now } = {}) {
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir).filter(f => f.endsWith('.md') && !f.startsWith('_')).map(f => {
     const { meta, body } = parseFrontmatter(fs.readFileSync(path.join(dir, f), 'utf8'));
@@ -95,6 +96,6 @@ export function loadPosts(dir, { today } = {}) {
     const { body: main, faq } = splitFaq(body);
     const chars = body.replace(/\s+/g, '').length;
     return { ...meta, file: f, main, faq, minutes: Math.max(2, Math.ceil(chars / 500)), chars };
-  }).filter(p => !today || p.date <= today)
+  }).filter(p => now ? `${p.date} ${p.time || '00:00'}` <= now : !today || p.date <= today)
     .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : (b.time || '').localeCompare(a.time || '') || a.slug.localeCompare(b.slug)));
 }

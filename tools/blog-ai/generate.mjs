@@ -22,7 +22,7 @@ const flag = n => args.includes(n);
 const opt = n => { const i = args.indexOf(n); return i > -1 ? args[i + 1] : null; };
 
 const D = await import('../../src/data.mjs');
-const { SITE, SHOWS, VENUES, RULES, FAQ, HISTORY, AWARDS, TOUR_CITIES, BLOG_CATEGORIES, ASOF_LABEL, venueOf, priceFrom, totalReviews, avgRating } = D;
+const { SITE, SHOWS, VENUES, RULES, FAQ, HISTORY, AWARDS, TOUR_CITIES, BLOG_CATEGORIES, ASOF_LABEL, venueOf, priceFrom, totalReviews, avgRating, NOTICES, noticePeriod } = D;
 const won = n => n.toLocaleString('ko-KR') + '원';
 const RULE_NAME = { play: '연극', kids: '어린이 뮤지컬', drag: '드랙인혜화' };
 
@@ -49,6 +49,8 @@ export function factSheet() {
   L.push(`[한뼘사이 지역 공연 도시] ${TOUR_CITIES.join(', ')}. 초청 공연: 삼성전자, 포항 POSCO, 건양대학교, 광양제철소(2025년 1월, 관객 1,145명).`);
   for (const h of HISTORY) L.push(`[연혁 ${h.year}] ${h.items.map(([d, t]) => `${d} ${t}`).join(' / ')}`);
   for (const f of FAQ) L.push(`[FAQ] ${f.q} → ${f.a}`);
+  // 공지사항·이벤트 게시판의 이벤트(기간 포함). 글에서는 notice/#<id> 로 연결
+  for (const n of NOTICES.filter(x => x.cat === 'event')) L.push(`[이벤트:${n.title.replace(/[「」]/g, '')}] 기간 ${n.start ? `${n.start}~` : ''}${n.end || '상시'}(${noticePeriod(n)}). ${n.summary} ${n.body.join(' ')} 상세 notice/#${n.id}`);
   return L.join('\n');
 }
 function allowedNumbers(sheet) {
@@ -225,6 +227,13 @@ async function main() {
   }
   if (flag('--facts')) { console.log(sheet); return; }
 
+  // 사람이 미리 써 둔 예약 글이 남아 있으면 AI 작성은 쉰다(하루 3편 유지). --force 로 무시
+  {
+    const n = new Date(), d = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(n);
+    const nowKST = d + ' ' + new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false }).format(n);
+    const pending = posts.filter(p => `${p.date} ${p.time || '00:00'}` > nowKST);
+    if (pending.length && !flag('--force')) { console.log(`예약 발행 대기 글 ${pending.length}편(마지막 ${pending.map(p => p.date).sort().pop()}) — AI 글 작성을 건너뜁니다.`); return; }
+  }
   const topics = JSON.parse(fs.readFileSync(TOPICS, 'utf8'));
   const { default: Anthropic } = await import('@anthropic-ai/sdk');
   const client = new Anthropic(); // ANTHROPIC_API_KEY 등 환경 자격 증명 사용
