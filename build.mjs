@@ -142,8 +142,11 @@ for (const p of posts) {
 }
 // RSS
 {
-  const items = posts.slice(0, 30).map(p => `<item><title>${esc(p.title)}</title><link>${SITE.url}blog/${p.slug}/</link><guid isPermaLink="true">${SITE.url}blog/${p.slug}/</guid><pubDate>${new Date(p.date + 'T' + (p.time || '09:00') + ':00+09:00').toUTCString()}</pubDate><category>${esc(p.category)}</category><description>${esc(p.description)}</description></item>`).join('\n');
-  write('blog/feed.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>파릇 대학로 연극 가이드</title><link>${SITE.url}blog/</link><atom:link href="${SITE.url}blog/feed.xml" rel="self" type="application/rss+xml"/><description>대학로·혜화 연극 관람 가이드</description><language>ko</language>\n${items}\n</channel></rss>\n`);
+  const pub = p => new Date(p.date + 'T' + (p.time || '09:00') + ':00+09:00').toUTCString();
+  const items = posts.slice(0, 30).map(p => `<item><title>${esc(p.title)}</title><link>${SITE.url}blog/${p.slug}/</link><guid isPermaLink="true">${SITE.url}blog/${p.slug}/</guid><pubDate>${pub(p)}</pubDate><category>${esc(p.category)}</category><description>${esc(p.description)}</description></item>`).join('\n');
+  // 채널 날짜는 가장 최근 글 기준(빌드 시각을 쓰면 매시 재빌드 때마다 피드가 바뀐 것처럼 보임). 네이버 서치어드바이저 RSS 제출 호환
+  const last = posts.length ? `<pubDate>${pub(posts[0])}</pubDate><lastBuildDate>${pub(posts[0])}</lastBuildDate>` : '';
+  write('blog/feed.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>파릇 대학로 연극 가이드</title><link>${SITE.url}blog/</link><atom:link href="${SITE.url}blog/feed.xml" rel="self" type="application/rss+xml"/><description>대학로·혜화 연극 관람 가이드</description><language>ko</language>${last}\n${items}\n</channel></rss>\n`);
 }
 
 // ── 404 (어느 경로에서나 열리므로 절대 주소) ──

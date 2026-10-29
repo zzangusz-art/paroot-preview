@@ -104,7 +104,8 @@ function send(req, res, file, st, status, rel) {
   const ext = path.extname(file).toLowerCase();
   const etag = `W/"${st.size.toString(16)}-${Math.floor(st.mtimeMs).toString(16)}"`;
   const headers = {
-    'Content-Type': TYPES[ext] || 'application/octet-stream',
+    // RSS는 네이버·티스토리 피드와 같은 text/xml로 보낸다(서치어드바이저 RSS 제출 호환)
+    'Content-Type': path.basename(file) === 'feed.xml' ? 'text/xml; charset=utf-8' : TYPES[ext] || 'application/octet-stream',
     'Cache-Control': status === 200 ? cacheControl(rel) : 'no-store',
     'Last-Modified': st.mtime.toUTCString(),
     ETag: etag,
