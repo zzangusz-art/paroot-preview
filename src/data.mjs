@@ -25,7 +25,7 @@ export const SITE = {
   email: 'contact@paroot.kr',          // 기존 푸터의 contact@paroot.co.kr 은 도메인이 없어(2026-10-23 DNS 조회) 메일 서버가 있는 paroot.kr 로 통일
   audition: 'audition@paroot.kr',
   address: { full: '서울특별시 종로구 대학로10길 11 (동숭동)', street: '대학로10길 11', locality: '종로구', region: '서울특별시', lat: 37.5818058, lng: 127.0027291 },
-  naverVerification: ['0dcf0bc6d5fe1e94c1f93a5722120aa32982a080', 'bc939dc4af639ee537f38dbc6bf9a5866e700085'],   // 소유 확인 값 목록(기존 paroot.kr 값 + parootent.kr 등록 때 받은 값)
+  naverVerification: ['0dcf0bc6d5fe1e94c1f93a5722120aa32982a080', 'bc939dc4af639ee537f38dbc6bf9a5866e700085', '54f63f15f85952f1c62f6960f149ee07a6ed87b7'],   // 소유 확인 값: 기존 paroot.kr · www.parootent.kr · parootent.kr(대표)
   googleVerification: ['PjDzXil-JkcPee5c7KrbCQ8kWv1p20vkWmYl3i4yQwI', '03mKi9a9dAxCPG26DP74MZK8t0otUkQSmP3jRbXeGVI'], // 기존 paroot.kr 값 + parootent.kr 서치콘솔(URL 접두어) 값
   agencyScript: '',
   // 방문 분석: ID를 넣으면 운영 빌드(SITE_MODE=production, 검색 노출 허용)에서만 켜진다. 미리보기에는 넣지 않아 데이터가 섞이지 않음.
