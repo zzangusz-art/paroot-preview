@@ -88,6 +88,18 @@ GitHub Actions가 **매일 09:05 · 13:05 · 18:05(KST)** 에 `_topics.json`의 
   - 환경 변수(`GA4_ID` 등)는 형식이 맞을 때만 코드 기본값을 덮어쓴다(빈 값·오타면 기본값 유지).
   - 네이버: 예매 클릭 때 전환(신청/예약, `wcs.cnv("4")`)도 보낸다 — 네이버 검색광고 프리미엄 로그분석을 연결하면 광고 전환으로 잡힌다.
 
+## 어드민 (https://parootent.kr/admin/)
+유입·트래픽 / 블로그 / 공지·이벤트 세 가지만 다루는 관리 화면. 코드 `tools/admin/`(`server.mjs` 라우팅·저장, `stats.mjs` 방문 통계, `github.mjs` 커밋, `ui/` 화면), `tools/serve.mjs`가 불러 쓴다. 검색엔진에는 `noindex` + robots `Disallow: /admin/`.
+- **Railway Variables(서비스 paroot-preview)**
+  - `ADMIN_PASSWORD`: 어드민 비밀번호. 없으면 `/admin/`은 설정 안내만 보인다. 바꾸면 기존 로그인은 모두 풀린다. 로그인 12시간 유지, 15분에 8번 틀리면 잠시 막힘.
+  - `GITHUB_TOKEN`: GitHub fine-grained 토큰(저장소 `zzangusz-art/paroot-preview`만, 권한 Contents: Read and write). 있으면 저장 = 저장소에 커밋 → Railway·GitHub Pages 자동 재배포. 없으면 어드민은 보기 전용.
+  - `DATA_DIR`: 방문 통계 저장 경로. Railway에서 볼륨(Volume)을 서비스에 붙이고 마운트 경로(예: `/data`)를 넣는다. 없으면 배포할 때마다 통계가 처음부터 다시 쌓인다.
+- **유입·트래픽**: 브라우저가 `/api/hit`로 보내는 비컨(운영 빌드의 `PAROOT_STATS`)을 날짜별 합계로만 저장(쿠키 없음, IP·브라우저 정보는 그날 방문자 수 세는 해시로만 쓰고 원문 저장 안 함 — 개인정보 처리 안내 5항에 적음). 유입 경로(네이버·구글·AI 답변·SNS·직접 등), 들어온 사이트, 많이 본·처음 들어온 페이지, 기기, 예매·전화·메일 클릭, 검색엔진·AI 크롤러 방문(서버가 User-Agent로 직접 기록), IndexNow 전송 기록. 400일 보관.
+- **블로그**: 공개·예약 글 목록(30일 조회 수 포함), 새 글·수정·삭제. 공개 일시가 미래면 예약 글. 어드민에서 저장한 글은 머리말 `editor: admin`이 붙고 사람용 검사(형식·길이·링크)만 한다(AI 글용 사실·문체 검사는 건너뜀, `tools/blog-ai/generate.mjs` `validateHuman`). 이미 공개된 글을 고치면 `updated`가 오늘로 바뀌어 사이트맵 lastmod·IndexNow로 알려진다. 주소(slug)는 처음 저장 뒤 바꾸지 않는다. 새 글 썸네일은 다음 로컬 배포(`deploy.bat`) 때 만들어지고, 그전엔 공연 커버를 쓴다.
+- **공지·이벤트**: 데이터는 `content/notices.json`(전에는 `src/data.mjs` 안), 이미지는 `assets/img/notice/<id>.webp`(폭 900)·`-2.webp`…·`<id>-t.webp`(480×360 썸네일). 이미지는 브라우저에서 WEBP로 바꿔 올린다(크롬·엣지). 이미지를 바꾸면 `v` 값이 바뀌어 주소 뒤 `?v=`로 캐시를 비켜 간다. 상태(진행 중·예정·상시·종료)는 날짜로 자동.
+- 저장하면 서버 파일도 바로 고치고 다시 빌드해 몇 초 안에 사이트에 보이고, 커밋 배포가 1~2분 뒤 같은 내용으로 덮는다. 로컬 PC에서는 다음 `deploy.bat` 때 `git pull --rebase`로 어드민 커밋을 받아 온다.
+- 로컬에서 어드민 써 보기: `ADMIN_PASSWORD=… ADMIN_LOCAL_WRITE=1 node tools/serve.mjs --production --url http://localhost:5530/`(파일만 고침, 커밋은 deploy.bat).
+
 ## (참고) 기존 도메인 www.paroot.kr 전환 시
 - 기본 주소는 `src/data.mjs`의 `SITE.url`(`https://www.paroot.kr/`). 미리보기는 `node build.mjs --preview <주소>` 로 모든 페이지 noindex·robots `Disallow: /`.
 - 운영 빌드: 저장소 Variables에 `SITE_MODE=production`(+필요하면 `SITE_URL`). GitHub Pages Custom domain 에 `www.paroot.kr`, DNS(현재 imweb)를 GitHub Pages로 연결.

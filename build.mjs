@@ -161,8 +161,8 @@ write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="htt
 if (SITE.indexNowKey) write(`${SITE.indexNowKey}.txt`, SITE.indexNowKey);
 write('robots.txt', PREVIEW
   ? 'User-agent: *\nDisallow: /\n'
-  : ['# 검색엔진과 AI 검색·답변 엔진의 수집을 모두 허용합니다', 'User-agent: *', 'Allow: /', '',
-    ...['Googlebot', 'Bingbot', 'Yeti', 'Daumoa', 'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Applebot', 'Applebot-Extended', 'CCBot'].flatMap(b => [`User-agent: ${b}`, 'Allow: /', '']),
+  : ['# 검색엔진과 AI 검색·답변 엔진의 수집을 모두 허용합니다(관리 화면 /admin/·통계 수집 /api/ 만 제외)', 'User-agent: *', 'Allow: /', 'Disallow: /admin/', 'Disallow: /api/', '',
+    ...['Googlebot', 'Bingbot', 'Yeti', 'Daumoa', 'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Perplexity-User', 'Google-Extended', 'Applebot', 'Applebot-Extended', 'CCBot'].flatMap(b => [`User-agent: ${b}`, 'Allow: /', 'Disallow: /admin/', 'Disallow: /api/', '']),
     `Sitemap: ${SITE.url}sitemap.xml`, `Sitemap: ${SITE.url}blog/feed.xml`, ''].join('\n'));
 
 const showLines = SHOWS.map(s => { const v = venueOf(s); return `### ${s.full}${s.original ? ` (원작 「${s.original}」)` : ''}\n- 장르: ${s.kind} · ${s.genre}\n- 한 줄: ${s.hook}\n- 공연장: ${v.name}${v.alias ? `(${v.alias})` : ''}, ${v.addr} — ${v.walk}\n- 개막: ${s.sinceLabel}\n- 공연 시간 ${s.runtime}분, 관람 연령 ${s.age}\n- 회차: ${s.schedule.map(([d, t]) => `${d} ${t}`).join(' / ')}\n- 가격(네이버 예약, ${ASOF_LABEL}): ${s.prices.map(p => `${p.name} ${won(p.price)}`).join(', ')} (정가 ${won(Math.max(...s.prices.map(p => p.normal)))})\n- 예매: ${s.booking.url}${s.rating ? `\n- 네이버 예약 관람평 평균 ${s.rating.avg} (${s.rating.count.toLocaleString('ko-KR')}건, ${s.rating.asof} 기준)` : ''}${s.credits ? `\n- ${s.credits}` : ''}\n- 상세: ${SITE.url}shows/${s.slug}/`; }).join('\n\n');

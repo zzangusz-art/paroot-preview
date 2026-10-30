@@ -6,7 +6,7 @@ import { SITE, SHOWS, FAQ, VENUES, PRESS, NOTICES, BLOG_CATEGORIES, venueOf, pri
 import { esc, won, img, phImg, kdate, nl2br } from './lib.mjs';
 import { ico } from './layout.mjs';
 import { showCard, ratingBars, reviewCard, faqAcc, venueCard, rulesList, crumbs, postCard, mapUrl, ratingLine, lightbox, noticeItem } from './parts.mjs';
-import { trackingTools } from './analytics.mjs';
+import { trackingTools, selfStats } from './analytics.mjs';
 const TOOL = { ga4: 'Google 애널리틱스 4', gtm: 'Google 태그 관리자', naver: '네이버 애널리틱스', clarity: 'Microsoft Clarity' };
 import { historyBlock, awardsPress, ctaBand, pressCard } from './home.mjs';
 
@@ -284,7 +284,7 @@ ${rel.length ? `<section class="sec-tight sec-soft"><div class="wrap"><h2 class=
 }
 
 export function privacy(u) {
-  const tools = trackingTools();
+  const tools = trackingTools(), own = selfStats();
   return `${pageHd(u, { crumb: [['홈', ''], ['개인정보처리방침', 'privacy/']], title: '개인정보 처리 안내' })}
 <section class="sec-tight"><div class="wrap prose">
   <p>${SITE.name}(이하 "회사")는 이 홈페이지에서 회원 가입, 로그인, 온라인 결제를 운영하지 않으며, 방문자가 입력한 정보를 서버에 저장하지 않습니다.</p>
@@ -292,9 +292,9 @@ export function privacy(u) {
   <h2>2. 이메일·전화 문의</h2><p>문의 메일(${SITE.email}), 오디션 지원 메일(${SITE.audition}), 대표전화(${SITE.phone})로 보내 주신 이름·연락처·내용은 답변과 관련 업무에만 쓰며, 목적을 달성한 뒤 지체 없이 파기합니다. 오디션 지원 자료는 해당 오디션 진행 기간 동안만 보관합니다.</p>
   <h2>3. 문의 내용 정리 도구</h2><p>문의 페이지의 정리 도구는 브라우저 안에서만 메일 본문을 만들며, 입력한 내용을 회사나 제3자에게 보내지 않습니다.</p>
   <h2>4. 외부 서비스</h2><p>이 홈페이지는 글꼴 표시를 위해 Google Fonts를 불러오며, 지도 보기·예매 버튼은 네이버 지도·네이버 예약 페이지로 연결됩니다. 이 과정에서 각 서비스가 접속 기록을 처리할 수 있습니다.</p>
-  ${tools.length ? `<h2>5. 방문 분석 도구와 쿠키</h2><p>홈페이지를 더 쓰기 좋게 고치고 공연 안내가 잘 전달되는지 보기 위해 ${tools.map(t => TOOL[t]).join(', ')}를 씁니다. 이 도구들은 쿠키 등으로 방문한 페이지, 머문 시간, 누른 버튼(예: 예매 버튼), 유입 경로, 기기·브라우저 종류, 대략의 지역 같은 이용 기록을 수집하며, 이름·연락처처럼 개인을 직접 알아볼 수 있는 정보는 수집하지 않습니다. 수집된 정보는 각 서비스 제공자의 서버에 저장되고 각 사의 정책에 따라 보관됩니다.</p><p>원하지 않으면 브라우저 설정에서 쿠키를 거부하거나 삭제할 수 있고, Google 애널리틱스는 Google이 제공하는 차단 부가 기능(tools.google.com/dlpage/gaoptout)으로도 끌 수 있습니다. 쿠키를 거부해도 홈페이지 이용과 예매에는 지장이 없습니다.</p>` : ''}
-  <h2>${tools.length ? 6 : 5}. 문의처</h2><p>개인정보 관련 문의: ${SITE.email} · ${SITE.phone}</p>
-  <p class="muted">시행일: 2026년 10월 23일${tools.length ? ' · 개정: 2026년 10월 27일(방문 분석 도구 안내 추가)' : ''}</p>
+  ${tools.length || own ? `<h2>5. 방문 분석 도구와 쿠키</h2>${tools.length ? `<p>홈페이지를 더 쓰기 좋게 고치고 공연 안내가 잘 전달되는지 보기 위해 ${tools.map(t => TOOL[t]).join(', ')}를 씁니다. 이 도구들은 쿠키 등으로 방문한 페이지, 머문 시간, 누른 버튼(예: 예매 버튼), 유입 경로, 기기·브라우저 종류, 대략의 지역 같은 이용 기록을 수집하며, 이름·연락처처럼 개인을 직접 알아볼 수 있는 정보는 수집하지 않습니다. 수집된 정보는 각 서비스 제공자의 서버에 저장되고 각 사의 정책에 따라 보관됩니다.</p><p>원하지 않으면 브라우저 설정에서 쿠키를 거부하거나 삭제할 수 있고, Google 애널리틱스는 Google이 제공하는 차단 부가 기능(tools.google.com/dlpage/gaoptout)으로도 끌 수 있습니다. 쿠키를 거부해도 홈페이지 이용과 예매에는 지장이 없습니다.</p>` : ''}${own ? `<p>이와 별도로 홈페이지 서버가 쿠키 없이 방문한 페이지, 들어온 경로(검색·SNS 등), 기기 종류(모바일·PC), 예매·전화·메일 버튼을 누른 횟수를 날짜별 합계로만 집계합니다. 접속 IP와 브라우저 정보는 그날의 방문자 수를 세는 데만 바꿔 쓰고(되돌릴 수 없는 값, 매일 새로 만듦) 원문은 저장하지 않습니다.</p>` : ''}` : ''}
+  <h2>${tools.length || own ? 6 : 5}. 문의처</h2><p>개인정보 관련 문의: ${SITE.email} · ${SITE.phone}</p>
+  <p class="muted">시행일: 2026년 10월 23일${tools.length || own ? ' · 개정: 2026년 10월 27일(방문 분석 도구 안내 추가), 2026년 10월 30일(자체 방문 통계 안내 추가)' : ''}</p>
 </div></section>`;
 }
 

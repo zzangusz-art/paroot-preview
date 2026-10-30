@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>파릇 어드민 설정 필요</title>
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="login">
+  <div class="card login-card">
+    <p class="brand">파릇 <b>어드민</b></p>
+    <h1>어드민이 아직 켜지지 않았습니다</h1>
+    <p class="muted">서버 환경 변수에 어드민 비밀번호가 없어서 로그인 화면을 열지 않았습니다.</p>
+    <ol class="steps">
+      <li>Railway → 프로젝트 <b>beneficial-adventure</b> → 서비스 <b>paroot-preview</b> → <b>Variables</b></li>
+      <li><code>ADMIN_PASSWORD</code>에 어드민 비밀번호를 넣습니다(12자 이상 권장).</li>
+      <li>글·공지 저장을 쓰려면 <code>GITHUB_TOKEN</code>(저장소 Contents 읽기·쓰기 권한)도 넣습니다.</li>
+      <li>방문 통계를 배포 뒤에도 남기려면 볼륨을 붙이고 <code>DATA_DIR</code>을 그 경로로 둡니다.</li>
+    </ol>
+    <p class="muted">저장하면 서버가 다시 시작되고 이 주소에서 로그인할 수 있습니다.</p>
+  </div>
+</main>
+</body>
+</html>

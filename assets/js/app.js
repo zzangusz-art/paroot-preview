@@ -555,14 +555,18 @@
     });
   }
 
-  // ── 13) 방문 분석 이벤트: 운영 빌드에 GA4·GTM·네이버 애널리틱스가 있을 때만 보낸다(없으면 아무것도 안 함) ──
+  // ── 13) 방문 분석 이벤트: 운영 빌드에서만 보낸다(미리보기에는 아무것도 안 함) ──
   //  book_click(네이버 예약으로 이동)을 GA4 「주요 이벤트」로 표시해 전환으로 본다. GTM은 같은 이름의 dataLayer 이벤트로 받는다.
-  const A = window.PAROOT_ANALYTICS;
+  //  자체 통계(PAROOT_STATS): 쿠키 없이 페이지 조회·유입 경로와 예매·전화·메일 클릭 합계만 서버(/api/hit)에 보낸다 → 어드민 「유입·트래픽」
+  const A = window.PAROOT_ANALYTICS || (window.PAROOT_STATS ? {} : null);
   if (A) {
+    const beacon = data => { if (window.PAROOT_STATS) try { navigator.sendBeacon('/api/hit', JSON.stringify(data)); } catch (_) { /* 비컨 미지원 */ } };
+    beacon({ t: 'pv', p: location.pathname, r: d.referrer, q: location.search, w: innerWidth });
     const track = (name, p = {}) => {
       const params = { page_path: location.pathname, ...p };
       (window.dataLayer = window.dataLayer || []).push({ event: name, ...params });
       if (A.ga4 && window.gtag) gtag('event', name, params);
+      if (name === 'book_click' || name === 'contact_call' || name === 'contact_email') beacon({ t: 'ev', e: name, s: p.show });
     };
     window.paroot.track = track;
     const showOf = href => SHOWS.find(s => href.startsWith(s.booking));

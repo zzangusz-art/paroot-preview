@@ -53,7 +53,7 @@ export function factSheet() {
   for (const n of NOTICES.filter(x => x.cat === 'event')) L.push(`[이벤트:${n.title.replace(/[「」]/g, '')}] 기간 ${n.start ? `${n.start}~` : ''}${n.end || '상시'}(${noticePeriod(n)}). ${n.summary} ${n.body.join(' ')} 상세 notice/#${n.id}`);
   return L.join('\n');
 }
-function allowedNumbers(sheet) {
+export function allowedNumbers(sheet) {
   const set = new Set(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '2026', '2027', '1997', '97']);
   for (const m of sheet.matchAll(/\d[\d,]*(?:\.\d+)?/g)) set.add(m[0].replace(/,/g, ''));
   return set;
@@ -69,10 +69,12 @@ const BANNED = [
 ];
 const UNITS = /(\d[\d,]*(?:\.\d+)?)\s*(원|분|시간|시|%|개월|개|일|명|건|편|년|월|세|층|회|곳|점|km|m)/g;
 
-function validate(md, { allowed, slugs }) {
+// 어드민(/admin/)에서 사람이 쓴 글(머리말 editor: admin)은 형식·링크만 보고, AI 글용 사실·문체 검사는 하지 않는다
+export function validate(md, { allowed, slugs }) {
   const errs = [];
   let meta, body;
   try { ({ meta, body } = parseFrontmatter(md)); } catch (e) { return { ok: false, errs: ['머리말 형식 오류: ' + e.message] }; }
+  if (meta.editor === 'admin') return validateHuman(meta, body, slugs);
   for (const k of ['title', 'description', 'slug', 'category', 'tags', 'keyword']) if (!meta[k] || (Array.isArray(meta[k]) && !meta[k].length)) errs.push(`머리말 ${k} 누락`);
   if (meta.slug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(meta.slug)) errs.push('slug는 영문 소문자·숫자·하이픈만');
   if (meta.slug && slugs.has(meta.slug)) errs.push(`이미 있는 slug: ${meta.slug}`);
@@ -97,6 +99,22 @@ function validate(md, { allowed, slugs }) {
   const unknown = new Set();
   for (const m of body.matchAll(UNITS)) { const n = m[1].replace(/,/g, ''); if (!allowed.has(n)) unknown.add(m[0]); }
   if (unknown.size) errs.push(`사실 목록에 없는 수치: ${[...unknown].join(', ')}`);
+  return { ok: errs.length === 0, errs, meta, len };
+}
+function validateHuman(meta, body, slugs) {
+  const errs = [];
+  for (const [k, name] of [['title', '제목을'], ['description', '요약을'], ['slug', '주소(slug)를'], ['date', '공개 날짜를'], ['category', '분류를']]) if (!meta[k]) errs.push(`${name} 입력하세요`);
+  if (meta.slug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(meta.slug)) errs.push('주소(slug)는 영문 소문자·숫자·하이픈만 쓸 수 있습니다');
+  if (meta.slug && slugs.has(meta.slug)) errs.push(`이미 있는 주소(slug)입니다: ${meta.slug}`);
+  if (meta.date && !/^\d{4}-\d{2}-\d{2}$/.test(meta.date)) errs.push('공개 날짜 형식은 YYYY-MM-DD입니다');
+  if (meta.time && !/^\d{2}:\d{2}$/.test(meta.time)) errs.push('공개 시각 형식은 HH:MM입니다');
+  if (meta.category && !BLOG_CATEGORIES.includes(meta.category)) errs.push(`분류는 ${BLOG_CATEGORIES.join('/')} 중 하나입니다`);
+  if (meta.show && !SHOWS.some(s => s.slug === meta.show)) errs.push('연결 공연이 올바르지 않습니다');
+  if (meta.title && (meta.title.length < 8 || meta.title.length > 80)) errs.push(`제목은 8~80자입니다(현재 ${meta.title.length}자)`);
+  if (meta.description && (meta.description.length < 20 || meta.description.length > 160)) errs.push(`요약은 20~160자입니다(현재 ${meta.description.length}자)`);
+  const len = (body || '').replace(/\s+/g, '').length;
+  if (len < 200) errs.push(`본문이 너무 짧습니다(${len}자, 200자 이상)`);
+  for (const m of (body || '').matchAll(/\]\(([^)\s]+)\)/g)) if (!/^https?:/.test(m[1]) && !isInternal(m[1])) errs.push(`사이트 안 링크 주소가 올바르지 않습니다: ${m[1]}`);
   return { ok: errs.length === 0, errs, meta, len };
 }
 

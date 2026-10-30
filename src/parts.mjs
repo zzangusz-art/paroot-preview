@@ -77,8 +77,9 @@ export const lightbox = `<div class="modal" id="modalImg" hidden role="dialog" a
 const NCAT = { event: '이벤트', notice: '공지', audition: '오디션' };
 export function noticeItem(u, n) {
   const st = noticeStatus(n), show = n.show ? showBySlug(n.show) : null, per = noticePeriod(n);
-  const thumb = n.imgs ? `<span class="nt-thumb ph">${img(u, `assets/img/notice/${n.id}-t.webp`, '')}</span>` : `<span class="nt-thumb nt-thumb-ico" aria-hidden="true">${ico('bell')}</span>`;
-  const pics = Array.from({ length: n.imgs }, (_, k) => img(u, `assets/img/notice/${n.id}${k ? `-${k + 1}` : ''}.webp`, `${n.title.replace(/[「」]/g, '')} 안내 이미지${n.imgs > 1 ? ` ${k + 1}` : ''}`)).join('');
+  const uv = n.v ? r => `${u(r)}?v=${n.v}` : u; // 어드민에서 이미지를 바꾸면 v가 바뀌어 브라우저·CDN 캐시를 비켜 간다
+  const thumb = n.imgs ? `<span class="nt-thumb ph">${img(uv, `assets/img/notice/${n.id}-t.webp`, '')}</span>` : `<span class="nt-thumb nt-thumb-ico" aria-hidden="true">${ico('bell')}</span>`;
+  const pics = Array.from({ length: n.imgs }, (_, k) => img(uv, `assets/img/notice/${n.id}${k ? `-${k + 1}` : ''}.webp`, `${n.title.replace(/[「」]/g, '')} 안내 이미지${n.imgs > 1 ? ` ${k + 1}` : ''}`)).join('');
   const acts = [
     show && n.cat === 'event' && st.key !== 'closed' ? `<a class="btn btn-pink btn-s" href="${show.booking.url}" target="_blank" rel="noopener" data-book="${esc(show.title)}">${ico('ticket')}네이버 예약에서 예매</a>` : '',
     show ? `<a class="btn btn-line btn-s" href="${u(`shows/${show.slug}/`)}">${esc(show.title)} 공연 정보</a>` : '',

@@ -8,10 +8,13 @@ const ids = Object.fromEntries(Object.entries(valid).map(([k, re]) => [k, re.tes
 let on = false;
 export const setTracking = v => { on = !!v; };
 export const trackingTools = () => (on ? Object.keys(ids).filter(k => ids[k]) : []);
+export const selfStats = () => on;
 
+// 운영 빌드에서는 분석 도구 ID가 없어도 자체 통계(PAROOT_STATS → /api/hit, tools/admin/stats.mjs)는 켠다
 export function analyticsHead() {
-  if (!trackingTools().length) return '';
-  const out = [`<script>window.PAROOT_ANALYTICS=${JSON.stringify(ids)};window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}</script>`];
+  if (!on) return '';
+  if (!trackingTools().length) return '<script>window.PAROOT_STATS=1</script>\n';
+  const out = [`<script>window.PAROOT_STATS=1;window.PAROOT_ANALYTICS=${JSON.stringify(ids)};window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}</script>`];
   if (ids.gtm) out.push(`<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${ids.gtm}');</script>`);
   if (ids.ga4) out.push(`<script async src="https://www.googletagmanager.com/gtag/js?id=${ids.ga4}"></script>`, `<script>gtag('js',new Date());gtag('config','${ids.ga4}');</script>`);
   if (ids.clarity) out.push(`<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${ids.clarity}");</script>`);
