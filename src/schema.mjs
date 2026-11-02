@@ -1,6 +1,6 @@
 // 구조화 데이터(JSON-LD). 모든 페이지는 @graph 하나로 내보낸다.
 // 평점은 네이버 예약(외부 사이트) 집계라 화면에만 출처와 함께 보여 주고 aggregateRating 마크업은 하지 않는다(다른 사이트 평점 집계 금지 지침).
-import { SITE, SHOWS, AWARDS, HISTORY, venueOf, ASOF } from './data.mjs';
+import { SITE, SHOWS, AWARDS, HISTORY, venueOf, ASOF, KOPIS } from './data.mjs';
 
 const ORG_ID = () => SITE.url + '#org';
 const SITE_ID = () => SITE.url + '#website';
@@ -20,6 +20,7 @@ export function organization() {
     slogan: SITE.tagline,
     description: '주식회사 파릇은 서울 대학로(혜화)에서 연극과 어린이 뮤지컬을 제작·기획·운영하는 공연 제작사입니다. 2016년 어린이뮤지컬 기획으로 시작해 2017년부터 연극 「한뼘사이」를 오픈런으로 공연하고 있습니다.',
     url: SITE.url,
+    sameAs: SITE.sameAs,
     logo: SITE.url + 'assets/img/brand/logo-512.png',
     image: SITE.url + 'assets/img/og-default.jpg',
     foundingDate: SITE.founded,
@@ -81,6 +82,8 @@ export function event(s, url, image) {
     alternateName: [s.title, s.original ? `비누향기` : null, s.short, s.titleEn].filter(Boolean),
     description: s.lead,
     url,
+    // 같은 공연의 공식 기록(공연예술통합전산망 KOPIS)·공식 인스타그램
+    ...(KOPIS[s.slug] || s.instagram ? { sameAs: [KOPIS[s.slug] && `https://kopis.or.kr/por/db/pblprfr/pblprfrView.do?menuId=MNU_00020&mt20Id=${KOPIS[s.slug]}`, s.instagram].filter(Boolean) } : {}),
     image,
     inLanguage: 'ko',
     startDate: s.since,
@@ -111,7 +114,7 @@ export function blogPosting(p, url, image) {
     '@type': 'BlogPosting', '@id': url + '#article', headline: p.title, description: p.description,
     datePublished: p.date, dateModified: p.updated || p.date, inLanguage: 'ko-KR', url,
     mainEntityOfPage: url, articleSection: p.category, keywords: p.tags.join(', '),
-    author: { '@type': 'Organization', name: p.author || '파릇 공연기획팀', url: SITE.url + 'about/' },
+    author: { '@type': 'Organization', name: p.author || '파릇 공연기획팀', url: SITE.url + 'about/#team', parentOrganization: { '@id': ORG_ID() } },
     publisher: { '@id': ORG_ID() },
     image,
     ...(p.show ? { about: { '@id': SITE.url + `shows/${p.show}/#event` } } : {}),

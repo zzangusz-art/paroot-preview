@@ -66,8 +66,8 @@ const lastPost = posts[0]?.date || ASOF;
 // ── 홈 ──
 {
   const out = 'index.html', url = pageUrl(out);
-  const t = '대학로 연극·혜화 연극 | 파릇 — 한뼘사이·사내연애 보고서·플러팅';
-  const d = `대학로·혜화에서 연극과 어린이 뮤지컬을 만드는 공연 제작사 파릇. 2017년부터 오픈런 중인 로맨틱 코미디 「한뼘사이」, 「사내연애 보고서」, 섹시 코미디 「플러팅」, 심야 쇼 「드랙인혜화」, 어린이 뮤지컬 「늑대숲 또옹돼지 원정대」·「피노키오야 노올자」, 「수상한 룸메이트」 예매·오시는 길.`;
+  const t = '대학로 연극·혜화 연극 | 한뼘사이 제작사 파릇';
+  const d = `대학로·혜화의 공연 제작사 파릇. 2017년부터 오픈런 중인 「한뼘사이」와 「사내연애 보고서」 「플러팅」, 어린이 뮤지컬까지 가격·회차·예매·오시는 길을 한곳에서.`;
   emit({ out, pri: '1.0', mod: lastPost > ASOF ? lastPost : ASOF, bodyClass: 'home', title: t, description: d,
     keywords: ['대학로 연극', '혜화 연극', '대학로 연극 추천', '혜화 연극 추천', ...SHOWS.map(s => s.title), '파릇'],
     schema: S.graph(S.organization(), S.website(), S.webpage({ url, title: t, description: d }), S.showList(url), S.faqPage(FAQ.filter(f => f.pages.includes('home')), url)),
@@ -77,7 +77,7 @@ const lastPost = posts[0]?.date || ASOF;
 // ── 공연 ──
 {
   const out = 'shows/index.html', url = pageUrl(out);
-  const t = '대학로 연극·뮤지컬 공연 전체 — 가격·회차·공연장 비교 | 파릇';
+  const t = '대학로 연극·뮤지컬 공연 가격·회차 비교 | 파릇';
   const d = `파릇이 대학로·혜화에서 공연 중인 연극 3편, 어린이 뮤지컬 2편, 심야 쇼 1편의 공연장·공연 시간·관람 연령·가격·관람평을 한 번에 비교합니다(${ASOF_LABEL} 기준).`;
   emit({ out, section: 'shows/', pri: '0.9', title: t, description: d, keywords: ['대학로 연극 추천', '혜화 연극 추천', '대학로 공연', '대학로 어린이 뮤지컬'],
     schema: S.graph(S.organization(), S.website(), S.webpage({ url, title: t, description: d, type: 'CollectionPage' }), S.showList(url), bc([['홈', ''], ['공연', 'shows/']])),
@@ -98,17 +98,17 @@ const info = [
   { out: 'about/index.html', name: '파릇 소개', render: P.about, pri: '0.7', type: 'AboutPage',
     title: '파릇 소개·연혁 — 대학로 공연 제작사 주식회사 파릇', description: '주식회사 파릇은 2016년 어린이뮤지컬 기획으로 시작해 연극 「한뼘사이」 「사내연애 보고서」 「플러팅」 「비누향기(수상한 룸메이트)」와 어린이뮤지컬을 제작·기획·운영하는 대학로 공연 제작사입니다. 연혁·수상·회사 정보.', extra: () => [S.historyPage()] },
   { out: 'visit/index.html', name: '오시는 길', render: P.visit, pri: '0.8',
-    title: '대학로 공연장 오시는 길 — 혜화역 출구별 파릇 공연장 | 파릇', description: '라온아트홀(한뼘사이 전용관)·제나아트홀·라온씨어터는 혜화역 2번 출구, 서연아트홀은 4번 출구, 뮤지컬펍 커튼콜은 1번 출구에서 걸어서 5분 이내입니다. 주소·가는 길·주차 안내.',
+    title: '대학로 공연장 오시는 길(혜화역 출구별) | 파릇', description: '라온아트홀(한뼘사이 전용관)·제나아트홀·라온씨어터는 혜화역 2번 출구, 서연아트홀은 4번 출구, 뮤지컬펍 커튼콜은 1번 출구에서 걸어서 5분 이내입니다. 주소·가는 길·주차 안내.',
     extra: () => VENUES.map(v => ({ '@type': 'PerformingArtsTheater', name: v.name, address: { '@type': 'PostalAddress', streetAddress: v.addr.replace(/^서울 종로구 /, ''), addressLocality: '종로구', addressRegion: '서울특별시', addressCountry: 'KR' }, geo: { '@type': 'GeoCoordinates', latitude: v.lat, longitude: v.lng } })), faq: 'visit' },
   { out: 'notice/index.html', name: '공지사항·이벤트', render: P.notice, pri: '0.7',
-    title: '공지사항·이벤트 — 대학로 연극 할인·이벤트, 배우 오디션 | 파릇', description: '한뼘사이·사내연애 보고서·플러팅·수상한 룸메이트 수험생 할인과 군인 할인, 리뷰·재관람 이벤트, 단체 관람 공지와 작품별 배우 오디션 공고를 모았습니다.',
+    title: '대학로 연극 할인·이벤트·공지 | 파릇', description: '한뼘사이·사내연애 보고서·플러팅·수상한 룸메이트 수험생 할인과 군인 할인, 리뷰·재관람 이벤트, 단체 관람 공지와 작품별 배우 오디션 공고를 모았습니다.',
     extra: () => [{ '@type': 'ItemList', name: '파릇 공지사항·이벤트', itemListElement: sortedNotices().map((n, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE.url}notice/#${n.id}`, name: n.title.replace(/[「」]/g, '') })) }] },
   { out: 'news/index.html', name: '보도', render: P.news, pri: '0.5',
-    title: '파릇 언론 보도 | 파릇', description: '한뼘사이·사내연애 보고서·수상한 룸메이트(비누향기) 캐스팅과 수상 등 언론에 소개된 파릇 공연 이야기를 모았습니다.' },
+    title: '언론 보도 — 대학로 공연 제작사 파릇', description: '한뼘사이·사내연애 보고서·수상한 룸메이트(비누향기) 캐스팅과 수상 등 언론에 소개된 파릇 공연 이야기를 모았습니다.' },
   { out: 'contact/index.html', name: '문의', render: P.contact, pri: '0.6', type: 'ContactPage',
     title: '단체 관람·초청 공연·제휴 문의 | 파릇', description: `20인 이상 단체 관람, 기업·학교 초청 공연, 공연 기획·마케팅 제휴는 ${SITE.email}, 대표전화 ${SITE.phone}. 배우 오디션은 ${SITE.audition}.`, faq: 'contact' },
   { out: 'faq/index.html', name: '자주 묻는 질문', render: P.faqPage, pri: '0.8',
-    title: '대학로 연극 관람 자주 묻는 질문 — 예매·입장·좌석·주차 | 파릇', description: '대학로 연극이 처음일 때 고르는 법, 혜화역에서 공연장까지, 주차, 좌석 배정, 당일 취소, 아이와 관람, 단체 관람까지 파릇 공연 기준으로 답합니다.', faq: 'all' },
+    title: '대학로 연극 관람 자주 묻는 질문 | 파릇', description: '대학로 연극이 처음일 때 고르는 법, 혜화역에서 공연장까지, 주차, 좌석 배정, 당일 취소, 아이와 관람, 단체 관람까지 파릇 공연 기준으로 답합니다.', faq: 'all' },
 ];
 for (const it of info) {
   const url = pageUrl(it.out);
@@ -125,7 +125,7 @@ for (const it of info) {
 // ── 블로그 ──
 {
   const out = 'blog/index.html', url = pageUrl(out);
-  const t = '대학로 연극 가이드 — 공연 고르는 법, 데이트, 아이와 관람 | 파릇';
+  const t = '대학로 연극 가이드: 고르는 법·데이트·가격 | 파릇';
   const d = '대학로·혜화 연극을 처음 고르는 법, 데이트·모임 동선, 아이와 보는 첫 공연, 관람 매너와 예매 팁까지 파릇 공연기획팀이 정리합니다.';
   emit({ out, section: 'blog/', pri: '0.8', mod: lastPost, title: t, description: d,
     schema: S.graph(S.organization(), S.website(), { ...S.webpage({ url, title: t, description: d, type: 'CollectionPage', modified: lastPost }), mainEntity: { '@type': 'ItemList', itemListElement: posts.slice(0, 30).map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: SITE.url + `blog/${p.slug}/` })) } }, bc([['홈', ''], ['대학로 연극 가이드', 'blog/']])),
@@ -177,6 +177,8 @@ const llms = `# ${SITE.name} (${SITE.nameEn}) — 대학로 연극·혜화 연�
 - 한뼘사이 지역 공연 도시: ${TOUR_CITIES.join(', ')}
 - 공연장: 모두 지하철 4호선 혜화역에서 도보 5분 이내, 주차 시설 없음
 - 회사: 상호 ${SITE.name}, 대표 ${SITE.ceo}, 사업자등록번호 ${SITE.bizNo}, ${SITE.address.full}, 대표전화 ${SITE.phone}, 문의 ${SITE.email}, 오디션 ${SITE.audition}
+- 공식 홈페이지: ${SITE.url} (이전 홈페이지 www.paroot.kr의 내용을 옮겨 새로 만든 사이트)
+- 연극 「비누향기」(2021년 7월 개막)는 2026년 8월 「수상한 룸메이트」로 이름을 바꿔 서연아트홀에서 공연 중이다(같은 작품). 「한뼘사이」 공연장 라온아트홀은 한뼘사이 전용관과 같은 곳이다
 
 ## 공연
 ${showLines}

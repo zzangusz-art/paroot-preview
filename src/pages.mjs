@@ -150,6 +150,13 @@ export function about(u) {
   <div class="sec-head" style="margin-bottom:24px"><div><p class="eyebrow">Archive</p><h2 class="h2" style="font-size:clamp(24px,3vw,34px)">무대 기록</h2></div><span class="muted">사진을 누르면 크게 볼 수 있습니다</span></div>
   <div class="gallery">${[1, 2, 3, 4, 5, 6].map(i => `<button class="gal" type="button" data-lightbox="${u(`assets/img/stage/archive-0${i}.webp`)}" data-alt="파릇 공연 무대 기록 ${i}">${phImg(u, `assets/img/stage/archive-0${i}.webp`, `파릇 공연 무대 기록 ${i}`)}</button>`).join('')}</div>
 </div></section>
+<section class="sec-tight" id="team"><div class="wrap two-col">
+  <div><p class="eyebrow">Editorial</p><h2 class="h2" style="font-size:clamp(24px,3vw,34px)">파릇 공연기획팀</h2></div>
+  <div class="prose" style="font-size:16px">
+    <p class="answer">「대학로 연극 가이드」는 파릇 공연기획팀이 관리하는 관람 안내 글입니다. 공연 고르는 법, 데이트·모임 동선, 아이와 보는 첫 공연, 할인과 예매처럼 관객이 실제로 묻는 것에 파릇 공연 기준으로 답합니다.</p>
+    <p>가격·회차·관람 연령·관람평은 네이버 예약에 공개된 정보를 기준일과 함께 적고, 정보가 바뀌면 글을 고칩니다. 다른 제작사 공연을 깎아내리거나 순위를 매기지 않습니다. 잘못된 내용을 보셨다면 <a href="mailto:${SITE.email}">${SITE.email}</a>로 알려 주세요.</p>
+  </div>
+</div></section>
 <section class="sec-tight sec-soft"><div class="wrap two-col">
   <div><p class="eyebrow">Company</p><h2 class="h2" style="font-size:clamp(24px,3vw,34px)">회사 정보</h2></div>
   <div class="tbl-scroll"><table class="cmp"><tbody>
@@ -187,6 +194,7 @@ export function visit(u) {
 export function news(u) {
   return `${pageHd(u, { crumb: [['홈', ''], ['보도', 'news/']], eyebrow: 'Press', title: '언론 보도', lead: '언론에 소개된 파릇 공연 이야기입니다. 할인·이벤트와 배우 오디션 공지는 공지사항·이벤트에 있습니다.' })}
 <section class="sec-tight"><div class="wrap">
+  <h2 class="sr-only">언론 보도 기사</h2>
   <div class="press-grid press-lt">${PRESS.map(p => pressCard(u, p)).join('')}</div><p class="muted" style="font-size:13.5px;margin-top:14px">날짜는 기존 파릇 홈페이지 뉴스 게시판에 올린 날짜입니다.</p>
   <div class="cc" style="margin-top:32px"><h3>공지사항·이벤트</h3><p>공연별 할인·이벤트, 단체 관람 안내, 작품별 배우 오디션 공고를 한곳에 모았습니다.</p><div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-dark btn-s" href="${u('notice/')}">공지사항·이벤트 보기${ico('arrow')}</a><a class="btn btn-line btn-s" href="${u('notice/')}#audition">오디션 공고</a></div></div>
 </div></section>`;
@@ -201,6 +209,7 @@ export function notice(u) {
   <div class="blog-filter tabs-like" role="group" aria-label="공지 분류" id="ntFilter">
     <button class="chip" type="button" data-nf="all" aria-pressed="true">전체 ${NOTICES.length}</button><button class="chip" type="button" data-nf="event" aria-pressed="false">이벤트 ${n('event')}</button><button class="chip" type="button" data-nf="notice" aria-pressed="false">공지 ${n('notice')}</button><button class="chip" type="button" data-nf="audition" aria-pressed="false">오디션 ${n('audition')}</button>
   </div>
+  <h2 class="sr-only">공지사항·이벤트 목록</h2>
   <div class="nt-list">${sortedNotices().map(x => noticeItem(u, x)).join('')}</div>
   <p class="muted" style="font-size:13.5px;margin-top:18px">이벤트 내용은 네이버 예약 공연 상세 안내(2026년 10월 26일 확인)를 옮긴 것으로, 실제 적용 권종과 가격은 예매 화면을 기준으로 합니다. 공지·오디션 10건은 기존 파릇 홈페이지 공지사항 게시판에서 옮겼습니다.</p>
   <div class="cc" style="margin-top:28px"><h3>오디션 지원</h3><p>파릇은 언제나 재능 있는 배우를 환영합니다. 프로필과 포트폴리오, 사진 등 본인을 알릴 수 있는 자료를 보내 주시면 담당 부서에서 확인 후 연락드립니다.</p><span class="mail">${SITE.audition}</span><div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn btn-dark btn-s" href="mailto:${SITE.audition}?subject=${encodeURIComponent('[오디션 지원] 이름 / 지원 작품')}">${ico('mail')}메일 쓰기</a><button class="btn btn-line btn-s" type="button" data-copy="${SITE.audition}" data-copy-msg="오디션 메일 주소를 복사했습니다">${ico('copy')}주소 복사</button></div></div>
@@ -263,7 +272,7 @@ export function blogPost(u, p, posts) {
   const show = p.show ? SHOWS.find(s => s.slug === p.show) : null;
   const rel = posts.filter(x => x.slug !== p.slug && (x.category === p.category || (show && x.show === p.show))).slice(0, 3);
   return `<div class="readbar" aria-hidden="true"></div>
-<section class="page-hd"><div class="wrap">${crumbs(u, [['홈', ''], ['대학로 연극 가이드', 'blog/'], [p.category, 'blog/']])}<p class="eyebrow">${esc(p.category)}</p><h1 style="font-size:clamp(28px,4.2vw,50px)">${esc(p.title)}</h1><p class="lead">${esc(p.description)}</p><div class="post-meta"><span>${kdate(p.date)}</span><span>${p.minutes}분 읽기</span><span>${esc(p.author || '파릇 공연기획팀')}</span></div></div></section>
+<section class="page-hd"><div class="wrap">${crumbs(u, [['홈', ''], ['대학로 연극 가이드', 'blog/'], [p.category, 'blog/']])}<p class="eyebrow">${esc(p.category)}</p><h1 style="font-size:clamp(28px,4.2vw,50px)">${esc(p.title)}</h1><p class="lead">${esc(p.description)}</p><div class="post-meta"><span>${kdate(p.date)}</span><span>${p.minutes}분 읽기</span><a href="${u('about/')}#team">${esc(p.author || '파릇 공연기획팀')}</a></div></div></section>
 <section class="sec-tight"><div class="wrap article">
   <article>
     <div class="post-cover">${img(u, p.thumb, p.title, { priority: true })}</div>
