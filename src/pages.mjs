@@ -162,7 +162,7 @@ export function about(u) {
 <section class="sec-tight sec-soft"><div class="wrap two-col">
   <div><p class="eyebrow">Company</p><h2 class="h2" style="font-size:clamp(24px,3vw,34px)">회사 정보</h2></div>
   <div class="tbl-scroll"><table class="cmp"><tbody>
-    <tr><th scope="row">상호</th><td>${SITE.name} (PAROOT)</td></tr><tr><th scope="row">대표</th><td>${SITE.ceo}</td></tr><tr><th scope="row">사업자등록번호</th><td>${SITE.bizNo}</td></tr>
+    <tr><th scope="row">상호</th><td>${SITE.name} (PAROOT)</td></tr><tr><th scope="row">대표</th><td>${SITE.ceo}</td></tr><tr><th scope="row">사업자등록번호</th><td>${SITE.bizNo}</td></tr><tr><th scope="row">공식 채널</th><td>${Object.values(SITE.channels).map(c => `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.short)}</a>`).join(' · ')}</td></tr>
     <tr><th scope="row">주소</th><td>${SITE.address.full}</td></tr><tr><th scope="row">대표전화</th><td><a href="tel:${SITE.phone.replace(/-/g, '')}">${SITE.phone}</a></td></tr>
     <tr><th scope="row">공연·제휴 문의</th><td><a href="mailto:${SITE.email}">${SITE.email}</a></td></tr><tr><th scope="row">오디션</th><td><a href="mailto:${SITE.audition}">${SITE.audition}</a></td></tr>
   </tbody></table></div>

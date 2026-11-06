@@ -19,6 +19,7 @@ const { SITE, SHOWS, FAQ, VENUES, HISTORY, AWARDS, PRESS, BLOG_CATEGORIES, KEYWO
 const { makeUrl, pageUrl, esc, won } = await import('./src/lib.mjs');
 const S = await import('./src/schema.mjs');
 const { page } = await import('./src/layout.mjs');
+const { loadNaverBlog, freshPosts } = await import('./tools/naver_blog.mjs');
 const { setTracking } = await import('./src/analytics.mjs');
 // 방문 분석 태그는 운영 빌드에서만(미리보기 데이터가 섞이지 않게). 점검용으로 미리보기에 켜려면 ANALYTICS_PREVIEW=1
 setTracking(!PREVIEW || !!process.env.ANALYTICS_PREVIEW);
@@ -68,6 +69,9 @@ const ALL_SHOWS = ['한뼘사이', '사내연애 보고서', '플러팅', '수�
 const SHOW_KW = { play: '대학로 연극·혜화 연극 공연추천.', kids: '대학로 어린이 뮤지컬 공연추천.', show: '대학로 심야 공연추천.' };
 const fit = (parts, max = 155) => parts.reduce((a, x) => ((a + ' ' + x).length <= max ? a + ' ' + x : a));
 
+// 공식 네이버 블로그 최근 글(오래된 글은 빼고 없으면 빈 목록)
+const naverPosts = freshPosts(await loadNaverBlog(ROOT, SITE.channels.blog.rss), (process.env.BUILD_NOW || nowKST).slice(0, 10));
+
 // ── 홈 ──
 {
   const out = 'index.html', url = pageUrl(out);
@@ -76,7 +80,7 @@ const fit = (parts, max = 155) => parts.reduce((a, x) => ((a + ' ' + x).length <
   emit({ out, pri: '1.0', mod: lastPost > ASOF ? lastPost : ASOF, bodyClass: 'home', title: t, description: d,
     keywords: ['대학로 연극 추천', '혜화 연극 추천'],
     schema: S.graph(S.organization(), S.website(), S.webpage({ url, title: t, description: d }), S.showList(url), S.faqPage(FAQ.filter(f => f.pages.includes('home')), url)),
-    body: u => homeBody(u, posts) });
+    body: u => homeBody(u, posts, naverPosts) });
 }
 
 // ── 공연 ──
@@ -178,6 +182,7 @@ const llms = `# ${SITE.name} (${SITE.nameEn}) — 대학로 연극·혜화 연�
 ## 핵심 사실 (${ASOF_LABEL} 기준)
 - 현재 공연 ${SHOWS.length}편: ${SHOWS.map(s => s.title).join(', ')}
 - 네이버 예약 관람평 합계 ${totalReviews().toLocaleString('ko-KR')}건, 관람평 수로 가중한 평균 ${avgRating().toFixed(2)}점
+- 공식 채널: ${Object.values(SITE.channels).map(c => `${c.short} ${c.url}`).join(', ')}
 - 파릇 연극 순위(네이버 예약 관람평 수, 대학로 전체 순위 아님): ${rankedPlays().map((s, i) => `${i + 1}위 ${s.title} ${s.rating.count.toLocaleString('ko-KR')}건`).join(', ')}
 - 수상: ${AWARDS.map(a => `${a.t}(${a.d})`).join('; ')}
 - 한뼘사이 지역 공연 도시: ${TOUR_CITIES.join(', ')}

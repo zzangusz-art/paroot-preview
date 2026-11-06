@@ -96,6 +96,7 @@ function footer(u) {
       <div><b>공연</b><ul>${SHOWS.map(s => `<li><a href="${u(`shows/${s.slug}/`)}">${esc(s.title)}</a></li>`).join('')}</ul></div>
       <div><b>파릇</b><ul><li><a href="${u('about/')}">회사 소개·연혁</a></li><li><a href="${u('notice/')}">공지사항·이벤트</a></li><li><a href="${u('news/')}">언론 보도</a></li><li><a href="${u('visit/')}">공연장 오시는 길</a></li><li><a href="${u('faq/')}">자주 묻는 질문</a></li><li><a href="${u('blog/')}">대학로 연극 가이드</a></li></ul></div>
       <div><b>문의</b><ul><li><a href="${u('contact/')}">공연·제휴·단체 관람</a></li><li><a href="mailto:${SITE.email}">${SITE.email}</a></li><li><a href="mailto:${SITE.audition}">${SITE.audition}</a></li><li><a href="tel:${SITE.phone.replace(/-/g, '')}">${SITE.phone}</a></li><li><a href="${u('privacy/')}">개인정보처리방침</a></li></ul></div>
+      <div><b>공식 채널</b><ul>${Object.values(SITE.channels).map(c => `<li><a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.short)}</a></li>`).join('')}</ul></div>
     </div>
   </div>
   <p class="ft-biz"><span>상호 ${SITE.name}</span><span>대표 ${SITE.ceo}</span><span>사업자등록번호 ${SITE.bizNo}</span><span>주소 ${SITE.address.full}</span><span>대표전화 ${SITE.phone}</span><span>이메일 ${SITE.email}</span><br>© ${new Date().getFullYear()} PAROOT. All rights reserved.</p>

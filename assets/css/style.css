@@ -447,6 +447,14 @@ ul, ol { margin: 0; padding: 0; }
 @media (max-width: 1099px) { .press-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .press-grid { grid-template-columns: minmax(0, 1fr); } .pr-card { display: grid; grid-template-columns: 120px minmax(0, 1fr); } .pr-img { aspect-ratio: auto; height: 100%; min-height: 110px; } .pr-body { padding: 12px 14px; } .pr-body .tt { font-size: 14.5px; } }
 /* ── 공연장·오시는 길 ── */
+.channels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.channel { background: #fff; border: 1px solid var(--line); border-radius: var(--r-l); padding: clamp(22px, 3vw, 32px); display: flex; flex-direction: column; gap: 12px; }
+.channel h3 { font-size: 20px; margin: 0; }
+.channel p { margin: 0; color: var(--sub); line-height: 1.7; }
+.channel ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; font-size: 14.5px; }
+.channel li a { display: block; padding: 6px 0; text-decoration: underline; }
+.channel .btn { margin-top: auto; align-self: flex-start; }
+@media (max-width: 860px) { .channels { grid-template-columns: minmax(0, 1fr); } }
 .venues { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .venue { background: #fff; border: 1px solid var(--line); border-radius: var(--r-l); padding: clamp(22px, 3vw, 32px); display: flex; flex-direction: column; gap: 12px; }
 .venue h3 { font-size: 21px; }
@@ -592,10 +600,10 @@ html:not(.js) #postMore { display: none; }
 
 /* ── 푸터 ── */
 .ft { background: #0B0A12; color: var(--on-dk-sub); padding: 72px 0 calc(40px + env(safe-area-inset-bottom)); font-size: 14.5px; }
-.ft-top { display: grid; grid-template-columns: 1.3fr 2fr; gap: 48px; padding-bottom: 40px; border-bottom: 1px solid var(--line-dk); }
+.ft-top { display: grid; grid-template-columns: 1fr 2.6fr; gap: 48px; padding-bottom: 40px; border-bottom: 1px solid var(--line-dk); }
 .ft-brand img { height: 30px; width: auto; margin-bottom: 18px; }
 .ft-brand p { margin: 0; line-height: 1.8; }
-.ft-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.ft-links { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .ft-links b { display: block; color: #fff; font-size: 14px; margin-bottom: 12px; }
 .ft-links ul { list-style: none; display: grid; gap: 4px; }
 .ft-links a { display: inline-block; padding: 4px 0; }

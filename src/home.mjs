@@ -212,6 +212,16 @@ function photos(u) {
 ${lightbox}`;
 }
 
+// 공식 네이버 채널. 블로그 카드에는 최근 글(naverPosts)이 있을 때만 제목을 보여 준다.
+function channels(naverPosts) {
+  return `<section class="sec" id="naver" aria-labelledby="nvTitle">
+  <div class="wrap">
+    <div class="sec-head"><div><p class="eyebrow">Naver</p><h2 class="h2" id="nvTitle">네이버에서도<br>파릇을 만나요</h2><p class="lead">공연 소식과 티켓, 영상을 네이버에서 함께 볼 수 있습니다.</p></div></div>
+    <div class="channels">${Object.entries(SITE.channels).map(([k, c]) => `<div class="channel"><h3>${esc(c.name)}</h3><p>${esc(c.desc)}</p>${k === 'blog' && naverPosts.length ? `<ul>${naverPosts.map(p => `<li><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.title)}</a></li>`).join('')}</ul>` : ''}<a class="btn btn-line btn-s" href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.cta)}${ico('ext')}</a></div>`).join('')}</div>
+  </div>
+</section>`;
+}
+
 function blog(u, posts) {
   if (!posts.length) return '';
   return `<section class="sec sec-soft" id="guide" aria-labelledby="bgTitle">
@@ -229,6 +239,6 @@ export function ctaBand(u) {
 </div></div></section>`;
 }
 
-export function homeBody(u, posts) {
-  return [hero(u), marquee(), lineup(u), ranking(u), reviews(u), spotlight(u), finder(u), notices(u), history(), press(u), venues(u), faq(u), blog(u, posts), photos(u), ctaBand(u)].join('\n');
+export function homeBody(u, posts, naverPosts = []) {
+  return [hero(u), marquee(), lineup(u), ranking(u), reviews(u), spotlight(u), finder(u), notices(u), history(), press(u), venues(u), faq(u), blog(u, posts), channels(naverPosts), photos(u), ctaBand(u)].join('\n');
 }

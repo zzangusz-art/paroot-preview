@@ -25,8 +25,14 @@ export const SITE = {
   tel: '+82-70-8952-2151',
   email: 'contact@paroot.kr',          // 기존 푸터의 contact@paroot.co.kr 은 도메인이 없어(2026-10-23 DNS 조회) 메일 서버가 있는 paroot.kr 로 통일
   audition: 'audition@paroot.kr',
-  // 같은 회사의 다른 공식 페이지(검색·AI가 parootent.kr과 같은 회사로 묶게): 이전 홈페이지, 네이버 스마트스토어 → Organization sameAs
-  sameAs: ['https://www.paroot.kr/', 'https://smartstore.naver.com/paroot'],
+  // 공식 네이버 채널(홈 「네이버에서도」 칸·푸터·소개·llms.txt). 클립은 검색 결과 주소라 sameAs에 넣지 않는다.
+  channels: {
+    blog: { name: '공식 네이버 블로그', short: '네이버 블로그', url: 'https://blog.naver.com/ddanent', rss: 'https://rss.blog.naver.com/ddanent.xml', desc: '공연 일정과 캐스트, 리뷰 이벤트 소식을 모아 둔 파릇 공식 블로그입니다.', cta: '블로그 보기' },
+    store: { name: '네이버 스마트스토어', short: '네이버 스마트스토어', url: 'https://smartstore.naver.com/paroot', desc: '파릇 공연 티켓을 판매하는 공식 스토어입니다.', cta: '스토어 보기' },
+    clip: { name: '네이버 클립', short: '네이버 클립', url: 'https://search.naver.com/search.naver?nso=&query=%ED%8C%8C%EB%A6%87+%EC%97%B0%EA%B7%B9&sm=tab_smr&sort=rel&ssc=tab.clip.all', desc: '네이버 클립에 올라온 파릇 연극 영상을 모아 봅니다.', cta: '클립 보기' },
+  },
+  // 같은 회사의 다른 공식 페이지(검색·AI가 parootent.kr과 같은 회사로 묶게): 이전 홈페이지, 네이버 블로그, 네이버 스마트스토어 → Organization sameAs
+  sameAs: ['https://www.paroot.kr/', 'https://blog.naver.com/ddanent', 'https://smartstore.naver.com/paroot'],
   address: { full: '서울특별시 종로구 대학로10길 11 (동숭동)', street: '대학로10길 11', locality: '종로구', region: '서울특별시', lat: 37.5818058, lng: 127.0027291 },
   naverVerification: ['0dcf0bc6d5fe1e94c1f93a5722120aa32982a080', 'bc939dc4af639ee537f38dbc6bf9a5866e700085', '54f63f15f85952f1c62f6960f149ee07a6ed87b7'],   // 소유 확인 값: 기존 paroot.kr · www.parootent.kr · parootent.kr(대표)
   googleVerification: ['PjDzXil-JkcPee5c7KrbCQ8kWv1p20vkWmYl3i4yQwI', '03mKi9a9dAxCPG26DP74MZK8t0otUkQSmP3jRbXeGVI'], // 기존 paroot.kr 값 + parootent.kr 서치콘솔(URL 접두어) 값
