@@ -8,6 +8,7 @@ category: 관람 가이드
 tags: 서연아트홀, 서연아트홀 위치, 혜화역 4번 출구 공연장, 수상한 룸메이트
 keyword: 서연아트홀
 show: suspicious-roommate
+thumb_img: shows/suspicious-roommate/gallery/02.webp
 author: 파릇 공연기획팀
 ---
 서연아트홀은 서울 종로구 창경궁로 258-9에 있는 소극장입니다. 혜화역 4번 출구로 나와 CGV 방면으로 직진하다가 이디야커피 골목 안으로 30m 들어가면 나옵니다. 파릇 공연 가운데 [수상한 룸메이트](shows/suspicious-roommate/)와 [피노키오야 노올자](shows/pinocchio/)가 이곳에서 공연하고, 공연장에 주차 시설은 없습니다.

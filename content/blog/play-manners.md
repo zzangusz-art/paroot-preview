@@ -8,6 +8,7 @@ category: 관람 가이드
 tags: 연극 관람 매너, 공연 매너, 관람 예절, 수상한 룸메이트
 keyword: 연극 관람 매너
 show: suspicious-roommate
+thumb_img: shows/suspicious-roommate/gallery/02.webp
 author: 파릇 공연기획팀
 ---
 연극 관람 매너의 대부분은 공연이 시작되기 전에 끝내 둘 일입니다. 파릇 공연 기준으로 공연이 시작된 뒤에는 입장할 수 없고, 물을 포함한 음료와 음식물은 공연장 안에 가지고 들어갈 수 없습니다. 여기에 휴대폰 소리와 불빛을 미리 정리하는 일반적인 매너를 더하면, 마지막 장면을 관객 선택으로 정하는 [수상한 룸메이트](shows/suspicious-roommate/) 같은 공연도 처음부터 끝까지 편하게 즐길 수 있습니다.

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { SITE, SHOWS, FAQ, VENUES, PRESS, NOTICES, BLOG_CATEGORIES, venueOf, priceFrom, ASOF_LABEL, totalReviews, noticeStatus, sortedNotices } from './data.mjs';
 import { esc, won, img, phImg, kdate, nl2br } from './lib.mjs';
 import { ico } from './layout.mjs';
-import { showCard, ratingBars, reviewCard, faqAcc, venueCard, rulesList, crumbs, postCard, mapUrl, ratingLine, lightbox, noticeItem } from './parts.mjs';
+import { showCard, ratingBars, reviewCard, faqAcc, venueCard, rulesList, crumbs, postCard, mapUrl, ratingLine, lightbox, noticeItem, rankTable } from './parts.mjs';
 import { trackingTools, selfStats } from './analytics.mjs';
 const TOOL = { ga4: 'Google 애널리틱스 4', gtm: 'Google 태그 관리자', naver: '네이버 애널리틱스', clarity: 'Microsoft Clarity' };
 import { historyBlock, awardsPress, ctaBand, pressCard } from './home.mjs';
@@ -34,7 +34,9 @@ export function showsIndex(u) {
   <div class="show-grid">${SHOWS.map(s => showCard(u, s, { h: 'h2' })).join('')}</div>
 </div></section>
 <section class="sec-tight sec-soft"><div class="wrap">
-  <h2 class="h2" style="font-size:clamp(24px,3vw,34px);margin-bottom:22px">한 번에 비교하기</h2>
+  <h2 class="h2" style="font-size:clamp(24px,3vw,34px);margin-bottom:22px" id="ranking">대학로 연극 순위(파릇 연극 관람평 많은 순)</h2>
+  ${rankTable(u)}
+  <h2 class="h2" style="font-size:clamp(24px,3vw,34px);margin:48px 0 22px">한 번에 비교하기</h2>
   <div class="tbl-scroll tbl-cards"><table class="cmp cmp-wide"><thead><tr><th>공연</th><th>장르</th><th>공연장</th><th>시간</th><th>관람 연령</th><th>회차</th><th>가격</th><th>관람평</th></tr></thead><tbody>${rows}</tbody></table></div>
   <p class="muted" style="font-size:13.5px;margin-top:12px">가격은 네이버 예약에서 증빙 없이 살 수 있는 가장 낮은 일반 가격입니다. 중고생·대학생·군인 등 할인은 공연 상세에서 확인하세요. 회차는 날짜에 따라 바뀔 수 있습니다.</p>
 </div></section>

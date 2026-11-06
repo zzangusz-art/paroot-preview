@@ -8,6 +8,7 @@ category: 관람 가이드
 tags: 라온아트홀, 한뼘사이 전용관, 라온아트홀 위치, 한뼘사이
 keyword: 라온아트홀
 show: hanbbeumsai
+thumb_img: stage/exterior.webp
 author: 파릇 공연기획팀
 ---
 라온아트홀은 서울 종로구 대학로10길 11에 있는 한뼘사이 전용관입니다. 지하철 4호선 혜화역 2번 출구로 나와 KFC 골목 안쪽으로 50m 이내라, 출구만 맞게 나오면 찾기 어렵지 않습니다. 이 공연장에서는 파릇의 로맨틱 코미디 [한뼘사이](shows/hanbbeumsai/)를 공연합니다.

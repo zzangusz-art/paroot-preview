@@ -15,7 +15,7 @@ if (PREVIEW) process.env.SITE_URL = PREVIEW;
 const OUT = path.resolve(ROOT, opt('--out') || 'dist');
 
 const D = await import('./src/data.mjs');
-const { SITE, SHOWS, FAQ, VENUES, HISTORY, AWARDS, PRESS, BLOG_CATEGORIES, KEYWORDS, ASOF, ASOF_LABEL, venueOf, priceFrom, totalReviews, avgRating, TOUR_CITIES, NOTICES, TODAY, noticeStatus, noticePeriod, sortedNotices } = D;
+const { SITE, SHOWS, FAQ, VENUES, HISTORY, AWARDS, PRESS, BLOG_CATEGORIES, KEYWORDS, CORE_KEYWORDS, rankedPlays, ASOF, ASOF_LABEL, venueOf, priceFrom, totalReviews, avgRating, TOUR_CITIES, NOTICES, TODAY, noticeStatus, noticePeriod, sortedNotices } = D;
 const { makeUrl, pageUrl, esc, won } = await import('./src/lib.mjs');
 const S = await import('./src/schema.mjs');
 const { page } = await import('./src/layout.mjs');
@@ -41,10 +41,10 @@ const write = (rel, html) => { const f = path.join(OUT, rel); fs.mkdirSync(path.
 const pages = []; // sitemap용 {out, mod, pri}
 const agency = !PREVIEW && SITE.agencyScript ? `<script src="${SITE.agencyScript}" async></script>` : '';
 
-function emit({ out, title, description, body, schema, section, ogImage, ogType, published, mod = ASOF, pri = '0.7', bodyClass = '', keywords = [] }) {
+function emit({ out, title, description, body, schema, section, ogImage, ogType, published, mod = ASOF, pri = '0.7', bodyClass = '', keywords = [], coreKeywords = true }) {
   const u = makeUrl(out);
   const url = pageUrl(out);
-  const html = page({ title, description, url, schema, section, ogImage, ogType, published, v: V, noindex: !!PREVIEW, bodyClass, extraScripts: agency, keywords }, u, body(u));
+  const html = page({ title, description, url, schema, section, ogImage, ogType, published, v: V, noindex: !!PREVIEW, bodyClass, extraScripts: agency, keywords: coreKeywords ? [...new Set([...keywords, ...CORE_KEYWORDS, ...SHOWS.map(s => s.title)])] : keywords }, u, body(u));
   write(out, html);
   pages.push({ out, mod, pri });
 }
@@ -63,13 +63,18 @@ const posts = loadPosts(BLOG, { now: process.env.BUILD_NOW || nowKST }).map(p =>
 });
 const lastPost = posts[0]?.date || ASOF;
 
+// 제목·설명에 함께 쓰는 공연 이름. 설명은 문장 단위로 잘라 끊긴 채 노출되지 않게 한다.
+const ALL_SHOWS = ['한뼘사이', '사내연애 보고서', '플러팅', '수상한 룸메이트', '드랙인혜화', '늑대숲 또옹돼지 원정대', '피노키오야 노올자'].join(', ');
+const SHOW_KW = { play: '대학로 연극·혜화 연극 공연추천.', kids: '대학로 어린이 뮤지컬 공연추천.', show: '대학로 심야 공연추천.' };
+const fit = (parts, max = 155) => parts.reduce((a, x) => ((a + ' ' + x).length <= max ? a + ' ' + x : a));
+
 // ── 홈 ──
 {
   const out = 'index.html', url = pageUrl(out);
-  const t = '대학로 연극·혜화 연극 | 한뼘사이 제작사 파릇';
-  const d = `대학로·혜화의 공연 제작사 파릇. 2017년부터 오픈런 중인 「한뼘사이」와 「사내연애 보고서」 「플러팅」, 어린이 뮤지컬까지 가격·회차·예매·오시는 길을 한곳에서.`;
+  const t = '파릇 | 대학로 연극 순위·혜화 연극 공연추천, 혜화역 연극·서울 연극 예매';
+  const d = `서울 대학로·혜화역 연극 공연추천은 파릇. ${ALL_SHOWS}의 관람평 순위·가격·회차를 비교하고 바로 연극 예매하세요.`;
   emit({ out, pri: '1.0', mod: lastPost > ASOF ? lastPost : ASOF, bodyClass: 'home', title: t, description: d,
-    keywords: ['대학로 연극', '혜화 연극', '대학로 연극 추천', '혜화 연극 추천', ...SHOWS.map(s => s.title), '파릇'],
+    keywords: ['대학로 연극 추천', '혜화 연극 추천'],
     schema: S.graph(S.organization(), S.website(), S.webpage({ url, title: t, description: d }), S.showList(url), S.faqPage(FAQ.filter(f => f.pages.includes('home')), url)),
     body: u => homeBody(u, posts) });
 }
@@ -77,8 +82,8 @@ const lastPost = posts[0]?.date || ASOF;
 // ── 공연 ──
 {
   const out = 'shows/index.html', url = pageUrl(out);
-  const t = '대학로 연극·뮤지컬 공연 가격·회차 비교 | 파릇';
-  const d = `파릇이 대학로·혜화에서 공연 중인 연극 3편, 어린이 뮤지컬 2편, 심야 쇼 1편의 공연장·공연 시간·관람 연령·가격·관람평을 한 번에 비교합니다(${ASOF_LABEL} 기준).`;
+  const t = '대학로 연극 순위·공연추천, 연극 예매 가격 비교 | 파릇';
+  const d = `${ALL_SHOWS}까지 파릇 공연 ${SHOWS.length}편의 관람평 순위·공연장·시간·가격을 비교하고 바로 연극 예매하세요. 서울 혜화역 연극 공연추천(${ASOF_LABEL} 기준).`;
   emit({ out, section: 'shows/', pri: '0.9', title: t, description: d, keywords: ['대학로 연극 추천', '혜화 연극 추천', '대학로 공연', '대학로 어린이 뮤지컬'],
     schema: S.graph(S.organization(), S.website(), S.webpage({ url, title: t, description: d, type: 'CollectionPage' }), S.showList(url), bc([['홈', ''], ['공연', 'shows/']])),
     body: u => P.showsIndex(u) });
@@ -86,7 +91,7 @@ const lastPost = posts[0]?.date || ASOF;
 for (const s of SHOWS) {
   const out = `shows/${s.slug}/index.html`, url = pageUrl(out);
   const v = venueOf(s);
-  const d = `${s.full} — ${s.lead} ${v.name}(혜화역 ${v.exit}번 출구), ${s.runtime}분, ${s.age.replace(/\(.*\)/, '')}, ${won(priceFrom(s))}부터.`.slice(0, 158);
+  const d = fit([`${s.full} 예매 안내. ${v.name}(혜화역 ${v.exit}번 출구), ${s.runtime}분, ${s.age.replace(/\(.*\)/, '')}, ${won(priceFrom(s))}부터. ${SHOW_KW[s.cat]}`, ...s.lead.split(/(?<=다\.)\s+/)]);
   const image = SITE.url + `assets/img/shows/${s.slug}/og.jpg`;
   emit({ out, section: 'shows/', pri: '0.9', title: `${s.seo.title} | 파릇`, description: d, ogImage: `assets/img/shows/${s.slug}/og.jpg`, keywords: s.seo.keywords,
     schema: S.graph(S.organization(), S.website(), S.webpage({ url, title: s.seo.title, description: d, image }), S.event(s, url, [image, SITE.url + `assets/img/shows/${s.slug}/poster.webp`]), bc([['홈', ''], ['공연', 'shows/'], [s.title, `shows/${s.slug}/`]]), S.faqPage(s.faq, url)),
@@ -96,19 +101,19 @@ for (const s of SHOWS) {
 // ── 안내 페이지 ──
 const info = [
   { out: 'about/index.html', name: '파릇 소개', render: P.about, pri: '0.7', type: 'AboutPage',
-    title: '파릇 소개·연혁 — 대학로 공연 제작사 주식회사 파릇', description: '주식회사 파릇은 2016년 어린이뮤지컬 기획으로 시작해 연극 「한뼘사이」 「사내연애 보고서」 「플러팅」 「비누향기(수상한 룸메이트)」와 어린이뮤지컬을 제작·기획·운영하는 대학로 공연 제작사입니다. 연혁·수상·회사 정보.', extra: () => [S.historyPage()] },
+    title: '파릇 소개·연혁 — 대학로 연극 제작사 주식회사 파릇', description: `주식회사 파릇은 2016년 어린이 뮤지컬 기획으로 시작해 ${ALL_SHOWS}를 선보이는 서울 대학로 연극 제작사입니다. 연혁·수상·회사 정보.`, extra: () => [S.historyPage()] },
   { out: 'visit/index.html', name: '오시는 길', render: P.visit, pri: '0.8',
-    title: '대학로 공연장 오시는 길(혜화역 출구별) | 파릇', description: '라온아트홀(한뼘사이 전용관)·제나아트홀·라온씨어터는 혜화역 2번 출구, 서연아트홀은 4번 출구, 뮤지컬펍 커튼콜은 1번 출구에서 걸어서 5분 이내입니다. 주소·가는 길·주차 안내.',
+    title: '혜화역 연극 공연장 오시는 길(출구별) | 대학로 파릇', description: '혜화역 연극 공연장 안내. 라온아트홀(한뼘사이)·제나아트홀(사내연애 보고서)·라온씨어터(플러팅·늑대숲 또옹돼지 원정대)는 2번 출구, 서연아트홀(수상한 룸메이트·피노키오야 노올자)은 4번 출구, 뮤지컬펍 커튼콜(드랙인혜화)은 1번 출구에서 걸어서 5분 이내입니다.',
     extra: () => VENUES.map(v => ({ '@type': 'PerformingArtsTheater', name: v.name, address: { '@type': 'PostalAddress', streetAddress: v.addr.replace(/^서울 종로구 /, ''), addressLocality: '종로구', addressRegion: '서울특별시', addressCountry: 'KR' }, geo: { '@type': 'GeoCoordinates', latitude: v.lat, longitude: v.lng } })), faq: 'visit' },
   { out: 'notice/index.html', name: '공지사항·이벤트', render: P.notice, pri: '0.7',
-    title: '대학로 연극 할인·이벤트·공지 | 파릇', description: '한뼘사이·사내연애 보고서·플러팅·수상한 룸메이트 수험생 할인과 군인 할인, 리뷰·재관람 이벤트, 단체 관람 공지와 작품별 배우 오디션 공고를 모았습니다.',
+    title: '대학로 연극 할인·이벤트·연극 예매 공지 | 파릇', description: '대학로 연극 한뼘사이·사내연애 보고서·플러팅·수상한 룸메이트의 수험생·군인 할인, 리뷰·재관람 이벤트, 연극 예매·단체 관람 공지와 배우 오디션 공고를 모았습니다.',
     extra: () => [{ '@type': 'ItemList', name: '파릇 공지사항·이벤트', itemListElement: sortedNotices().map((n, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE.url}notice/#${n.id}`, name: n.title.replace(/[「」]/g, '') })) }] },
   { out: 'news/index.html', name: '보도', render: P.news, pri: '0.5',
-    title: '언론 보도 — 대학로 공연 제작사 파릇', description: '한뼘사이·사내연애 보고서·수상한 룸메이트(비누향기) 캐스팅과 수상 등 언론에 소개된 파릇 공연 이야기를 모았습니다.' },
+    title: '언론 보도 — 대학로 연극 제작사 파릇', description: '대학로 연극 한뼘사이·사내연애 보고서·수상한 룸메이트(구 비누향기)의 캐스팅과 수상 등 언론에 소개된 파릇 공연 이야기를 모았습니다.' },
   { out: 'contact/index.html', name: '문의', render: P.contact, pri: '0.6', type: 'ContactPage',
-    title: '단체 관람·초청 공연·제휴 문의 | 파릇', description: `20인 이상 단체 관람, 기업·학교 초청 공연, 공연 기획·마케팅 제휴는 ${SITE.email}, 대표전화 ${SITE.phone}. 배우 오디션은 ${SITE.audition}.`, faq: 'contact' },
+    title: '대학로 연극 단체 관람·초청 공연·제휴 문의 | 파릇', description: `한뼘사이·사내연애 보고서·플러팅·수상한 룸메이트 등 대학로 연극 20인 이상 단체 관람, 기업·학교 초청 공연, 제휴는 ${SITE.email}, 대표전화 ${SITE.phone}. 배우 오디션은 ${SITE.audition}.`, faq: 'contact' },
   { out: 'faq/index.html', name: '자주 묻는 질문', render: P.faqPage, pri: '0.8',
-    title: '대학로 연극 관람 자주 묻는 질문 | 파릇', description: '대학로 연극이 처음일 때 고르는 법, 혜화역에서 공연장까지, 주차, 좌석 배정, 당일 취소, 아이와 관람, 단체 관람까지 파릇 공연 기준으로 답합니다.', faq: 'all' },
+    title: '대학로 연극 순위·연극 예매 자주 묻는 질문 | 파릇', description: '대학로 연극 고르는 법과 순위, 연극 예매·당일 취소, 혜화역에서 공연장까지, 주차, 좌석까지 한뼘사이·사내연애 보고서·플러팅·수상한 룸메이트 등 파릇 공연 기준으로 답합니다.', faq: 'all' },
 ];
 for (const it of info) {
   const url = pageUrl(it.out);
@@ -119,14 +124,14 @@ for (const it of info) {
 }
 {
   const out = 'privacy/index.html', url = pageUrl(out);
-  emit({ out, pri: '0.2', title: '개인정보 처리 안내 | 파릇', description: '주식회사 파릇 홈페이지의 개인정보 처리 안내입니다.', schema: S.graph(S.website(), S.webpage({ url, title: '개인정보 처리 안내', description: '파릇 개인정보 처리 안내' })), body: u => P.privacy(u) });
+  emit({ out, pri: '0.2', coreKeywords: false, title: '개인정보 처리 안내 | 파릇', description: '주식회사 파릇 홈페이지의 개인정보 처리 안내입니다.', schema: S.graph(S.website(), S.webpage({ url, title: '개인정보 처리 안내', description: '파릇 개인정보 처리 안내' })), body: u => P.privacy(u) });
 }
 
 // ── 블로그 ──
 {
   const out = 'blog/index.html', url = pageUrl(out);
-  const t = '대학로 연극 가이드: 고르는 법·데이트·가격 | 파릇';
-  const d = '대학로·혜화 연극을 처음 고르는 법, 데이트·모임 동선, 아이와 보는 첫 공연, 관람 매너와 예매 팁까지 파릇 공연기획팀이 정리합니다.';
+  const t = '대학로 연극 가이드: 공연추천·데이트·연극 예매 팁 | 파릇';
+  const d = '대학로 연극·혜화 연극 고르는 법과 공연추천, 데이트 동선, 연극 예매 팁까지 파릇 공연기획팀이 한뼘사이·사내연애 보고서·플러팅·수상한 룸메이트 기준으로 정리합니다.';
   emit({ out, section: 'blog/', pri: '0.8', mod: lastPost, title: t, description: d,
     schema: S.graph(S.organization(), S.website(), { ...S.webpage({ url, title: t, description: d, type: 'CollectionPage', modified: lastPost }), mainEntity: { '@type': 'ItemList', itemListElement: posts.slice(0, 30).map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: SITE.url + `blog/${p.slug}/` })) } }, bc([['홈', ''], ['대학로 연극 가이드', 'blog/']])),
     body: u => P.blogIndex(u, posts) });
@@ -173,6 +178,7 @@ const llms = `# ${SITE.name} (${SITE.nameEn}) — 대학로 연극·혜화 연�
 ## 핵심 사실 (${ASOF_LABEL} 기준)
 - 현재 공연 ${SHOWS.length}편: ${SHOWS.map(s => s.title).join(', ')}
 - 네이버 예약 관람평 합계 ${totalReviews().toLocaleString('ko-KR')}건, 관람평 수로 가중한 평균 ${avgRating().toFixed(2)}점
+- 파릇 연극 순위(네이버 예약 관람평 수, 대학로 전체 순위 아님): ${rankedPlays().map((s, i) => `${i + 1}위 ${s.title} ${s.rating.count.toLocaleString('ko-KR')}건`).join(', ')}
 - 수상: ${AWARDS.map(a => `${a.t}(${a.d})`).join('; ')}
 - 한뼘사이 지역 공연 도시: ${TOUR_CITIES.join(', ')}
 - 공연장: 모두 지하철 4호선 혜화역에서 도보 5분 이내, 주차 시설 없음

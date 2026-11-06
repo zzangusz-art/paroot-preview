@@ -8,6 +8,7 @@ category: 관람 가이드
 tags: 연극 음료 반입, 공연장 음식, 연극 물, 플러팅
 keyword: 연극 음료 반입
 show: flirting
+thumb_img: shows/office-romance-report/gallery/03.webp
 author: 파릇 공연기획팀
 ---
 생수 한 병도 연극 공연장 안으로는 가지고 들어갈 수 없습니다. 파릇 공연장 기준으로 연극 음료 반입은 물을 포함해 되지 않고, 음식물도 마찬가지입니다. 혜화역 2번 출구 라온씨어터의 [플러팅](shows/flirting/)처럼 100분 동안 이어지는 연극이라면, 매표소에 들르기 전후로 마실 것과 먹을 것을 미리 해결해 두는 편이 편합니다.

@@ -24,10 +24,14 @@ BOLD = os.path.join(HERE, 'fonts', 'NotoSansKR-Bold.ttf')
 MED = os.path.join(HERE, 'fonts', 'NotoSansKR-Medium.ttf')
 
 W, H = 1200, 630
+SITE_HOST = 'parootent.kr'  # 공식 주소(data.mjs SITE.displayDomain)
 INK = (14, 13, 18)
 PINK = (240, 128, 182)
 WHITE = (247, 244, 250)
 SUB = (182, 176, 194)
+
+# 세로 카드로 자르면 사람이 잘리거나(플러팅 01·02·04) 옛 제목 「비누향기」가 비치는(수상한 룸메이트 04) 사진은 자동 선택에서 뺀다. 필요하면 머리말 thumb_img로 직접 지정.
+SKIP_AUTO = {'shows/flirting/gallery/01.webp', 'shows/flirting/gallery/02.webp', 'shows/flirting/gallery/04.webp', 'shows/suspicious-roommate/gallery/04.webp'}
 
 # 공연이 없는 글은 카테고리별 무대 사진을 돌려 쓴다(같은 사진이 이어지지 않게 slug 해시로 고름)
 STILLS = {
@@ -124,7 +128,10 @@ def build(meta, out):
         gdir = os.path.join(IMG, 'shows', show, 'gallery')
         cands = [os.path.join(IMG, 'shows', show, 'poster.webp')] + ([os.path.join(gdir, f) for f in sorted(os.listdir(gdir)) if f.endswith('.webp') and not f.endswith('-sm.webp')] if os.path.isdir(gdir) else [])
         h = int(hashlib.md5(meta['slug'].encode()).hexdigest(), 16)
-        src = cands[h % len(cands)]
+        i = h % len(cands)
+        while os.path.relpath(cands[i], IMG).replace(os.sep, '/') in SKIP_AUTO:
+            i = (i + 1) % len(cands)
+        src = cands[i]
     else:
         lst = STILLS.get(meta.get('category', ''), STILLS['공연 고르기'])
         h = int(hashlib.md5(meta['slug'].encode()).hexdigest(), 16)
@@ -159,7 +166,7 @@ def build(meta, out):
     lw = 190
     logo = logo.resize((lw, round(logo.height * lw / logo.width)), Image.LANCZOS)
     base.alpha_composite(logo, (x, H - 70 - logo.height))
-    d.text((x + lw + 22, H - 70 - logo.height + 2), 'www.paroot.kr', font=ImageFont.truetype(MED, 22), fill=SUB)
+    d.text((x + lw + 22, H - 70 - logo.height + 2), SITE_HOST, font=ImageFont.truetype(MED, 22), fill=SUB)
     base.convert('RGB').save(out, 'JPEG', quality=86, optimize=True, progressive=True)
 
 

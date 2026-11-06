@@ -31,7 +31,7 @@ export function organization() {
     address: { '@type': 'PostalAddress', streetAddress: SITE.address.street, addressLocality: SITE.address.locality, addressRegion: SITE.address.region, addressCountry: 'KR' },
     location: { '@type': 'Place', name: '대학로', geo: { '@type': 'GeoCoordinates', latitude: SITE.address.lat, longitude: SITE.address.lng } },
     areaServed: { '@type': 'Country', name: '대한민국' },
-    knowsAbout: ['대학로 연극', '혜화 연극', '로맨틱 코미디 연극', '어린이 참여형 뮤지컬', '공연 제작', '공연 기획', '기업 초청 공연', '드랙 쇼'],
+    knowsAbout: ['대학로 연극', '혜화 연극', '혜화역 연극', '서울 연극', '로맨틱 코미디 연극', '어린이 참여형 뮤지컬', '공연 제작', '공연 기획', '기업 초청 공연', '드랙 쇼'],
     award: AWARDS.map(a => `${a.t} — ${a.d}`),
     contactPoint: [
       { '@type': 'ContactPoint', contactType: '공연·제휴 문의', email: SITE.email, telephone: SITE.tel, availableLanguage: 'Korean' },

@@ -1,5 +1,5 @@
 // 여러 페이지가 함께 쓰는 조각
-import { SITE, SHOWS, VENUES, venueOf, priceFrom, RULES, showBySlug, noticeStatus, noticePeriod } from './data.mjs';
+import { SITE, SHOWS, VENUES, venueOf, priceFrom, RULES, showBySlug, noticeStatus, noticePeriod, rankedPlays } from './data.mjs';
 import { esc, won, img, phImg, kdate } from './lib.mjs';
 import { ico } from './layout.mjs';
 
@@ -97,3 +97,10 @@ export function noticeItem(u, n) {
 }
 
 export { VENUES };
+
+// 대학로 연극 순위 표(홈·공연 목록). 파릇 연극 안의 순위임을 표 아래에 밝힌다.
+export function rankTable(u) {
+  const rows = rankedPlays().map((s, i) => { const v = venueOf(s); return `<tr><th scope="row"><a href="${u(`shows/${s.slug}/`)}">${i + 1}위 ${esc(s.title)}</a></th><td data-label="관람평"><span>${s.rating.count.toLocaleString('ko-KR')}건 · 평균 ${s.rating.avg.toFixed(2)}점</span></td><td data-label="공연장"><span>${esc(v.name)}<br><small class="muted">혜화역 ${v.exit}번 출구</small></span></td><td data-label="가격"><span>${won(priceFrom(s))}부터</span></td><td data-label="예매"><span><a href="${s.booking.url}" target="_blank" rel="noopener" data-book="${esc(s.title)}" style="font-weight:700;text-decoration:underline">네이버 예약</a></span></td></tr>`; }).join('');
+  return `<div class="tbl-scroll tbl-cards"><table class="cmp cmp-wide"><thead><tr><th>순위·연극</th><th>관람평</th><th>공연장</th><th>가격</th><th>연극 예매</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <p class="muted" style="font-size:13.5px;margin-top:12px">네이버 예약 관람평 수 기준(2026년 10월 조회). 수상한 룸메이트는 「비누향기」 시절 관람평을 포함합니다. 대학로 전체 연극 순위는 NOL 티켓 등 예매처 랭킹에서 볼 수 있습니다.</p>`;
+}

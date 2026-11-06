@@ -2,7 +2,7 @@
 import { SITE, SHOWS, FAQ, HISTORY, AWARDS, PRESS, VENUES, WHO, TOUR_CITIES, totalReviews, avgRating, showBySlug, NOTICES, noticeStatus, noticePeriod, sortedNotices } from './data.mjs';
 import { esc, img, phImg, kdate } from './lib.mjs';
 import { ico } from './layout.mjs';
-import { showCard, ratingBars, reviewCard, faqAcc, venueCard, postCard, lightbox } from './parts.mjs';
+import { showCard, ratingBars, reviewCard, faqAcc, venueCard, postCard, lightbox, rankTable } from './parts.mjs';
 
 const H = () => showBySlug('hanbbeumsai');
 
@@ -20,7 +20,7 @@ function hero(u) {
     <div class="scroll-cue" aria-hidden="true">SCROLL<i></i></div>
     <div class="hero-copy"><div class="wrap">
       <p class="en">${esc(SITE.en)}</p>
-      <h1>${esc(SITE.tagline)}<span class="k">대학로·혜화에서 연극과 어린이 뮤지컬을 만드는 파릇</span></h1>
+      <h1>${esc(SITE.tagline)}<span class="k">대학로 연극·혜화역 연극을 만드는 서울 공연 제작사 파릇</span></h1>
       <p class="lead">${esc(SITE.intro)}<br>2016년부터 대학로에서, 공연이 처음인 사람도 편하게 웃고 나올 수 있는 무대를 만듭니다.</p>
       <div class="hero-cta"><a class="btn btn-light" href="#lineup">지금 공연 보기${ico('arrow')}</a><button class="btn btn-ghost-dk" type="button" data-open="drawerBook">${ico('ticket')}예매하기</button></div>
       <ul class="hero-shows" aria-label="지금 공연 중인 작품">${SHOWS.map((s, i) => `<li style="--i:${i}"><a href="${u(`shows/${s.slug}/`)}" data-qv="${s.id}"><span class="hs-img ph"><img src="${u(`assets/img/shows/${s.slug}/thumb.webp`)}" alt="${esc(s.title)} 포스터" width="320" height="400" decoding="async"></span><b>${esc(s.title)}</b><small>${esc(s.kind)}</small></a></li>`).join('')}</ul>
@@ -30,7 +30,7 @@ function hero(u) {
 }
 
 function marquee() {
-  const ws = ['대학로 연극', '혜화 연극', ...SHOWS.map(s => s.title), '대학로 데이트', '아이와 대학로', '혜화역 공연'];
+  const ws = ['대학로 연극', '혜화 연극', ...SHOWS.map(s => s.title), '혜화역 연극', '서울 연극', '공연추천', '연극 예매'];
   const row = ws.map(w => `<span>${esc(w)}</span>`).join('');
   return `<div class="marquee" aria-hidden="true"><div class="marquee-track">${row}${row}</div></div>`;
 }
@@ -170,6 +170,15 @@ function press(u) {
 </section>`;
 }
 
+function ranking(u) {
+  return `<section class="sec sec-soft" id="ranking" aria-labelledby="rkTitle">
+  <div class="wrap">
+    <div class="sec-head"><div><p class="eyebrow">Ranking</p><h2 class="h2" id="rkTitle">대학로 연극 순위,<br>관람평 많은 순서로</h2><p class="lead">서울 연극을 혜화역 근처에서 고른다면 참고할 만한 순서입니다. 파릇 연극 네 편만 네이버 예약 관람평 수로 줄 세웠고, 대학로 전체 순위는 아닙니다.</p></div></div>
+    ${rankTable(u)}
+  </div>
+</section>`;
+}
+
 function venues(u) {
   return `<section class="sec sec-soft" id="visit" aria-labelledby="vsTitle">
   <div class="wrap">
@@ -221,5 +230,5 @@ export function ctaBand(u) {
 }
 
 export function homeBody(u, posts) {
-  return [hero(u), marquee(), lineup(u), reviews(u), spotlight(u), finder(u), notices(u), history(), press(u), venues(u), faq(u), blog(u, posts), photos(u), ctaBand(u)].join('\n');
+  return [hero(u), marquee(), lineup(u), ranking(u), reviews(u), spotlight(u), finder(u), notices(u), history(), press(u), venues(u), faq(u), blog(u, posts), photos(u), ctaBand(u)].join('\n');
 }

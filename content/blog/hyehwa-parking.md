@@ -8,6 +8,7 @@ category: 관람 가이드
 tags: 대학로 공연장 주차, 혜화 주차, 대학로 주차, 수상한 룸메이트
 keyword: 대학로 공연장 주차
 show: suspicious-roommate
+thumb_img: stage/exterior.webp
 author: 파릇 공연기획팀
 ---
 파릇 공연이 열리는 대학로 공연장 주차는 기대하지 않는 편이 좋습니다. 공연장 다섯 곳 모두 주차 시설이 없고, 대신 지하철 4호선 혜화역에서 모두 걸어서 5분 이내에 있습니다. [수상한 룸메이트](shows/suspicious-roommate/)가 공연하는 서연아트홀도 혜화역 4번 출구에서 걸어가는 거리입니다.

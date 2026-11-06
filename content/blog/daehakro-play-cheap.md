@@ -8,6 +8,7 @@ category: 관람 가이드
 tags: 대학로 연극 싸게 보는 법, 연극 할인, 저렴한 연극, 수상한 룸메이트
 keyword: 대학로 연극 싸게 보는 법
 show: suspicious-roommate
+thumb_img: shows/suspicious-roommate/poster.webp
 author: 파릇 공연기획팀
 ---
 대학로 연극 싸게 보는 법은 할인 코드를 찾기보다 요일과 회차를 먼저 고르는 데서 시작합니다. 파릇 연극은 같은 작품이라도 평일 일반 권종이 주말·공휴일보다 낮고, 일부 작품은 주말 첫 회차와 마지막 회차에 따로 권종을 둡니다. 2026년 10월 23일 네이버 예약 기준으로 파릇 연극의 평일 일반 권종 가운데 가장 낮은 가격은 [수상한 룸메이트](shows/suspicious-roommate/)의 16,900원입니다.

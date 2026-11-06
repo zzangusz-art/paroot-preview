@@ -8,6 +8,7 @@ category: 관람 가이드
 tags: 연극 포토타임, 배우 사진 연극, 플러팅 포토타임, 플러팅
 keyword: 연극 포토타임
 show: flirting
+thumb_img: shows/flirting/gallery/05.webp
 author: 파릇 공연기획팀
 ---
 배우와 사진을 남기고 싶다면 연극 포토타임이 어느 회차에 있는지부터 봐야 합니다. 파릇 공연 가운데 [플러팅](shows/flirting/)은 포토타임 회차를 정해 두었습니다. 평일과 일요일에는 전 회차, 토요일에는 마지막 회차가 끝난 뒤 무대 위에서 배우와 함께 사진을 찍습니다.
