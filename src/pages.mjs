@@ -273,12 +273,15 @@ export function blogIndex(u, posts) {
 export function blogPost(u, p, posts) {
   const show = p.show ? SHOWS.find(s => s.slug === p.show) : null;
   const rel = posts.filter(x => x.slug !== p.slug && (x.category === p.category || (show && x.show === p.show))).slice(0, 3);
+  // 본문 사진은 두 번째 소제목 앞(첫 구간을 읽은 뒤)에 넣는다
+  const fig = p.bodyImg ? `<figure class="post-fig">${img(u, p.bodyImg, p.bodyAlt, { sizes: '(max-width: 800px) 100vw, 760px' })}<figcaption>${esc(p.bodyAlt)}</figcaption></figure>\n` : '';
+  const html = !fig ? p.html : p.html.includes('<h2 id="h-2"') ? p.html.replace('<h2 id="h-2"', fig + '<h2 id="h-2"') : p.html + '\n' + fig;
   return `<div class="readbar" aria-hidden="true"></div>
 <section class="page-hd"><div class="wrap">${crumbs(u, [['홈', ''], ['대학로 연극 가이드', 'blog/'], [p.category, 'blog/']])}<p class="eyebrow">${esc(p.category)}</p><h1 style="font-size:clamp(28px,4.2vw,50px)">${esc(p.title)}</h1><p class="lead">${esc(p.description)}</p><div class="post-meta"><span>${kdate(p.date)}</span><span>${p.minutes}분 읽기</span><a href="${u('about/')}#team">${esc(p.author || '파릇 공연기획팀')}</a></div></div></section>
 <section class="sec-tight"><div class="wrap article">
   <article>
     <div class="post-cover">${img(u, p.thumb, p.title, { priority: true })}</div>
-    <div class="prose">${p.html}
+    <div class="prose">${html}
     ${p.faq.length ? `<h2 id="h-faq">자주 묻는 질문</h2>${faqAcc(p.faq, 'pfaq')}` : ''}
     </div>
     ${(() => {

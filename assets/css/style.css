@@ -579,6 +579,9 @@ html:not(.js) #postMore { display: none; }
 .prose a { color: var(--pink-ink); text-decoration: underline; text-underline-offset: 3px; }
 .prose blockquote { margin: 1.6em 0; padding: 18px 22px; background: var(--paper-2); border-left: 4px solid var(--violet); border-radius: 0 var(--r-s) var(--r-s) 0; color: var(--sub); }
 .prose .tbl-scroll { margin: 1.6em 0; }
+.prose .post-fig { margin: 1.8em 0; }
+.prose .post-fig img { display: block; width: 100%; height: auto; border-radius: var(--r-s); background: var(--paper-2); }
+.prose .post-fig figcaption { margin-top: 8px; font-size: 13.5px; line-height: 1.5; color: var(--sub); }
 .prose table { width: 100%; border-collapse: collapse; font-size: 15.5px; background: #fff; }
 .prose th, .prose td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
 .prose thead th { background: var(--paper-2); font-weight: 800; }

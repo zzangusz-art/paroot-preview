@@ -60,8 +60,29 @@ const posts = loadPosts(BLOG, { now: process.env.BUILD_NOW || nowKST }).map(p =>
   const has = fs.existsSync(path.join(ROOT, thumbRel));
   if (!has) console.warn(`썸네일 없음 → 공연 커버로 대신: ${p.slug} (python tools/thumbs/build_thumbs.py)`);
   const show = p.show && SHOWS.find(s => s.slug === p.show);
-  return { ...p, html: r.html, toc: r.toc, thumb: has ? thumbRel : `assets/img/shows/${show ? show.slug : 'hanbbeumsai'}/cover.webp` };
+  return { ...p, html: r.html, toc: r.toc, thumb: has ? thumbRel : `assets/img/shows/${show ? show.slug : 'hanbbeumsai'}/cover.webp`, ...bodyPhoto(p, show) };
 });
+
+// 본문 사진: 연결 공연의 무대 사진 한 장을 글마다 고정으로 고른다(slug 해시).
+// 표지(썸네일)에 쓴 사진과 옛 제목 「비누향기」가 비치는 사진은 뺀다. 표지 고르는 규칙은 tools/thumbs/build_thumbs.py와 같다.
+function bodyPhoto(p, show) {
+  if (!show) return {};
+  const gdir = path.join(ROOT, 'assets/img/shows', show.slug, 'gallery');
+  if (!fs.existsSync(gdir)) return {};
+  const files = fs.readdirSync(gdir).filter(f => f.endsWith('.webp') && !f.endsWith('-sm.webp')).sort();
+  const h = BigInt('0x' + crypto.createHash('md5').update(p.slug).digest('hex'));
+  const THUMB_SKIP = new Set(['shows/flirting/gallery/01.webp', 'shows/flirting/gallery/02.webp', 'shows/flirting/gallery/04.webp', 'shows/suspicious-roommate/gallery/04.webp']);
+  let cover = p.thumb_img;
+  if (!cover) {
+    const tc = [`shows/${show.slug}/poster.webp`, ...files.map(f => `shows/${show.slug}/gallery/${f}`)];
+    let i = Number(h % BigInt(tc.length));
+    while (THUMB_SKIP.has(tc[i])) i = (i + 1) % tc.length;
+    cover = tc[i];
+  }
+  const cands = files.filter(f => /^\d+\.webp$/.test(f)).map(f => `shows/${show.slug}/gallery/${f}`).filter(r => r !== cover && r !== 'shows/suspicious-roommate/gallery/04.webp');
+  if (!cands.length) return {};
+  return { bodyImg: 'assets/img/' + cands[Number((h >> 8n) % BigInt(cands.length))], bodyAlt: `${show.title} 공연 장면` };
+}
 const lastPost = posts[0]?.date || ASOF;
 
 // 제목·설명에 함께 쓰는 공연 이름. 설명은 문장 단위로 잘라 끊긴 채 노출되지 않게 한다.
@@ -95,9 +116,12 @@ const naverPosts = freshPosts(await loadNaverBlog(ROOT, SITE.channels.blog.rss),
 for (const s of SHOWS) {
   const out = `shows/${s.slug}/index.html`, url = pageUrl(out);
   const v = venueOf(s);
-  const d = fit([`${s.full} 예매 안내. ${v.name}(혜화역 ${v.exit}번 출구), ${s.runtime}분, ${s.age.replace(/\(.*\)/, '')}, ${won(priceFrom(s))}부터. ${SHOW_KW[s.cat]}`, ...s.lead.split(/(?<=다\.)\s+/)]);
+  const d = fit([`${s.full} 예매 안내. ${v.name}(혜화역 ${v.exit}번 출구), ${s.runtime}분, ${s.age.replace(/\(.*\)/, '')}, ${won(priceFrom(s))}부터.${s.rating ? ` 관람평 ${s.rating.count.toLocaleString('ko-KR')}건 ★${s.rating.avg.toFixed(2)}.` : ''} ${SHOW_KW[s.cat]}`, ...s.lead.split(/(?<=다\.)\s+/)]);
   const image = SITE.url + `assets/img/shows/${s.slug}/og.jpg`;
-  emit({ out, section: 'shows/', pri: '0.9', title: `${s.seo.title} | 파릇`, description: d, ogImage: `assets/img/shows/${s.slug}/og.jpg`, keywords: s.seo.keywords,
+  // 검색 결과 제목 앞쪽에 최저가를 붙인다(가격은 data.mjs에서 계산 — 가격이 바뀌면 같이 바뀜)
+  const [tHead, ...tRest] = s.seo.title.split(' | ');
+  const title = [`${tHead} ${won(priceFrom(s))}부터`, ...tRest].join(' | ');
+  emit({ out, section: 'shows/', pri: '0.9', title: `${title} | 파릇`, description: d, ogImage: `assets/img/shows/${s.slug}/og.jpg`, keywords: s.seo.keywords,
     schema: S.graph(S.organization(), S.website(), S.webpage({ url, title: s.seo.title, description: d, image }), S.event(s, url, [image, SITE.url + `assets/img/shows/${s.slug}/poster.webp`]), bc([['홈', ''], ['공연', 'shows/'], [s.title, `shows/${s.slug}/`]]), S.faqPage(s.faq, url)),
     body: u => P.showPage(u, s, posts) });
 }
@@ -143,7 +167,7 @@ for (const it of info) {
 }
 for (const p of posts) {
   const out = `blog/${p.slug}/index.html`, url = pageUrl(out);
-  const image = SITE.url + p.thumb;
+  const image = p.bodyImg ? [SITE.url + p.thumb, SITE.url + p.bodyImg] : SITE.url + p.thumb;
   emit({ out, section: 'blog/', pri: '0.6', mod: p.updated || p.date, ogType: 'article', published: p.date, ogImage: p.thumb.endsWith('.jpg') ? p.thumb : undefined,
     title: `${p.title} | 파릇`, description: p.description, keywords: p.tags,
     schema: S.graph(S.organization(), S.website(), S.blogPosting(p, url, image), bc([['홈', ''], ['대학로 연극 가이드', 'blog/'], [p.title, `blog/${p.slug}/`]]), p.faq.length ? S.faqPage(p.faq, url) : null),
