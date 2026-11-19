@@ -129,7 +129,7 @@ for (const s of SHOWS) {
 // ── 안내 페이지 ──
 const info = [
   { out: 'about/index.html', name: '파릇 소개', render: P.about, pri: '0.7', type: 'AboutPage',
-    title: '파릇 소개·연혁 — 대학로 연극 제작사 주식회사 파릇', description: `주식회사 파릇은 2016년 어린이 뮤지컬 기획으로 시작해 ${ALL_SHOWS}를 선보이는 서울 대학로 연극 제작사입니다. 연혁·수상·회사 정보.`, extra: () => [S.historyPage()] },
+    title: '파릇 소개·연혁 — 대학로 연극 제작사 주식회사 파릇', description: `주식회사 파릇은 2016년 어린이 뮤지컬 기획으로 시작해 ${ALL_SHOWS}를 선보이는 서울 대학로 연극 제작사입니다. 연혁·수상·회사 정보.`, extra: () => [S.historyPage()], faq: 'about' },
   { out: 'visit/index.html', name: '오시는 길', render: P.visit, pri: '0.8',
     title: '혜화역 연극 공연장 오시는 길(출구별) | 대학로 파릇', description: '혜화역 연극 공연장 안내. 라온아트홀(한뼘사이)·제나아트홀(사내연애 보고서)·라온씨어터(플러팅·늑대숲 또옹돼지 원정대)는 2번 출구, 서연아트홀(수상한 룸메이트·피노키오야 노올자)은 4번 출구, 뮤지컬펍 커튼콜(드랙인혜화)은 1번 출구에서 걸어서 5분 이내입니다.',
     extra: () => VENUES.map(v => ({ '@type': 'PerformingArtsTheater', name: v.name, address: { '@type': 'PostalAddress', streetAddress: v.addr.replace(/^서울 종로구 /, ''), addressLocality: '종로구', addressRegion: '서울특별시', addressCountry: 'KR' }, geo: { '@type': 'GeoCoordinates', latitude: v.lat, longitude: v.lng } })), faq: 'visit' },

@@ -1183,5 +1183,53 @@
     "date": "2026-12-04",
     "time": "09:00",
     "slug": "first-play-guide"
+  },
+  {
+    "id": "paroot-plays",
+    "title": "파릇 연극 네 편 비교, 한뼘사이·사내연애 보고서·플러팅·수상한 룸메이트",
+    "keyword": "파릇 연극",
+    "category": "공연 고르기",
+    "show": "hanbbeumsai",
+    "status": "scheduled",
+    "source": "brand-2026-11-19",
+    "date": "2026-12-08",
+    "time": "09:00",
+    "slug": "paroot-plays"
+  },
+  {
+    "id": "paroot-reviews",
+    "title": "파릇 관람평 12,288건, 공연별 점수와 관객이 함께 꼽은 것",
+    "keyword": "파릇 관람평",
+    "category": "작품 노트",
+    "show": "suspicious-roommate",
+    "status": "scheduled",
+    "source": "brand-2026-11-19",
+    "date": "2026-12-11",
+    "time": "09:00",
+    "slug": "paroot-reviews"
+  },
+  {
+    "id": "paroot-booking",
+    "title": "파릇 공연 예매, 작품별 네이버 예약과 문의 전화",
+    "keyword": "파릇 공연 예매",
+    "category": "관람 가이드",
+    "show": "office-romance-report",
+    "status": "scheduled",
+    "source": "brand-2026-11-19",
+    "date": "2026-12-15",
+    "time": "09:00",
+    "slug": "paroot-booking"
+  },
+  {
+    "id": "paroot-new-2026",
+    "title": "파릇 신작과 2026년 달라진 공연, 플러팅·드랙인혜화·수상한 룸메이트",
+    "keyword": "파릇 신작",
+    "category": "작품 노트",
+    "show": "drag-in-hyehwa",
+    "status": "scheduled",
+    "source": "brand-2026-11-19",
+    "date": "2026-12-18",
+    "time": "09:00",
+    "slug": "paroot-new-2026"
   }
 ]

@@ -167,6 +167,7 @@ export function about(u) {
     <tr><th scope="row">공연·제휴 문의</th><td><a href="mailto:${SITE.email}">${SITE.email}</a></td></tr><tr><th scope="row">오디션</th><td><a href="mailto:${SITE.audition}">${SITE.audition}</a></td></tr>
   </tbody></table></div>
 </div></section>
+<section class="sec-tight"><div class="wrap"><h2 class="h2" style="font-size:clamp(22px,2.6vw,30px);margin:0 0 18px">파릇에 대해 자주 묻는 질문</h2>${faqAcc(FAQ.filter(f => f.pages.includes('about')), 'abfaq', { open: 1 })}</div></section>
 ${ctaBand(u)}
 ${lightbox}`;
 }
