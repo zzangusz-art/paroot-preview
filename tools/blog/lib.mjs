@@ -87,7 +87,7 @@ export function splitFaq(body) {
 }
 
 // 글 목록(최신순). 예약 발행: now('YYYY-MM-DD HH:MM', 한국 시간)를 주면 date+time 이 아직 안 된 글은 빼고,
-// today 만 주면 날짜로만 거른다. 하루 3번 예약 빌드(09:05·13:05·18:05)가 09:00·13:00·18:00 글을 차례로 공개한다
+// today 만 주면 날짜로만 거른다. Railway가 매시 정각 다시 빌드해 date·time이 지난 글을 공개한다(지금은 화·금 09:00 글)
 export function loadPosts(dir, { today, now } = {}) {
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir).filter(f => f.endsWith('.md') && !f.startsWith('_')).map(f => {

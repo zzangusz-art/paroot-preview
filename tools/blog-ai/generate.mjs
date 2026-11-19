@@ -1,4 +1,4 @@
-// 파릇 「대학로 연극 가이드」 — AI 글 자동 작성기 (GitHub Actions가 하루 3번 실행: 09:05 · 13:05 · 18:05 KST)
+// 파릇 「대학로 연극 가이드」 — AI 글 자동 작성기 (GitHub Actions가 매일 09:05 KST에 실행, 글은 화·금 주 2편까지만 씀)
 // 사용:
 //   node tools/blog-ai/generate.mjs              다음 주제 1편 작성 → 검증 통과 시 content/blog/<slug>.md 로 발행
 //   node tools/blog-ai/generate.mjs --count 3    3편 연속 작성
@@ -245,12 +245,22 @@ async function main() {
   }
   if (flag('--facts')) { console.log(sheet); return; }
 
-  // 사람이 미리 써 둔 예약 글이 남아 있으면 AI 작성은 쉰다(하루 3편 유지). --force 로 무시
+  // 발행 주기: 주 2편(화·금). 2026-11-19부터 하루 3편 → 주 1~2편으로 줄였다(새 도메인 색인 회복 우선).
+  // ① 사람이 미리 써 둔 예약 글이 남아 있으면 AI 작성은 쉰다 ② 발행 요일(BLOG_DAYS, 기본 화·금)이 아니면 쉰다
+  // ③ 이번 주(월~일, 한국 시간)에 이미 BLOG_WEEKLY_MAX(기본 2)편 이상 공개됐으면 쉰다. --force 로 모두 무시
   {
     const n = new Date(), d = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(n);
     const nowKST = d + ' ' + new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hour12: false }).format(n);
     const pending = posts.filter(p => `${p.date} ${p.time || '00:00'}` > nowKST);
     if (pending.length && !flag('--force')) { console.log(`예약 발행 대기 글 ${pending.length}편(마지막 ${pending.map(p => p.date).sort().pop()}) — AI 글 작성을 건너뜁니다.`); return; }
+    const DOW = ['일', '월', '화', '수', '목', '금', '토'];
+    const dow = new Date(d + 'T00:00:00Z').getUTCDay();
+    const days = (process.env.BLOG_DAYS || '화,금').split(',').map(s => s.trim());
+    if (!days.includes(DOW[dow]) && !flag('--force')) { console.log(`오늘(${DOW[dow]})은 발행 요일(${days.join('·')})이 아님 — AI 글 작성을 건너뜁니다.`); return; }
+    const monday = new Date(Date.parse(d + 'T00:00:00Z') - ((dow + 6) % 7) * 864e5).toISOString().slice(0, 10);
+    const weekMax = Number(process.env.BLOG_WEEKLY_MAX) || 2;
+    const thisWeek = posts.filter(p => p.date >= monday && `${p.date} ${p.time || '00:00'}` <= nowKST).length;
+    if (thisWeek >= weekMax && !flag('--force')) { console.log(`이번 주 공개 ${thisWeek}편(주 ${weekMax}편 한도) — AI 글 작성을 건너뜁니다.`); return; }
   }
   const topics = JSON.parse(fs.readFileSync(TOPICS, 'utf8'));
   const { default: Anthropic } = await import('@anthropic-ai/sdk');

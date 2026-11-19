@@ -431,7 +431,7 @@ NOTICES.forEach(n => {
   if (n.cat === 'event') n.imgs ??= 1;
   n.imgs ??= 0;
 });
-// 빌드하는 날(한국 시간). 하루 3번 예약 빌드가 돌아 이벤트 상태가 자동으로 바뀐다
+// 빌드하는 날(한국 시간). 예약 빌드(Railway 매시 정각)가 돌아 이벤트 상태가 자동으로 바뀐다
 export const TODAY = process.env.BUILD_DATE || new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
 const md = d => `${+d.slice(5, 7)}월 ${+d.slice(8, 10)}일`;
 export const noticePeriod = n => n.cat !== 'event' ? '' : n.start && n.end ? `${md(n.start)} ~ ${md(n.end)}` : n.end ? `${md(n.end)}까지` : '상시';

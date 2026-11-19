@@ -21,7 +21,7 @@
 | `content/drafts/` | 검증에 떨어진 AI 초안(발행 안 됨). 고쳐서 `content/blog/`로 옮기면 발행 |
 | `tools/blog-ai/generate.mjs` | AI 글 작성·검증기 |
 | `tools/thumbs/build_thumbs.py` | 블로그 썸네일(1200×630) |
-| `.github/workflows/site.yml` | 푸시·하루 3회 예약 → (AI 글 1편 + 썸네일) → 빌드 → GitHub Pages |
+| `.github/workflows/site.yml` | 푸시·매일 09:05 예약 → (화·금만 AI 글 1편 + 썸네일) → 빌드 → GitHub Pages |
 
 ## 수정 → 반영
 1. 가격·회차·문구는 `src/data.mjs`, 화면은 `src/*.mjs`, 디자인은 `assets/css/style.css`
@@ -31,16 +31,20 @@
 
 **공연 순서**는 `src/data.mjs`의 `SHOWS` 배열 순서가 곧 사이트 전체(메뉴·라인업·목록·푸터·비교표) 순서입니다. 히어로 필름 속 포스터 순서는 `../motion/video/comp.js`의 `SHOWS`를 같이 바꾸고 `../motion/render_all.sh`(또는 `render.bat`)로 다시 렌더합니다.
 
-**공지사항·이벤트**는 `src/data.mjs`의 `NOTICES`에 한 건씩 추가합니다(cat: event/notice/audition, 이벤트는 start·end 날짜). 진행 중·시작 예정·상시·종료 표시는 빌드하는 날 기준으로 자동으로 바뀌고, 예약 빌드가 하루 3번 돌아 날짜가 지나면 저절로 "종료"가 됩니다. 이미지는 `tools/prepare_notices.py`의 `SRC`에 원본을 적고 실행합니다.
+**공지사항·이벤트**는 `src/data.mjs`의 `NOTICES`에 한 건씩 추가합니다(cat: event/notice/audition, 이벤트는 start·end 날짜). 진행 중·시작 예정·상시·종료 표시는 빌드하는 날 기준으로 자동으로 바뀌고, 예약 빌드(Railway 매시 정각, GitHub Pages 매일 09:05)가 돌아 날짜가 지나면 저절로 "종료"가 됩니다. 이미지는 `tools/prepare_notices.py`의 `SRC`에 원본을 적고 실행합니다.
 
 **가격·회차는 네이버 예약이 바뀌면 `src/data.mjs`도 같이 바꿔야 합니다.** 사이트 문구, JSON-LD, llms.txt, AI 글의 사실 목록이 모두 이 값을 씁니다.
 
-## 블로그(대학로 연극 가이드) 하루 3편 자동 발행
+## 블로그(대학로 연극 가이드) 주 2편 발행(화·금)
+
+**2026-11-19부터 하루 3편 → 주 1~2편으로 줄였습니다**(새 도메인 구글 색인 회복 우선). 발행 슬롯은 **화·금 09:00**이고, 미리 써 둔 예약 글이 있으면 그 글이 먼저 나갑니다. 요일·편수는 환경 변수 `BLOG_DAYS`(기본 `화,금`)·`BLOG_WEEKLY_MAX`(기본 2)로 바꿉니다. 주 1편으로 줄이려면 `BLOG_DAYS=화`.
+
+아래는 처음(10/28~11/18) 하루 3편으로 운영할 때의 설명입니다.
 
 **예약 글 60편(2026-10-28 ~ 11-16, 매일 09:00·13:00·18:00)** 이 `content/blog/`에 미리 들어 있습니다. 글마다 `date`·`time`이 있고, 하루 3번 예약 빌드(09:05·13:05·18:05 KST)가 그 시각이 지난 글을 차례로 공개합니다(그 전에는 목록·sitemap·RSS에 안 나옴). 대표 키워드는 60편이 모두 다르며 `_topics.json`에 `status: "scheduled"`로 묶여 있습니다. 글마다 주 공연(`show`)이 있고, 본문에 링크된 파릇 공연은 글 아래 「이 글에 나온 공연 예매」 카드(포스터·가격·네이버 예약 버튼)로 자동 연결됩니다.
-- 예약 글이 남아 있는 동안 AI 글 작성은 쉽니다(하루 3편 유지). 예약 글이 다 공개된 다음 날부터 `ANTHROPIC_API_KEY`가 있으면 AI가 이어서 씁니다. 강제로 쓰려면 `--force`.
+- 예약 글이 남아 있는 동안 AI 글 작성은 쉽니다. 예약 글이 다 공개된 다음 날부터 `ANTHROPIC_API_KEY`가 있으면 AI가 이어서 씁니다. 강제로 쓰려면 `--force`.
 - 공개 시각을 바꾸려면 글 머리말의 `date`·`time`만 고치면 됩니다.
-GitHub Actions가 **매일 09:05 · 13:05 · 18:05(KST)** 에 `_topics.json`의 다음 `todo` 주제로 글 1편씩 쓰고, 검증을 통과하면 썸네일을 만들어 `content/blog/`에 커밋한 뒤 바로 배포합니다.
+GitHub Actions가 **매일 09:05(KST)** 에 돌고, 발행 요일(화·금)이면서 이번 주 공개 글이 한도 미만일 때만 `_topics.json`의 다음 `todo` 주제로 글 1편을 쓰고, 검증을 통과하면 썸네일을 만들어 `content/blog/`에 커밋한 뒤 바로 배포합니다.
 - 모델 `claude-opus-5-5`(effort high), 서버 측 폴백 `fallbacks: "default"`(베타 `server-side-fallback-2026-07-01`). 근거는 `src/data.mjs`에서 만든 사실 목록뿐입니다(`node tools/blog-ai/generate.mjs --facts` 로 확인).
 - 검증: 머리말·대표 키워드(제목·첫 문단), 본문 900~4,500자, 소제목 4개 이상, FAQ 2개 이상, 과장·보장·상투 표현 금지, 다른 제작사 공연명·커뮤니티명 금지, 외부 링크 금지, 허용된 내부 링크만, **사실 목록에 없는 숫자+단위 금지**, 기존 글과 대표 키워드·제목 겹침 금지.
 - 한 번 고쳐 쓰게 하고도 떨어지면 `content/drafts/`에 두고 다음 주제로 넘어갑니다(회차당 최대 3개 주제 시도).

@@ -1,4 +1,5 @@
-# 파릇: 빌드 → GitHub Pages 배포 + 「대학로 연극 가이드」 글 AI 자동 발행(하루 3회: 09:05 · 13:05 · 18:05 KST)
+# 파릇: 빌드 → GitHub Pages 배포 + 「대학로 연극 가이드」 글 AI 자동 발행(주 2편: 화·금 09:05 KST, 2026-11-19 하루 3편에서 변경)
+# 매일 09:05에 한 번 빌드하고(공지 상태·예약 글 반영), 글은 generate.mjs가 화·금에만 쓴다(BLOG_DAYS·BLOG_WEEKLY_MAX로 조정)
 # 처음 한 번 설정(저장소 Settings):
 #   1) Pages → Source: GitHub Actions
 #   2) Secrets and variables → Actions → Secrets: ANTHROPIC_API_KEY (없으면 글 작성만 건너뛰고 배포는 진행)
@@ -10,9 +11,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '5 0 * * *'   # 09:05 KST
-    - cron: '5 4 * * *'   # 13:05 KST
-    - cron: '5 9 * * *'   # 18:05 KST
+    - cron: '5 0 * * *'   # 매일 09:05 KST (글 작성은 화·금만)
   workflow_dispatch:
     inputs:
       generate:
