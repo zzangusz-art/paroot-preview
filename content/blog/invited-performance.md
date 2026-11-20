@@ -2,8 +2,8 @@
 title: 기업 초청 공연, 회사·학교에서 연극을 여는 방법
 description: 기업 초청 공연은 contact@paroot.kr로 날짜·장소·예상 관객 수를 적어 제안하면 담당 부서가 연락합니다. 한뼘사이가 삼성전자, 포항 POSCO, 건양대학교, 광양제철소에서 공연한 기록과 준비할 것을 담았습니다.
 slug: invited-performance
-date: 2026-11-24
-time: 09:00
+date: 2026-11-20
+time: 19:10
 category: 데이트·모임
 tags: 기업 초청 공연, 초청 공연, 찾아가는 공연, 학교 초청 공연, 한뼘사이
 keyword: 기업 초청 공연

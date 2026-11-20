@@ -841,8 +841,8 @@
     "show": "hanbbeumsai",
     "status": "scheduled",
     "source": "plan-2026-10-23",
-    "date": "2026-11-24",
-    "time": "09:00",
+    "date": "2026-11-20",
+    "time": "19:10",
     "slug": "invited-performance"
   },
   {
@@ -1156,8 +1156,8 @@
     "show": "suspicious-roommate",
     "status": "scheduled",
     "source": "weekly-2026-11-19",
-    "date": "2026-11-27",
-    "time": "09:00",
+    "date": "2026-11-20",
+    "time": "19:20",
     "slug": "roommate-review"
   },
   {
@@ -1192,8 +1192,8 @@
     "show": "hanbbeumsai",
     "status": "scheduled",
     "source": "brand-2026-11-19",
-    "date": "2026-12-08",
-    "time": "09:00",
+    "date": "2026-11-20",
+    "time": "19:00",
     "slug": "paroot-plays"
   },
   {
