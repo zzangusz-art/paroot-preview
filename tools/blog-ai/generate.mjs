@@ -22,7 +22,7 @@ const flag = n => args.includes(n);
 const opt = n => { const i = args.indexOf(n); return i > -1 ? args[i + 1] : null; };
 
 const D = await import('../../src/data.mjs');
-const { SITE, SHOWS, VENUES, RULES, FAQ, HISTORY, AWARDS, TOUR_CITIES, BLOG_CATEGORIES, ASOF_LABEL, venueOf, priceFrom, totalReviews, avgRating, NOTICES, noticePeriod } = D;
+const { SITE, SHOWS, VENUES, RULES, FAQ, HISTORY, AWARDS, TOUR_CITIES, BLOG_CATEGORIES, ASOF_LABEL, venueOf, priceFrom, totalReviews, avgRating, NOTICES, noticePeriod, PRESS } = D;
 const won = n => n.toLocaleString('ko-KR') + '원';
 const RULE_NAME = { play: '연극', kids: '어린이 뮤지컬', drag: '드랙인혜화' };
 
@@ -51,6 +51,9 @@ export function factSheet() {
   for (const f of FAQ) L.push(`[FAQ] ${f.q} → ${f.a}`);
   // 공지사항·이벤트 게시판의 이벤트(기간 포함). 글에서는 notice/#<id> 로 연결
   for (const n of NOTICES.filter(x => x.cat === 'event')) L.push(`[이벤트:${n.title.replace(/[「」]/g, '')}] 기간 ${n.start ? `${n.start}~` : ''}${n.end || '상시'}(${noticePeriod(n)}). ${n.summary} ${n.body.join(' ')} 상세 notice/#${n.id}`);
+  // 지난 오디션 공고(제목·날짜만, 2026-11-25 추가)와 언론 보도(매체·날짜·제목, news/ 페이지와 같은 목록). 기사 본문은 사실 목록에 없으므로 제목 이상은 쓰지 않는다
+  for (const n of NOTICES.filter(x => x.cat === 'audition')) L.push(`[지난 오디션 공고] ${n.date} ${n.title.replace(/[「」]/g, '')} — 지원 기간이 지난 공고. 상세 notice/#${n.id}`);
+  for (const p of PRESS) L.push(`[언론 보도] ${p.d} ${p.o} 「${p.t}」 (전체 목록 news/)`);
   return L.join('\n');
 }
 export function allowedNumbers(sheet) {
