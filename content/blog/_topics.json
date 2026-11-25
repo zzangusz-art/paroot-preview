@@ -1252,7 +1252,7 @@
     "show": "flirting",
     "status": "scheduled",
     "source": "daily-2-2026-11-20",
-    "date": "2026-11-26",
+    "date": "2026-12-02",
     "time": "18:00",
     "slug": "anniversary-date-play"
   },
@@ -1324,7 +1324,7 @@
     "show": "drag-in-hyehwa",
     "status": "scheduled",
     "source": "daily-2-2026-11-20",
-    "date": "2026-12-02",
+    "date": "2026-11-26",
     "time": "18:00",
     "slug": "drag-queen-meaning"
   },
@@ -1543,5 +1543,29 @@
     "date": "2026-12-04",
     "time": "09:00",
     "slug": "year-end-family-show"
+  },
+  {
+    "id": "drag-price",
+    "title": "드랙인혜화 가격, 정가 30,000원과 할인 권종·환불 규정",
+    "keyword": "드랙인혜화 가격",
+    "category": "관람 가이드",
+    "show": "drag-in-hyehwa",
+    "status": "scheduled",
+    "source": "urgent-drag-2026-11-25",
+    "date": "2026-11-25",
+    "time": "21:50",
+    "slug": "drag-price"
+  },
+  {
+    "id": "drag-running",
+    "title": "드랙인혜화 공연 기간, 10월에 끝나지 않고 매주 금·토 공연 중",
+    "keyword": "드랙인혜화 공연 기간",
+    "category": "작품 노트",
+    "show": "drag-in-hyehwa",
+    "status": "scheduled",
+    "source": "urgent-drag-2026-11-25",
+    "date": "2026-11-25",
+    "time": "22:00",
+    "slug": "drag-running"
   }
 ]

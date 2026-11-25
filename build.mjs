@@ -116,7 +116,7 @@ const naverPosts = freshPosts(await loadNaverBlog(ROOT, SITE.channels.blog.rss),
 for (const s of SHOWS) {
   const out = `shows/${s.slug}/index.html`, url = pageUrl(out);
   const v = venueOf(s);
-  const d = fit([`${s.full} 예매 안내. ${v.name}(혜화역 ${v.exit}번 출구), ${s.runtime}분, ${s.age.replace(/\(.*\)/, '')}, ${won(priceFrom(s))}부터.${s.rating ? ` 관람평 ${s.rating.count.toLocaleString('ko-KR')}건 ★${s.rating.avg.toFixed(2)}.` : ''} ${SHOW_KW[s.cat]}`, ...s.lead.split(/(?<=다\.)\s+/)]);
+  const d = fit([`${s.full} 예매 안내.${s.status ? ` ${s.status}.` : ''} ${v.name}(혜화역 ${v.exit}번 출구), ${s.runtime}분, ${s.age.replace(/\(.*\)/, '')}, ${won(priceFrom(s))}부터.${s.rating ? ` 관람평 ${s.rating.count.toLocaleString('ko-KR')}건 ★${s.rating.avg.toFixed(2)}.` : ''} ${SHOW_KW[s.cat]}`, ...s.lead.split(/(?<=다\.)\s+/)]);
   const image = SITE.url + `assets/img/shows/${s.slug}/og.jpg`;
   // 검색 결과 제목 앞쪽에 최저가를 붙인다(가격은 data.mjs에서 계산 — 가격이 바뀌면 같이 바뀜)
   const [tHead, ...tRest] = s.seo.title.split(' | ');
